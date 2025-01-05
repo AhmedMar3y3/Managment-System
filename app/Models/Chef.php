@@ -3,9 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Chef extends Model
+class Chef extends Authenticatable
 {
     use HasFactory;
+
+    protected $fillable = [
+
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 }
