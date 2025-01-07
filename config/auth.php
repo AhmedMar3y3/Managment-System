@@ -49,12 +49,16 @@ return [
             'provider' => 'managers',
         ],
         'sale' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'sales',
         ],
         'delivery' => [
             'driver' => 'sanctum',
             'provider' => 'deliveries',
+        ],
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admins',
         ],
     ],
 
@@ -83,6 +87,10 @@ return [
         'deliveries' => [
             'driver' => 'eloquent',
             'model' => App\Models\Delivery::class,
+        ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
 
 

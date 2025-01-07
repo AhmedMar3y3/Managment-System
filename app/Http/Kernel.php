@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'auth.chef' => \App\Http\Middleware\Chef::class,
         'auth.sale' => \App\Http\Middleware\Sale::class,
         'auth.delivery' => \App\Http\Middleware\Delivery::class,
+        'auth.admin' => \App\Http\Middleware\Admin::class,
     ];
 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\sales;
+namespace App\Http\Requests\branch;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class login extends FormRequest
+class update extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class login extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'    => 'nullable|string',
+            'phone'   => 'nullable|string',
+            'address' => 'nullable|string',
         ];
     }
 }

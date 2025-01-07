@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Chef
+class Admin
 {
     /**
      * Handle an incoming request.
@@ -16,14 +16,14 @@ class Chef
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $chef = Auth::guard('chef')->user();
+        $admin = Auth::guard('admin')->user();
         
-        if (!$chef) {
-            logger('chef middleware: No authenticated chef.');
-            return response()->json(['message' => 'غير مصرح: يمكن فقط للطهاة الوصول إلى هذا المسار'], 403);
+        if (!$admin) {
+            logger('admin middleware: No authenticated admin.');
+            return response()->json(['message' => 'غير مصرح: يمكن فقط للمسؤولين الوصول إلى هذا المسار'], 403);
         }
     
-        logger('chef middleware: chef authenticated.', ['chef' => $chef]);
+        logger('admin middleware: admin authenticated.', ['admin' => $admin]);
         return $next($request);
     }
 }

@@ -20,7 +20,7 @@ class Delivery
         
         if (!$delivery) {
             logger('delivery middleware: No authenticated delivery.');
-            return response()->json(['message' => 'غير مصرح: يمكن فقط للمسؤولين الوصول إلى هذا المسار'], 403);
+            return response()->json(['message' => 'غير مصرح: يمكن فقط للسائقين الوصول إلى هذا المسار'], 403);
         }
     
         logger('delivery middleware: delivery authenticated.', ['delivery' => $delivery]);

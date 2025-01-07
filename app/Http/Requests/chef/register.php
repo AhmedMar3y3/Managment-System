@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\sales;
+namespace App\Http\Requests\chef;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,9 +24,10 @@ class register extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
-            'email'      => 'required|email|unique:sales,email',
-            'phone'      => 'required|numeric|unique:sales,phone',
+            'email'      => 'required|email|unique:chefs,email',
+            'phone'      => 'required|numeric|unique:chefs,phone',
             'image'      => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'branch_id'  => 'required|exists:branches,id',
             'password'   => 'required|string',
         ];
     }
