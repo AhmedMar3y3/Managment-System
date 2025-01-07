@@ -12,11 +12,30 @@ class Delivery extends Authenticatable
     use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable = [
-
+    'first_name',
+    'last_name',
+    'email',
+    'password',
+    'phone',
+    'image',
+    'status',
+    'verification_code',
+    'verified_at',
+    'branch_id',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

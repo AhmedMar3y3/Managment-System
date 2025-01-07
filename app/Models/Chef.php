@@ -22,8 +22,6 @@ class Chef extends Authenticatable
         'verification_code',
         'verified_at',
         'branch_id',
-
-
     ];
 
     protected $hidden = [
