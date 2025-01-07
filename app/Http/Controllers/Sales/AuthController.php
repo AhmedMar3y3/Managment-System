@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Sales;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\sales\Register;
+use App\Http\Requests\sales\register;
 use Illuminate\Http\Request;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
      // Register a new user
-     public function register(Register $request)
+     public function register(register $request)
      {
          $validatedData = $request->validated();
          $validatedData['password'] = Hash::make($validatedData['password']);
@@ -69,26 +69,30 @@ class AuthController extends Controller
      public function login(Request $request)
      {
          $credentials = $request->only('email', 'password');
- 
-         if (Auth::guard('sale')->attempt($credentials)) {
-             $user = Auth::guard('sale')->user();
-             if (!$user->verified_at) {
-                 return response()->json(['message' => 'يرجى التحقق من حسابك.'], 401);
-             }
-             if($user->status == "مرفوض"){
-                 return response()->json(['message' => 'تم رفض حسابك.'], 401);
-             }
-             if($user->status == "قيد الانتظار"){
-                 return response()->json(['message' => 'حسابك قيد الانتظار للموافقة.'], 401);
-             }
-             $token = $user->createToken('api of token', [$user->name])->plainTextToken; 
-             return response()->json([
-                 'user' => $user,
-                 'token' => $token
-             ]);
+     
+         $user = Sale::where('email', $credentials['email'])->first();
+     
+         if (!$user || !Hash::check($credentials['password'], $user->password)) {
+             return response()->json(['message' => 'بيانات غير صالحة'], 401);
          }
-             return response()->json(['message' => 'بيانات الاعتماد غير صالحة'], 401);
+     
+         if (!$user->verified_at) {
+             return response()->json(['message' => 'يرجى التحقق من حسابك.'], 401);
+         }
+         if ($user->status == "مرفوض") {
+             return response()->json(['message' => 'تم رفض حسابك.'], 401);
+         }
+         if ($user->status == "قيد الانتظار") {
+             return response()->json(['message' => 'حسابك قيد الانتظار للموافقة.'], 401);
+         }
+              $token = $user->createToken('sale-token')->plainTextToken;
+     
+         return response()->json([
+             'user' => $user,
+             'token' => $token
+         ]);
      }
+     
  
      // Logout user
      public function logout()
