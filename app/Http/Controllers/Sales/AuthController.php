@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyPhone;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -69,8 +70,8 @@ class AuthController extends Controller
      {
          $credentials = $request->only('email', 'password');
  
-         if (auth('sale')->attempt($credentials)) {
-             $user = auth('sale')->user();
+         if (Auth::guard('sale')->attempt($credentials)) {
+             $user = Auth::guard('sale')->user();
              if (!$user->verified_at) {
                  return response()->json(['message' => 'يرجى التحقق من حسابك.'], 401);
              }
@@ -92,7 +93,7 @@ class AuthController extends Controller
      // Logout user
      public function logout()
      {
-         auth('sale')->user()->tokens()->delete();
+         Auth::logout();
          return response()->json(['message' => 'تم تسجيل الخروج بنجاح'], 200);
      }
  

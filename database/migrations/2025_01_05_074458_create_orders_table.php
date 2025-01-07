@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_name');
+            $table->string('customer_phone');
+            $table->string('customer_address');
+            $table->string('order_type')->nullable();
+            $table->text('order_details');
+            $table->enum('status', ["جاري الاستلام", "تم التجهيز", "تم التوصيل"])->default("جاري الاستلام");
+            $table->double('price');
+            $table->double('deposit')->default(0);
+            $table->date('delivery_date');
+            $table->text('notes')->nullable();
+            $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
+            $table->foreignId('chef_id')->nullable()->constrained('chefs')->onDelete('cascade');
+            $table->foreignId('delivery_id')->nullable()->constrained('deliveries')->onDelete('cascade');
             $table->timestamps();
         });
     }

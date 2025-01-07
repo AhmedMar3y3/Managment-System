@@ -41,11 +41,11 @@ return [
             'provider' => 'users',
         ],
         'chef' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'chefs',
         ],
         'manager' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'managers',
         ],
         'sale' => [
@@ -53,7 +53,7 @@ return [
             'provider' => 'sales',
         ],
         'delivery' => [
-            'driver' => 'session',
+            'driver' => 'sanctum',
             'provider' => 'deliveries',
         ],
     ],

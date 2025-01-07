@@ -16,10 +16,10 @@ class Sale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $sale = Auth::guard('sale')->user();
+        $sale = Auth::guard('sanctum')->user();
         
         if (!$sale) {
-            logger('sale middleware: No authenticated sale.');
+            logger('sale middleware: No authenticated sale.', ['token' => $request->bearerToken()]);
             return response()->json(['message' => 'غير مصرح: يمكن فقط للمسؤولين الوصول إلى هذا المسار'], 403);
         }
     

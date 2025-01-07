@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class OrderImage extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'order_id',
+        'image',
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }
