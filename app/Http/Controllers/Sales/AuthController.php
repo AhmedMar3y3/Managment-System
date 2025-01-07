@@ -45,7 +45,7 @@ class AuthController extends Controller
          }
  
          return response()->json(['message' => 'تم تسجيل المستخدم بنجاح'], 201);
-     }
+     } 
  
       // Verify account (email or phone)
       public function verify(Request $request)
@@ -111,7 +111,7 @@ class AuthController extends Controller
  
          if (!$sale) {
              return response()->json(['message' => 'المستخدم غير موجود'], 404);
-         }
+         } 
  
          $code = mt_rand(1000, 9999);
          DB::table('password_reset_tokens')->updateOrInsert(

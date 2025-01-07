@@ -13,8 +13,19 @@ return new class extends Migration
     {
         Schema::create('managers', function (Blueprint $table) {
             $table->id();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email')->unique();
+            $table->string('phone')->unique();
+            $table->string('image')->nullable();
+            $table->rememberToken();
+            $table->string('password');
+            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
+            $table->enum('status', ["قيد الانتظار", "مقبول", "مرفوض"])->default("قيد الانتظار");
+            $table->string('verification_code')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
-        });
+        }); 
     }
 
     /**
