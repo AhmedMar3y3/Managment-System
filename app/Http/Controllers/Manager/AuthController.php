@@ -80,8 +80,26 @@ class AuthController extends Controller
         ]);
     }
 
+public function verifyCod(request $request){
+    $validatedData = $request->validate([
+        'identifier'=>'required|string',
+        'code'=>'required|string',
+    ]);
+
+
+    
+
+}
+
+
+
+
     public function resetPassword(ResetPass $request)
     {
+
+        // 'identifier'=>'',
+        // 'code'=>'',
+
         $validatedData = $request->validated();
 
 
@@ -94,6 +112,14 @@ class AuthController extends Controller
         if (!$reset) {
             return response()->json(['message' => 'غير معروف'], 404);
         }
+
+if($reset->token!=$request->code){
+    return response()->json(['message' => 'كود غير معرف'], 404);
+}
+
+if($reset->token!=$request->email){
+    return response()->json(['message' => 'لا توجد معلومات'], 404);
+}
 
         $manager = Manager::where('email', $request->email)->first();
         $manager->password = Hash::make($request->password);

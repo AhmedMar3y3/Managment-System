@@ -25,6 +25,6 @@ class ResetPass extends FormRequest
             'email' => 'required|email|',
             'code'  => 'required|numeric',
         'password'  => 'required|string',
-        ];
+        ]; 
     }
 }
