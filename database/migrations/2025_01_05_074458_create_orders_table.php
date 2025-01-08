@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('customer_address');
             $table->string('order_type')->nullable();
             $table->text('order_details');
-            $table->enum('status', ["جاري الاستلام", "تم التجهيز", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","تم الرفض","قيد التنفيذ", "تم التجهيز", "تم التوصيل"])->default("جاري الاستلام");
             $table->double('price');
             $table->double('deposit')->default(0);
             $table->date('delivery_date');
             $table->text('notes')->nullable();
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
+            $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('cascade');
             $table->foreignId('chef_id')->nullable()->constrained('chefs')->onDelete('cascade');
             $table->foreignId('delivery_id')->nullable()->constrained('deliveries')->onDelete('cascade');
             $table->timestamps();
