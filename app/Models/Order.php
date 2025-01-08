@@ -21,6 +21,7 @@ class Order extends Model
         'delivery_date',
         'notes',
         'sale_id',
+        'manager_id',
         'chef_id',
         'delivery_id',
     ];
@@ -30,6 +31,10 @@ class Order extends Model
         return $this->belongsTo(Sale::class);
     }
 
+    public function manager()
+    {
+        return $this->belongsTo(Manager::class);
+    }
     public function chef()
     {
         return $this->belongsTo(Chef::class);

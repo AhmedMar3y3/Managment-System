@@ -22,7 +22,8 @@ class BranchController extends Controller
     }
 
     public function show($id){
-        $branch = Branch::find($id)->with('manager', 'chefs', 'deliveries')->first();
+        $branch = Branch::find($id);
+        //->with('manager', 'chefs', 'deliveries')->first()
         if($branch){
             return response()->json($branch, 200);
         }else{
@@ -50,4 +51,6 @@ class BranchController extends Controller
             return response()->json(['message' => 'الفرع غير موجود'], 404);
         }
     }
+
+    
 }
