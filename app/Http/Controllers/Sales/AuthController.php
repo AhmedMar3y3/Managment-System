@@ -38,6 +38,7 @@ class AuthController extends Controller
              Mail::raw("رمز التحقق الخاص بك هو: $verificationCode", function ($message) use ($sale) {
                  $message->to($sale->email)->subject('رمز التحقق');
              });
+             
              return response()->json(['message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني'], 201);
          } elseif ($request->has('phone')) {
              Notification::send($sale, new VerifyPhone($verificationCode));
@@ -82,6 +83,8 @@ class AuthController extends Controller
          if ($user->status == "مرفوض") {
              return response()->json(['message' => 'تم رفض حسابك.'], 401);
          }
+
+
          if ($user->status == "قيد الانتظار") {
              return response()->json(['message' => 'حسابك قيد الانتظار للموافقة.'], 401);
          }
@@ -91,6 +94,9 @@ class AuthController extends Controller
              'user' => $user,
              'token' => $token
          ]);
+
+
+         
      }
      
  

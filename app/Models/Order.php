@@ -44,4 +44,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderImage::class);
     }
+
+public function manager(){
+    return $this->belongsTo(Manager::class);
+} 
+
 }

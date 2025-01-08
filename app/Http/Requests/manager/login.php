@@ -23,9 +23,7 @@ class login extends FormRequest
     {
         return [
             'password' =>'required|string',
-            'email' =>'required|email',
-            'status' =>'required|string',
-
+            'email' =>'required|email|exists:managers,email',
         ];
     }
 }

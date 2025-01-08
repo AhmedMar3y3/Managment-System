@@ -14,6 +14,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('sale_id', Auth('sale')->id())->get(['order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
+        
     }
 
     public function store(store $request)
@@ -23,7 +24,7 @@ class OrderController extends Controller
         $order = Order::create($validatedData);
         if ($request->has('images')) {
             foreach ($request->file('images') as $image) {
-             
+            
                     $destinationPath = public_path('orders');
                     $fileName = uniqid() . '_' . $image->getClientOriginalName();
                     $image->move($destinationPath, $fileName);
@@ -36,9 +37,8 @@ class OrderController extends Controller
             }
         }
 
-        
-    
         return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'order' => $order], 201);
+        
     }
 
     public function show($id)
