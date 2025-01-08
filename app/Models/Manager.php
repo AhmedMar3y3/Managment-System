@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+
 
 class Manager extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable = [
         'first_name',
@@ -34,4 +37,14 @@ class Manager extends Authenticatable
     public function branch(){
     return $this->belongsTo(Branch::class);
     }
+
+public function order(){
+    return $this->hasMany(Order::class);
+}
+
+public function chef()
+{
+    return $this->hasMany(Chef::class);
+} 
+
 }

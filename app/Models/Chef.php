@@ -17,7 +17,7 @@ class Chef extends Authenticatable
         'email',
         'password',
         'phone',
-        'image',
+        'image', 
         'status',
         'verification_code',
         'verified_at',
@@ -38,4 +38,11 @@ class Chef extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function manager(){
+    return $this->belongsTo(Manager::class);
+
+    }
+
+
 }
