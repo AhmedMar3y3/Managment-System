@@ -11,12 +11,14 @@ class orderDone extends Notification
 {
     use Queueable;
 
+    public $order;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -35,8 +37,10 @@ class orderDone extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->subject('Order Completed')
+                    ->line('The order with ID ' . $this->order->id . ' has been completed.')
+                    ->line('Chef ID: ' . $this->order->chef_id)
+                    ->action('View Order', url('/orders/' . $this->order->id))
                     ->line('Thank you for using our application!');
     }
 

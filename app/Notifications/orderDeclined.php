@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class orderAcceptedByChef extends Notification
+class orderDeclined extends Notification
 {
     use Queueable;
 
@@ -37,8 +37,8 @@ class orderAcceptedByChef extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Order Accepted by Chef')
-                    ->line('The chef has accepted the order with the following ID: ' . $this->order->id)
+                    ->subject('Order Declined by Chef')
+                    ->line('The chef has declined the order with the following ID: ' . $this->order->id)
                     ->action('View Order', url('/orders/' . $this->order->id))
                     ->line('Thank you for using our application!');
     }
