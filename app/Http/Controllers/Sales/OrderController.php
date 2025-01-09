@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\SendToManager;
 use App\Http\Requests\order\store;
 use App\Http\Requests\order\update;
 use App\Models\Order;
+use App\Models\Manager;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -34,11 +36,16 @@ class OrderController extends Controller
                         'order_id' => $order->id,
                     ]);
                 
+
             }
         }
 
+        $managers = Manager::all();
+    foreach ($managers as $manager) {
+        $manager->notify(new SendToManager($order));
+    
+    }
         return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'order' => $order], 201);
-        
     }
 
     public function show($id)
@@ -98,4 +105,5 @@ class OrderController extends Controller
         ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
+
 }
