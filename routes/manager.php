@@ -21,17 +21,14 @@ Route::post('verify', [AuthController::class, 'verify']);
 
 // Protected Routes___________________________________________________________________________________________
 Route::middleware('auth.manager')->group(function () {
-    
+
     Route::post('order', [ManagerController::class, 'index']);
-    Route::post('checkOrder', [ManagerController::class, 'checkOrder']);
+    Route::post('asignToChef', [ManagerController::class, 'asignToChef']);
+    Route::post('acceptOrder/{id}', [ManagerController::class, 'acceptOrder']);
+    Route:: post('/branches', [ManagerController::class, 'createBranch']);
     
     
-    
-
-
-
-
-
     Route::post('logout', [AuthController::class, 'logout']);
+
 });
 //____________________________________________________________________________________________________________
