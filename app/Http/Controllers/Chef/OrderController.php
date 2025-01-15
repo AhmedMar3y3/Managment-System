@@ -9,7 +9,6 @@ use App\Notifications\OrderAccepted;
 use App\Notifications\orderAcceptedByChef;
 use App\Notifications\orderDeclined;
 use App\Notifications\orderDone;
-use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -29,13 +28,19 @@ class OrderController extends Controller
     }
     public function completedOrders()
     {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get();
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['order_type', 'order_details', 'delivery_date', 'price']);
         return response()->json(['orders' => $orders], 200);
     }
 
     public function newOrders()
     {
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get();
+        return response()->json(['orders' => $orders], 200);
+    }
+
+    public function pendingOrders()
+    {
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->with('images')->get(['order_type', 'order_details', 'delivery_date', 'price']);
         return response()->json(['orders' => $orders], 200);
     }
 
@@ -59,6 +64,7 @@ class OrderController extends Controller
         $order = Order::where('chef_id', Auth('chef')->id())->findOrFail($id);
         if ($order->status == 'وافق المدير') {
             $order->status = 'تم الرفض';
+            $order->chef_id = null;
             $order->save();
             $managerId = $order->manager_id;
             $manager = Manager::where('id', $managerId)->first();
@@ -78,7 +84,6 @@ class OrderController extends Controller
             return response()->json(['message' => 'تم تحديث حالة الطلب', 'status' => 1], 200);
         }
         return response()->json(['message' => 'تم تحديث حالة الطلب مسبقاً', 'status' => 0], 200);
-
     }
 
     public function orderDone($id)
@@ -87,7 +92,6 @@ class OrderController extends Controller
         if ($order->status == 'قيد التنفيذ') {
             $order->status = 'تم التجهيز';
             $order->save();
-
             $managerId = $order->manager_id;
             $manager = Manager::where('id', $managerId)->first();
             $manager->notify(new orderDone($order));

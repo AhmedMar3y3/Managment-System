@@ -22,13 +22,14 @@ class update extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'nullable|string',
-            'last_name'  => 'nullable|string',
-            'email'      => 'nullable|email|unique:chefs,email',
-            'phone'      => 'nullable|numeric|unique:chefs,phone',
-            'image'      => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'branch_id'  => 'nullable|exists:branches,id',
-            'password'   => 'nullable|string',
+            'first_name'     => 'nullable|string',
+            'last_name'      => 'nullable|string',
+            'email'          => 'nullable|email|unique:chefs,email',
+            'phone'          => 'nullable|numeric|unique:chefs,phone',
+            'specialization' => 'nullable|string',
+            'image'          => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'branch_id'      => 'nullable|exists:branches,id',
+            'password'       => 'nullable|string',
         ];
     }
 }

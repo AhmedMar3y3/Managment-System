@@ -20,6 +20,8 @@ use App\Http\Controllers\Dashboard\BranchController;
     Route::get('/branches/{id}', [BranchController::class, 'show']);
     Route::put('/branches/{id}', [BranchController::class, 'update']);
     Route::delete('/branches/{id}', [BranchController::class, 'destroy']);
+
+    //
 });
 
 

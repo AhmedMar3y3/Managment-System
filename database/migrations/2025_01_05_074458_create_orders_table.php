@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('customer_address');
             $table->string('order_type')->nullable();
             $table->text('order_details');
-            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","تم الرفض","قيد التنفيذ", "تم التجهيز", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","تم الرفض","قيد التنفيذ", "تم التجهيز","استلام السائق", "تم التوصيل"])->default("جاري الاستلام");
             $table->double('price');
             $table->double('deposit')->default(0);
             $table->date('delivery_date');
