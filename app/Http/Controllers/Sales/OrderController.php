@@ -82,9 +82,10 @@ class OrderController extends Controller
         return response()->json(['message' => 'تم تحديث الطلب بنجاح', 'order' => $order], 200);
     }
 
+    //TODO: Ask for the types of orders should be returned
     public function newOrders()
     {
-        $orders = Order::where('status', "جاري الاستلام")
+        $orders = Order::where('status', "جاري الاستلام" || "وافق المدير" || "تم القبول" || "تم الرفض" )
         ->where('sale_id', Auth('sale')->id())
         ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
@@ -92,7 +93,7 @@ class OrderController extends Controller
 
     public function preparingOrders()
     {
-        $orders = Order::where('status', 'تم التجهيز')
+        $orders = Order::where('status', 'قيد التنفيذ')
         ->where('sale_id', Auth('sale')->id())
         ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);

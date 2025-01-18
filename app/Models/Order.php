@@ -51,5 +51,4 @@ class Order extends Model
     }
 
 
-
 }
