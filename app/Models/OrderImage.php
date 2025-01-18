@@ -12,7 +12,7 @@ class OrderImage extends Model
     protected $fillable = [
         'order_id',
         'image',
-    ];
+    ]; 
 
     public function order()
     {

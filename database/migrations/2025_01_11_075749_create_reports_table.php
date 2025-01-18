@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_images', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->string('image');
+            $table->string('problem');
+            $table->unsignedBigInteger('chef_id');
+            $table->foreign('chef_id')->references('id')->on('chefs')->onDelete('cascade');
+            $table->timestamps();
         });
-    } 
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_images');
+        Schema::dropIfExists('reports');
     }
 };

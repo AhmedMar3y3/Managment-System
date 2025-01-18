@@ -27,7 +27,7 @@ class Chef extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-    ];
+    ]; 
 
     public function branch()
     {
@@ -44,5 +44,9 @@ class Chef extends Authenticatable
 
     }
 
+
+    public function report(){
+        return $this->hasMany(Report::class);
+    }
 
 }

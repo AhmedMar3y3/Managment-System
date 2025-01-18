@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     */
+     */ 
     public function up(): void
     {
         Schema::create('managers', function (Blueprint $table) {
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('verified_at')->nullable();
             $table->timestamps();
         }); 
-    }
+    } 
 
     /**
      * Reverse the migrations.

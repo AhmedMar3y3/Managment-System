@@ -32,7 +32,7 @@ class Manager extends Authenticatable
         'remember_token', 
     
         
-    ]; 
+    ];  
 
     public function branch(){
     return $this->belongsTo(Branch::class);

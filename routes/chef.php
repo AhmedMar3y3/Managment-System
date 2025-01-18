@@ -6,6 +6,9 @@ use App\Http\Controllers\Chef\AuthController;
 use App\Http\Controllers\Chef\ProfileController;
 use App\Http\Controllers\Chef\OrderController;
 use App\Http\Controllers\Chef\HomeController;
+use App\Http\Controllers\Chef\ReportController;
+use App\Http\Controllers\Chef\NotificationsController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -32,4 +35,13 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::put('/order-in-progress/{id}', [OrderController::class, 'orderInProgress']);
     Route::put('/order-done/{id}', [OrderController::class, 'orderDone']);
     Route::get('/home-stats', [HomeController::class, 'homeStats']);
+    Route::get('/home-indexAll', [HomeController::class, 'indexAll']);
+    
+    //ReportAproblem
+    Route::post('/store-report', [ReportController::class, 'store']);
+    Route::get('/show-report/{id}', [ReportController::class, 'show']); 
+    
+    //Notifications
+    Route::get('/Notifications', [NotificationsController::class, 'getNotifications']);
+
 });
