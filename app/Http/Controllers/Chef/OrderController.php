@@ -12,36 +12,34 @@ use App\Notifications\orderDone;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function completedOrders()
     {
-        $orders = Order::where('chef_id', Auth('chef')->id())->get(['order_type', 'order_details', 'delivery_date', 'price']);
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['id','order_name']);
         return response()->json(['orders' => $orders], 200);
     }
-
+    
+    public function newOrders()
+    {
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id','order_name']);
+        return response()->json(['orders' => $orders], 200);
+    }
+    public function acceptedOrders()
+    {
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id','order_name']);
+        return response()->json(['orders' => $orders], 200);
+    }
+    
+    public function pendingOrders()
+    {
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->with('images')->get(['id','order_name']);
+        return response()->json(['orders' => $orders], 200);
+    }
     //TODO : alter this to get only needed data with images (select is not working with WITH)
     public function getOrderDetails($id)
     {
         $order = Order::where('chef_id', Auth('chef')->id())
-            ->with('Images')
-            ->findOrFail($id, ['order_type', 'order_details', 'delivery_date']);
+            ->findOrFail($id)->load('images');
         return response()->json(['order' => $order], 200);
-    }
-    public function completedOrders()
-    {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['order_type', 'order_details', 'delivery_date', 'price']);
-        return response()->json(['orders' => $orders], 200);
-    }
-
-    public function newOrders()
-    {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get();
-        return response()->json(['orders' => $orders], 200);
-    }
-
-    public function pendingOrders()
-    {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->with('images')->get(['order_type', 'order_details', 'delivery_date', 'price']);
-        return response()->json(['orders' => $orders], 200);
     }
 
     public function acceptOrder($id)

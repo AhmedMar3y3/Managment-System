@@ -11,6 +11,8 @@ Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-reset-code', [AuthController::class, 'verifyResetCode']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::get('/branches', [AuthController::class, 'branches']);
+
 
 Route::middleware(['auth.delivery'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

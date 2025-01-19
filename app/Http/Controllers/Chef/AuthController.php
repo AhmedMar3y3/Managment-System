@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Chef;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\chef\register;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Chef;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+    public function branches(){
+        $branches = Branch::get(['id', 'name']);
+        return response()->json(['branches' => $branches], 200);
+    }
   // Register a new user
   public function register(register $request)
   {

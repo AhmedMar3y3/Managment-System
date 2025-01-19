@@ -35,8 +35,6 @@ class OrderController extends Controller
                         'image' => $imageFullUrl,
                         'order_id' => $order->id,
                     ]);
-                
-
             }
         }
 
@@ -82,12 +80,11 @@ class OrderController extends Controller
         return response()->json(['message' => 'تم تحديث الطلب بنجاح', 'order' => $order], 200);
     }
 
-    //TODO: Ask for the types of orders should be returned
     public function newOrders()
     {
-        $orders = Order::where('status', "جاري الاستلام" || "وافق المدير" || "تم القبول" || "تم الرفض" )
+        $orders = Order::whereDate('created_at', today())
         ->where('sale_id', Auth('sale')->id())
-        ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
+        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
 
@@ -95,7 +92,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('status', 'قيد التنفيذ')
         ->where('sale_id', Auth('sale')->id())
-        ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
+        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
 
@@ -103,7 +100,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('status', 'تم التوصيل')
         ->where('sale_id', Auth('sale')->id())
-        ->get(['order_type', 'status', 'delivery_date', 'customer_name']);
+        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
 

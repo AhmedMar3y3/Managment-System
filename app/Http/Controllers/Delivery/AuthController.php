@@ -13,10 +13,16 @@ use App\Notifications\ResetPassword;
 use App\Notifications\VerifyPhone;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Branch;
 
 
 class AuthController extends Controller
 {
+
+    public function branches(){
+        $branches = Branch::get(['id', 'name']);
+        return response()->json(['branches' => $branches], 200);
+    }
   // Register a new user
   public function register(register $request)
   {
