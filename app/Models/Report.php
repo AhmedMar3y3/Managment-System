@@ -11,8 +11,6 @@ class Report extends Model
 
     protected $fillable=['problem','chef_id'];
 
-
-
     public function chef(){
         return $this->belongsTo(Chef::class);
     }

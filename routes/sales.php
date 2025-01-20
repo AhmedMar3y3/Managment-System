@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sales\AuthController;
 use App\Http\Controllers\Sales\OrderController;
 use App\Http\Controllers\Sales\ProfileController;
+use App\Http\Controllers\Sales\HomeController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -20,6 +21,11 @@ Route::middleware(['auth.sale'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'getProfile']);
     Route::put('/profile', [ProfileController::class, 'updateProfile']);
     Route::delete('/delete-account', [ProfileController::class, 'deleteAccount']);
+
+    // Home Routes
+    Route::get('/banners', [HomeController::class, 'banners']);
+    Route::get('/ready-orders', [HomeController::class, 'readyOrders']);
+    Route::get('/stats', [HomeController::class,'stats']);
 
     // Order Routes
     Route::get('/orders', [OrderController::class, 'index']);

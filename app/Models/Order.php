@@ -14,6 +14,8 @@ class Order extends Model
         'customer_phone',
         'customer_address',
         'order_type',
+        'order_name',
+        'quantity',
         'order_details',
         'status',
         'price',
