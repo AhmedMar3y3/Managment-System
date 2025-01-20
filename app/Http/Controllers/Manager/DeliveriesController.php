@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Manager;
 use App\Models\Delivery;
+use App\Models\Order;
 //__________________________________________________________________________________________
 
 class DeliveriesController extends Controller
@@ -15,20 +16,19 @@ class DeliveriesController extends Controller
 //__________________________________________________________________________________________
 public function AllDeliveries()
 {
-    $deliveryInformation=Delivery::select('first_name', 'phone', 'image')->get();
+    $deliveryInformation=Delivery::select('first_name', 'phone','image','id')->get();
     $deliveryStatus=Delivery::where('status','مقبول')->get()->count();
     return response()->json(['message'=> $deliveryInformation,
     'orders'=>$deliveryStatus,
+    
 ]);
 }
 //__________________________________________________________________________________________
-
 public function showDelivery(string $id)
 {
-    $delivery = Delivery::select('first_name', 'phone', 'image','')->findOrFail($id);
-    $Allorder = Delivery::with('orders')->count();
-    $ordersDone = Delivery::with('orders')->where('status', 'تم التوصيل')->count();
-    $Receiving = Delivery::with('orders')->where('status', 'جاري الاستلام"')->count();
+    $delivery = Delivery::select('first_name', 'phone', 'image','id')->findOrFail($id);
+    $ordersDone = Order::where('status', 'تم التوصيل')->count();
+    $Receiving = Order::where('status', 'استلام السائق')->count();
     $deliveryDates = Delivery::with('orders')->first();
     
     if ($Receiving <= 1) {
@@ -39,15 +39,23 @@ public function showDelivery(string $id)
 
     return response()->json([
         'delivery' => $delivery,
-        'Allorder' => $Allorder,
         'ordersDone' => $ordersDone,
         'averageDeliveryDate' => $deliveryDates->delivery_date,
         'canTakeOrder'=>$canTakeOrder
     ]);
 }
-
 //__________________________________________________________________________________________
-
-
-
+public function assignOrderToDelivery(Request $request)
+{
+    $validatedData = $request->validate([
+        'order_id' => 'required|integer|exists:orders,id',
+        'delivery_id' => 'required|integer|exists:deliveries,id',
+    ]);
+    $order = Order::find($validatedData['order_id']);
+        $order->update([
+            'delivery_id' => $validatedData['delivery_id'],
+        ]);
+        return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
+        }
+// ______________________________________________________________________________________________
 }

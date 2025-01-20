@@ -26,7 +26,7 @@ class AuthController extends Controller
          $image = $request->file('image');
          $imageName = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
          $image->move(public_path('users'), $imageName);
-         $validatedData['image'] = env('APP_URL') . '/public/users/' . $imageName;
+         $validatedData['image'] = env('APP_URL') . '/users/' . $imageName;
      }
      $delivery = Delivery::create($validatedData);
 

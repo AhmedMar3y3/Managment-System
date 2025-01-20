@@ -31,7 +31,7 @@ public function assignToChef(Request $request)
         if ($order->status == "وافق المدير" || $order->status == "تم الرفض") {
             $order->update([
                 'chef_id' => $validatedData['chef_id'],
-                // 'status' => 'وافق المدير',
+                
             ]);
 
             return response()->json(['message' => 'تم ارسال الطلب إلى الشيف بنجاح']);
@@ -44,6 +44,7 @@ public function assignToChef(Request $request)
 //______________________________________________________________________________________________
 public function acceptOrder($id)
 {
+    
     $order = Order::findOrFail($id);
     if ($order->status === "جاري الاستلام") {
         $order->status = "وافق المدير";
@@ -52,6 +53,7 @@ public function acceptOrder($id)
         
         return response()->json([
             'message' => 'تم الموافقة على الطلب بنجاح',
+            'order_id' => $order->id,
             'manager_id' => $order->manager_id,
             'status' => $order->status,
         ]);
@@ -59,36 +61,7 @@ public function acceptOrder($id)
     return response()->json(['message' => 'حالة الطلب غير صحيحة']);
 }
 //______________________________________________________________________________________________
-// public function status()
-// {
-//     $order = Manager::where('status', 'قيد الانتظار')->first();
-    
-//     if ($order) {
-//         $order->status = 'مقبول';
-//         $order->save(); 
-//     }
-//     return response()->json(['message' => 'تم تغيير الحالة إلى مقبول', 'order' => $order]);
-// }
-//______________________________________________________________________________________________
-// public function switchStatusToApproved($id)
-// {
-//     // Find the manager by ID
-//     $manager = Manager::find($id);
-    
-//     if (!$manager) {
-//         return response()->json([
-//             'success' => false,
-//             'message' => "Manager with ID $id does not exist."
-//         ], 404);
-//     }
-//     $manager->status = 'مقبول';
-//     $manager->save();
-//     return response()->json([
-//         'success' => true,
-//         'message' => "Manager with ID $id has been updated to مقبول."
-//     ]);
-// }
-//______________________________________________________________________________________________
+
 
 }
 

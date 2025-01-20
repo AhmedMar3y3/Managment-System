@@ -9,7 +9,7 @@ use App\Models\Order;
 use App\Models\OrderImage;
 
 //___________________________________________________________________________________________________________________
-class OrdersDetailsController extends Controller
+class OrdersCompletedController extends Controller
 {
 //___________________________________________________________________________________________________________________
     public function completedOrders()
@@ -37,19 +37,26 @@ class OrdersDetailsController extends Controller
 //___________________________________________________________________________________________________________________
 public function show(string $id)
 {
-    $order = Order::with(['images', 'manager'])->findOrFail($id);
+    $order = Order::with(['images', 'manager','chef','delivery','id'])->findOrFail($id);
     if ($order->manager_id === auth('manager')->id()) {
         return response()->json([
             'success' => true,
-            'data' => $order,
+            'order_details' => $order->order_details,
+            'chef_name' => $order->chef->first_name,
+            'delivery_name' => $order->delivery ? $order->delivery->first_name : 'لم يتم اختياره بعد',
+            'customer_phone' => $order->customer_phone,
+            'customer_name' => $order->customer_name,
+            'price' => $order->price,
+            'customer_address' => $order->customer_address,
+            'images' => $order->images,
         ], 200);
     }
-
     return response()->json([
         'success' => false,
         'message' => 'You are not allowed to access this order',
     ], 403);
 }
-
 //___________________________________________________________________________________________________________________
 }
+
+
