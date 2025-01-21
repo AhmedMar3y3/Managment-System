@@ -55,7 +55,7 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'تم تحديث الطلب بنجاح (الشاشة الثانية)',
-            'order'   => $order,
+            'updated_data' => $validatedData,
         ], 200);
     }
 
@@ -65,15 +65,14 @@ class OrderController extends Controller
         $validatedData = $request->validated();
         $order->update($validatedData);
 
-        // Notify Managers
-        $managers = Manager::all();
+        $managers = Manager::where('status', 'مقبول')->get();
         foreach ($managers as $manager) {
             $manager->notify(new SendToManager($order));
         }
 
         return response()->json([
             'message' => 'تم تحديث الطلب بنجاح (الشاشة الثالثة)',
-            'order'   => $order,
+            'updated_data' => $validatedData,
         ], 200);
     }
 

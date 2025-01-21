@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\AuthController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BannerController;
+use App\Http\Controllers\Dashboard\ChefController;
+use App\Http\Controllers\Dashboard\DeliveryController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\ManagerController;
 use App\Http\Controllers\Dashboard\SalesController;
@@ -48,6 +50,16 @@ use App\Http\Controllers\Dashboard\SalesController;
     Route::post('/accept-sale/{id}', [SalesController::class,'acceptSale']);
     Route::post('/reject-sale/{id}', [SalesController::class,'rejectSale']);
     Route::delete('/delete-sale/{id}', [SalesController::class,'deleteSale']);
+
+    // Chef routes
+    Route::get('/chefs', [ChefController::class,'index']);
+    Route::get('/chef/{id}', [ChefController::class,'show']);
+    Route::delete('/delete-chef/{id}', [ChefController::class,'delete']);
+
+    // Delivery routes
+    Route::get('/deliveries', [DeliveryController::class,'index']);
+    Route::get('/delivery/{id}', [DeliveryController::class,'show']);
+    Route::delete('/delete-delivery/{id}', [DeliveryController::class,'delete']);
 });
 
 
