@@ -24,8 +24,8 @@ class register extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name'  => 'required|string',
-            'email'      => 'required|email|unique:chefs,email',
-            'phone'      => 'required|numeric|unique:chefs,phone',
+            'email'      => 'required|email|unique:deliveries,email',
+            'phone'      => 'required|numeric|unique:deliveries,phone',
             'image'      => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'branch_id'  => 'required|exists:branches,id',
             'password'   => 'required|string',
