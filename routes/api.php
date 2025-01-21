@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\ChefController;
 use App\Http\Controllers\Dashboard\DeliveryController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\ManagerController;
+use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\SalesController;
 
 //////////////////////////////////////////Admin routes//////////////////////////////////////////
@@ -60,6 +61,10 @@ use App\Http\Controllers\Dashboard\SalesController;
     Route::get('/deliveries', [DeliveryController::class,'index']);
     Route::get('/delivery/{id}', [DeliveryController::class,'show']);
     Route::delete('/delete-delivery/{id}', [DeliveryController::class,'delete']);
+
+    // Order routes
+    Route::get('/orders', [OrderController::class,'index']);
+    Route::get('/order/{id}', [OrderController::class,'show']);
 });
 
 
