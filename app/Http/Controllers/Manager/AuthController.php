@@ -85,13 +85,13 @@ if($manager->verified_at === null){
 
 }
 
-        // if ($manager->status === 'قيد الانتظار') {
-        //     return response()->json(['message' => 'لم يتم القبول بعد'], 403);
-        // }
+        if ($manager->status === 'قيد الانتظار') {
+            return response()->json(['message' => 'لم يتم القبول بعد'], 403);
+        }
 
-        // if ($manager->status === 'مرفوض') {
-        //     return response()->json(['message' => 'لقد تم رفض الطلب'], 403);
-        // }
+        if ($manager->status === 'مرفوض') {
+            return response()->json(['message' => 'لقد تم رفض الطلب'], 403);
+        }
 
         $token = $manager->createToken('manager_token')->plainTextToken;
         return response()->json([
