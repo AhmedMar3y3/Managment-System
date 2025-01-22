@@ -28,13 +28,13 @@ Route::middleware(['auth.chef'])->group(function () {
 
     // Home Routes
     Route::get('/banners', [HomeController::class, 'banners']);
-    Route::post('/new-orders', [HomeController::class,'newOrders']);
+    Route::get('/new-orders', [HomeController::class,'newOrders']);
 
     //Order Routes
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{id}', [OrderController::class, 'getOrderDetails']);
     Route::get('/completed-orders', [OrderController::class, 'completedOrders']);
-    Route::get('/new-orders', [OrderController::class, 'newOrders']);
+    // Route::get('/new-orders', [OrderController::class, 'newOrders']);
     Route::get('/accepted-orders', [OrderController::class, 'acceptedOrders']);
     Route::get('/pending-orders', [OrderController::class,'pendingOrders']);
     Route::put('/accept-order/{id}', [OrderController::class, 'acceptOrder']);

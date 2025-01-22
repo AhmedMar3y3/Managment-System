@@ -65,10 +65,10 @@ class OrderController extends Controller
         $validatedData = $request->validated();
         $order->update($validatedData);
 
-        $managers = Manager::where('status', 'مقبول')->get();
-        foreach ($managers as $manager) {
-            $manager->notify(new SendToManager($order));
-        }
+        // $managers = Manager::where('status', 'مقبول')->get();
+        // foreach ($managers as $manager) {
+        //     $manager->notify(new SendToManager($order));
+        // }
 
         return response()->json([
             'message' => 'تم تحديث الطلب بنجاح (الشاشة الثالثة)',

@@ -18,11 +18,11 @@ class OrderController extends Controller
         return response()->json(['orders' => $orders], 200);
     }
     
-    public function newOrders()
-    {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id','order_name']);
-        return response()->json(['orders' => $orders], 200);
-    }
+    // public function newOrders()
+    // {
+    //     $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id','order_name']);
+    //     return response()->json(['orders' => $orders], 200);
+    // }
     public function acceptedOrders()
     {
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id','order_name']);
