@@ -107,4 +107,18 @@ class OrderController extends Controller
         }
         return response()->json(['message' => 'غير مصرح'], 404);
     }
+
+    public function pendingOrders(){
+        $orders = Order::where('delivery_id', Auth('delivery')->id())
+            ->where('status', 'استلام السائق')
+            ->get(['id', 'quantity', 'updated_at']);
+            return response()->json( $orders, 200);
+    }
+    public function completedOrders(){
+        $orders = Order::where('delivery_id', Auth('delivery')->id())
+            ->where('status', 'تم التوصيل')
+            ->get(['id', 'quantity','updated_at']);
+            return response()->json( $orders, 200);
+    }
+
 }

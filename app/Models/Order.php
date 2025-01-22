@@ -23,6 +23,8 @@ class Order extends Model
         'latitude',
         'map_desc',
         'additional_data',
+        'is_returned',
+        'problem',
         'status',
         'sale_id',
         'manager_id',

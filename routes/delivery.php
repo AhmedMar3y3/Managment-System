@@ -12,7 +12,6 @@ Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-reset-code', [AuthController::class, 'verifyResetCode']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-Route::get('/branches', [AuthController::class, 'branches']);
 
 
 Route::middleware(['auth.delivery'])->group(function () {
@@ -30,7 +29,13 @@ Route::middleware(['auth.delivery'])->group(function () {
     Route::post('/accept-order/{id}', [OrderController::class,'acceptOrder']);
     Route::post('/reject-order/{id}', [OrderController::class,'rejectOrder']);
     Route::post('/order-delivered/{id}', [OrderController::class,'orderDelivered']);
-    Route::post('/cancel-order', [OrderController::class,'cancelOrder']);
+    Route::post('/cancel-order/{id}', [OrderController::class,'cancelOrder']);
+    Route::get('/pending-orders', [OrderController::class,'pendingOrders']);
+    Route::get('/completed-orders', [OrderController::class,'completedOrders']);
+
+    //Home Routes
+    Route::get('/search', [HomeController::class,'search']);
+    Route::get('/branch-address', [HomeController::class,'branchAddress']);
 
 
 });
