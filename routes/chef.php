@@ -27,7 +27,6 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::delete('/delete-account', [ProfileController::class, 'deleteAccount']);
 
     // Home Routes
-    Route::get('/stats', [HomeController::class, 'stats']);
     Route::get('/banners', [HomeController::class, 'banners']);
     Route::post('/new-orders', [HomeController::class,'newOrders']);
 

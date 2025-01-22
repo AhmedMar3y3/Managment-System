@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Sales;
 use App\Http\Controllers\Controller;
 use App\Notifications\SendToManager;
 use App\Http\Requests\order\store;
+use App\Http\Requests\order\storeFirst;
+use App\Http\Requests\order\storeSecond;
+use App\Http\Requests\order\storeThird;
 use App\Http\Requests\order\update;
 use App\Models\Order;
 use App\Models\Manager;
@@ -19,7 +22,7 @@ class OrderController extends Controller
         
     }
 
-    public function store(store $request)
+    public function storeFirstScreen(storeFirst $request)
     {
         $validatedData = $request->validated();
         $validatedData['sale_id'] = Auth('sale')->id();
@@ -38,13 +41,67 @@ class OrderController extends Controller
             }
         }
 
-        $managers = Manager::all();
-    foreach ($managers as $manager) {
-        $manager->notify(new SendToManager($order));
+        return response()->json([
+            'message' => 'تم إنشاء الطلب بنجاح',
+            'order'   => $order,
+        ], 201);
+    }
+
+    // Second Screen: Update Order with Price Details
+    public function storeSecondScreen(storeSecond $request, Order $order)
+    {
+        $validatedData = $request->validated();
+        $order->update($validatedData);
+
+        return response()->json([
+            'message' => 'تم تحديث الطلب بنجاح (الشاشة الثانية)',
+            'updated_data' => $validatedData,
+        ], 200);
+    }
+
+    // Third Screen: Update Order with Customer and Location Details
+    public function storeThirdScreen(storeThird $request, Order $order)
+    {
+        $validatedData = $request->validated();
+        $order->update($validatedData);
+
+        $managers = Manager::where('status', 'مقبول')->get();
+        foreach ($managers as $manager) {
+            $manager->notify(new SendToManager($order));
+        }
+
+        return response()->json([
+            'message' => 'تم تحديث الطلب بنجاح (الشاشة الثالثة)',
+            'updated_data' => $validatedData,
+        ], 200);
+    }
+
+    // public function store(store $request)
+    // {
+    //     $validatedData = $request->validated();
+    //     $validatedData['sale_id'] = Auth('sale')->id();
+    //     $order = Order::create($validatedData);
+    //     if ($request->has('images')) {
+    //         foreach ($request->file('images') as $image) {
+            
+    //                 $destinationPath = public_path('orders');
+    //                 $fileName = uniqid() . '_' . $image->getClientOriginalName();
+    //                 $image->move($destinationPath, $fileName);
+    //                 $imageFullUrl = url("orders/{$fileName}");
+    //                 $order->images()->create([
+    //                     'image' => $imageFullUrl,
+    //                     'order_id' => $order->id,
+    //                 ]);
+    //         }
+    //     }
+
+    //     $managers = Manager::all();
+    // foreach ($managers as $manager) {
+    //     $manager->notify(new SendToManager($order));
     
-    }
-        return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'order' => $order], 201);
-    }
+    // }
+    //     return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'order' => $order], 201);
+    // }
 
     public function show($id)
     {
