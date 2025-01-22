@@ -11,7 +11,7 @@ class TrackingPositionController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'device_id' => 'required',
+            'device_id' => 'required', 
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
