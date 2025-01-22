@@ -11,6 +11,7 @@ use App\Http\Controllers\Manager\OrdersNotFinishedController;
 use App\Http\Controllers\Manager\OrdersCompletedController;
 use App\Http\Controllers\Manager\AdditionRequestsController;
 use App\Http\Controllers\Manager\ProfileManagerController;
+use App\Http\Controllers\Manager\TrackingPositionController;
 //_____________________________________________________________________________________________________________
 
 
@@ -53,21 +54,23 @@ use App\Http\Controllers\Manager\ProfileManagerController;
     Route::get('/show-new-order/{id}', [OrdersNotFinishedController::class, 'ShowNewOrder']);
     Route::get('/stats', [OrdersNotFinishedController::class, 'stats']);
     
-//OrdersDelivered______________________________________________________________________________________________
+    //OrdersDelivered______________________________________________________________________________________________
     Route::get('/delivered-orders', [OrdersDeliveredController::class,'deliveredOrders']);
-///
-//additionrerquests_____________________________________________________________________________________________
+    ///
+    //additionrerquests_____________________________________________________________________________________________
     Route::get('/addition', [AdditionRequestsController::class, 'Addition']);
     Route::post('/accept-chef', [AdditionRequestsController::class, 'acceptChef']);
     Route::post('/reject-chef', [AdditionRequestsController::class, 'rejectChef']);
     Route::post('/accept-delivery', [AdditionRequestsController::class, 'acceptDelivery']);
     Route::post('/reject-delivery', [AdditionRequestsController::class, 'rejectDelivery']);
-
-//MANAGE/Rprofile/___________________________________________________________________________________________________________________-
+    
+    //MANAGE/Rprofile/___________________________________________________________________________________________________________________-
     Route::get('/profile', [ProfileManagerController::class, 'getProfilemanager']);
     Route::put('/profile', [ProfileManagerController::class, 'updateProfilemanager']);
     Route::delete('/delete-account', [ProfileManagerController::class, 'deleteAccountmanager']);
-
-//_______________________________________________________________________________________________________________
+    // tracking_position_______________________________________________________________________________________________________________
+    Route::post('/store-tracking', [TrackingPositionController::class, 'store']);
+    Route::get('/show-latest/{id}', [TrackingPositionController::class, 'latest']);
+//________________________________________________________________________________________________________________________
 
 });
