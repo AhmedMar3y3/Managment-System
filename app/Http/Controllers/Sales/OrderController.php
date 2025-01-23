@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Notifications\SendToManager;
-use App\Http\Requests\order\store;
 use App\Http\Requests\order\storeFirst;
 use App\Http\Requests\order\storeSecond;
 use App\Http\Requests\order\storeThird;
 use App\Http\Requests\order\update;
 use App\Models\Order;
 use App\Models\Manager;
-use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -140,7 +138,7 @@ class OrderController extends Controller
     public function newOrders()
     {
         $orders = Order::whereDate('created_at', today())
-        ->where('sale_id', Auth('sale')->id())
+        ->where('sale_id', Auth('sale')->id())->with('images')
         ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
