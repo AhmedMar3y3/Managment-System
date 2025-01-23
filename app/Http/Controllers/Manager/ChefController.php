@@ -55,4 +55,18 @@ public function CurrentRequests()
 }
 //____________________________________________________________________________________________________________
 
+public function CurrentRequestsDelivery()
+{
+    $delivery = auth('manager')->user();
+    if (!$delivery) {
+        return response()->json(['error' => 'لايوجد مدير'], 401);
+    }
+    $orders = Order::whereIn('status', ['تم القبول', 'قيد التنفيذ'])
+    ->where('delivery_id', $delivery->id)
+    ->get();
+    return response()->json(['orders'=>$orders],200);
+}
+
+
+
 }
