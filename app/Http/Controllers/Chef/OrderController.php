@@ -17,12 +17,7 @@ class OrderController extends Controller
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['id','order_name']);
         return response()->json(['orders' => $orders], 200);
     }
-    
-    // public function newOrders()
-    // {
-    //     $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id','order_name']);
-    //     return response()->json(['orders' => $orders], 200);
-    // }
+
     public function acceptedOrders()
     {
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id','order_name']);
@@ -34,7 +29,7 @@ class OrderController extends Controller
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->with('images')->get(['id','order_name']);
         return response()->json(['orders' => $orders], 200);
     }
-    //TODO : alter this to get only needed data with images (select is not working with WITH)
+    
     public function getOrderDetails($id)
     {
         $order = Order::where('chef_id', Auth('chef')->id())

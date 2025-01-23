@@ -94,7 +94,6 @@ class OrderController extends Controller
         return response()->json(['message' => 'غير مصرح'], 404);
     }
 
-    //Todo: Ask about this endpoint should it be separated or not
     public function cancelOrder(Request $request, $id)
     {
         $order = Order::find($id);
