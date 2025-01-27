@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 
 
+//Check CI/CD
 class AuthController extends Controller
 {
 
