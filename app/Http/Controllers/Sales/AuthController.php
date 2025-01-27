@@ -45,7 +45,7 @@ class AuthController extends Controller
              return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
          }
  
-         return response()->json(['message' => 'تم تسجيل المستخدم بنجاح'], 201);
+         return response()->json(['key'=>'sales','message' => 'تم تسجيل المستخدم بنجاح'], 201);
      } 
  
       // Verify account (email or phone)
@@ -91,6 +91,7 @@ class AuthController extends Controller
               $token = $user->createToken('sale-token')->plainTextToken;
      
          return response()->json([
+            'key'=>'sales',
              'user' => $user,
              'token' => $token
          ]);

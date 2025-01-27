@@ -47,7 +47,7 @@ class AuthController extends Controller
           return response()->json(['message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني'], 201);
       } elseif ($request->has('phone')) {
           Notification::send($delivery, new VerifyPhone($verificationCode));
-          return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
+          return response()->json(['key'=>'delivery', 'message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
       }
 
       return response()->json(['message' => 'تم تسجيل المستخدم بنجاح'], 201);
@@ -95,6 +95,7 @@ class AuthController extends Controller
               $token = $user->createToken('delivery-token')->plainTextToken;
      
          return response()->json([
+            'key'=>'delivery',
              'user' => $user,
              'token' => $token
          ]);

@@ -70,7 +70,7 @@ class AuthController extends Controller
        $chef->verification_code = null;
        $chef->save();
 
-       return response()->json(['message' => 'تم التحقق من الحساب بنجاح'], 200);
+       return response()->json(['key'=>'chef','message' => 'تم التحقق من الحساب بنجاح'], 200);
    }
    
   // Login user
@@ -96,6 +96,7 @@ class AuthController extends Controller
               $token = $user->createToken('chef-token')->plainTextToken;
      
          return response()->json([
+             'key'=>'chef',
              'user' => $user,
              'token' => $token
          ]);
