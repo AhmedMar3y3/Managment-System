@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Manager;
 use App\Models\Delivery;
 use App\Models\Order;
+use App\Notifications\OrderRejectedNotification;
 //__________________________________________________________________________________________
 
 class DeliveriesController extends Controller
@@ -55,7 +56,16 @@ public function assignOrderToDelivery(Request $request)
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
         ]);
-        return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
+        if (in_array($order->status, ['تم الرفض', 'مرتجع'])) {
+        
+            $delivery = Delivery::find($validatedData['delivery_id']);
+            $delivery->notify(new OrderRejectedNotification($order));
+                return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
+        }
+        return response()->json(['message' => 'خطأ'], 403);
+
         }
 // ______________________________________________________________________________________________
 }
+
+

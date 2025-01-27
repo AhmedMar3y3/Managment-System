@@ -7,6 +7,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderImage;
+use App\Models\Delivery;
 
 //___________________________________________________________________________________________________________________
 class OrdersCompletedController extends Controller
@@ -65,6 +66,39 @@ public function show(string $id)
     ], 403);
 }
 //___________________________________________________________________________________________________________________
+
+//___________________________________________________________________________________________________________________
+// public function resendOrder(string $delivery_id, $id)
+// {
+//     $order = Order::findOrFail($id);
+
+//     if ($order->manager_id !== auth('manager')->id()) {
+//         return response()->json([
+//             'message' => 'لا تملك صلاحية لإعادة إرسال هذا الطلب.',
+//         ], 403);
+//     }
+
+//     if (!in_array($order->status, ['مرفوض', 'مرتجع'])) {
+//         return response()->json([
+//             'message' => 'يمكن إعادة إرسال الطلب فقط إذا كان في حالة "مرفوض" أو "مرتجع".',
+//         ], 400);
+//     }
+
+//     if (!Delivery::where('id', $delivery_id)) {
+//         return response()->json([
+//             'message' => 'معرف المندوب غير صالح.',
+//         ], 400);
+//     }
+
+//     $order->status = 'استلام السائق';
+//     $order->delivery_id = $delivery_id;
+//     $order->save();
+
+//     return response()->json([
+//         'message' => 'تم إرسال الطلب إلى المندوب بنجاح.',
+//         'order' => $order,
+//     ], 200);
+// }
+
+//___________________________________________________________________________________________________________________
 }
-
-

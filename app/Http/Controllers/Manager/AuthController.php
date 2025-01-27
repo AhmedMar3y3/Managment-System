@@ -42,7 +42,9 @@ class AuthController extends Controller
             Notification::send($manager, new VerifyPhone($verificationCode));
             return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
         }
-        return response()->json(['message' => 'تم تسجيل المستخدم بنجاح'], 201);
+        return response()->json([
+            'key'=>'manager',
+            'message' => 'تم تسجيل المستخدم بنجاح'], 201);
     } 
 
     public function verify(Request $request)
@@ -95,7 +97,7 @@ if($manager->verified_at === null){
 
         $token = $manager->createToken('manager_token')->plainTextToken;
         return response()->json([
-            'message' => 'تم تسجيل الدخول بنجاح',
+            'key'=>'manager',
             'manager' => $manager,
             'token' => $token,
         ], 200);
