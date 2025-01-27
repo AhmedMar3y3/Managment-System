@@ -15,18 +15,47 @@ use App\Models\OrderImage;
 class OrdersNotFinishedController extends Controller
 {
 //___________________________________________________________________________________________________________________
-public function stats(){
-$accept=Order::where('status','تم القبول')->count();
-$dlivered=Order::where('status','تم التوصيل')->count();
-$totaldlivered=$accept-$dlivered;
-return response()->json(['delvered_orders'=>$totaldlivered]);
-}
+public function stats()
+{
+
+    $preparedCount = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', "تم التجهيز")
+        ->count();
+
+    $rejectedCount = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', "تم الرفض")
+        ->count();
+
+    $deliveredCount = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', "تم التوصيل")
+        ->count();
+
+    $returnedCount = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', "مرتجع")
+        ->count();
+
+
+$Count = Order::where('manager_id', auth('manager')->user()->id)
+    ->where('status', "تم التوصيل")
+    ->count();
+$totalOrders = Order::count();
+$Percentage = ($totalOrders > 0) ? ($Count / $totalOrders) * 100 : 0;
+
+
+
+return response()->json([
+    'prepared' => $preparedCount,
+    'rejected' => $rejectedCount,
+    'delivered' => $deliveredCount,
+    'returned' => $returnedCount,
+    'percentage' => $Percentage . "%", 
+    ], 200);
+} 
+
 //___________________________________________________________________________________________________________________
     public function inProgressOrders()
     {
-        $manager = auth('manager')->user();
-    
-        $orders = Order::where('manager_id', $manager->id)
+        $orders = Order::where('manager_id', auth('manager')->user()->id)
             ->where('status',  'قيد التنفيذ')
             ->orderBy('delivery_date', 'desc')
             ->get(['id', 'customer_name', 'order_details', 'order_type']);
@@ -65,6 +94,9 @@ public function ShowNewOrder(string $id){
 }
 //___________________________________________________________________________________________________________________
 
-
+// $accept=Order::where('status','تم القبول')->count();
+// $dlivered=Order::where('status','تم التوصيل')->count();
+// $totaldlivered=$accept-$dlivered;
+// return response()->json(['delvered_orders'=>$totaldlivered]);
 
 }

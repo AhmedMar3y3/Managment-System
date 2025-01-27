@@ -30,81 +30,70 @@ public function Addition()
     ], 200);
 }
 //___________________________________________________________________________________________________
-public function acceptChef(Request $request)
+public function acceptChef(string $id)
 {
-    $validatedData = $request->validate([
-        'chef_id' => 'required|integer|exists:chefs,id',
-    ]);
-    $manager = auth('manager')->user();
-    $chef = Chef::where('id', $validatedData['chef_id'])
-        ->where('branch_id', $manager->branch_id)
-        ->first();
-    if (!$chef) {
+    $chef = Chef::findOrFail($id);
+    if ($chef->branch_id === Auth('manager')->user()->branch_id) {
+        $chef->update(['status' => 'مقبول']);
         return response()->json([
-            'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
-        ], 404);
+            'message' => 'تم قبول الشيف بنجاح',
+        ], 200);
     }
-    $chef->update(['status' => 'مقبول']);
     return response()->json([
-        'message' => 'تم قبول الشيف بنجاح',
-    ], 200);
+        'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
+    ], 404);
 }
 //_________________________________________________________________________________________________________
 
-public function rejectChef(Request $request)
+public function rejectChef(string $id)
 {
-    $validatedData = $request->validate([
-        'chef_id' => 'required|integer|exists:chefs,id',
-    ]);
-    $manager = auth('manager')->user();
-    $chef = Chef::where('id', $validatedData['chef_id'])
-        ->where('branch_id', $manager->branch_id)
-        ->first();
-    if (!$chef) {
-        return response()->json([
-            'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
-        ], 404);
-    }
-    $chef->update(['status' => 'مرفوض']);
-    return response()->json([
-        'message' => 'تم رفض الشيف بنجاح',
-    ], 200);
-} 
-//___________________________________________________________________________________________________
 
-public function acceptDelivery(request $request){
-    $validatedData=$request->validate([
-        'delivery_id'=>'required|integer|exists:deliveries,id',
-    ]);
-    $manager=auth('manager')->user();
-    $delivery=Delivery::where('id',$validatedData['delivery_id'])
-    ->where('branch_id',$manager->branch_id)
-    ->first();
-    if(!$delivery){
-        return response()->json(['message'=>'المندوب غير موجود او لا ينتمي الي الفرع']);
+    $chef = Chef::findOrFail($id);
+
+    if ($chef->branch_id === auth('manager')->user()->branch_id) {
+        $chef->update(['status' => 'مرفوض']);
+    
+        return response()->json([
+            'message' => 'تم رفض الشيف بنجاح',
+        ], 200);
+    
     }
-    $delivery->update(['status'=>'مقبول']);
     return response()->json([
-        'message'=>'تم قبول المندوب',
-    ], 200);
+        'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
+    ], 404);
+
 }
 //___________________________________________________________________________________________________
 
-public function  rejectDelivery(request $request){
-    $validatedData=$request->validate([
-        'delivery_id'=>'required|integer|exists:deliveries,id',
-    ]);
-    $manager=auth('manager')->user();
-    $delivery=Delivery::where('id',$validatedData['delivery_id'])
-    ->where('branch_id',$manager->branch_id)
-    ->first();
-    if(!$delivery){
-        return response()->json(['message'=>'المندوب غير موجود او لا ينتمي الي الفرع']);
+public function acceptDelivery(string $id){
+
+    $delivery=Delivery::findOrFail($id);
+    if ($delivery->branch_id === auth('manager')->user()->branch_id) {
+        
+        $delivery->update(['status'=>'مقبول']);
+        return response()->json([
+            'message'=>'تم قبول المندوب',
+        ], 200);
     }
-    $delivery->update(['status'=>'مرفوض']);
     return response()->json([
-        'message'=>'تم رفض المندوب بنجاح',
-    ], 200);
+        'message' => 'المندوب لا ينتمي الي الفرع الخاص بك او غيلر موجود  ',
+    ], 404);
+}
+//___________________________________________________________________________________________________
+
+public function  rejectDelivery(string $id){
+
+    $delivery=Delivery::findOrFail($id);
+    if ($delivery->branch_id === auth('manager')->user()->branch_id) {
+    
+        $delivery->update(['status'=>'مرفوض']);
+        return response()->json([
+            'message'=>'تم رفض المندوب بنجاح',
+        ], 200);
+    }
+    return response()->json([
+        'message' => 'المندوب لا ينتمي الي الفرع الخاص بك او غيلر موجود  ',
+    ], 404);
 }
 //___________________________________________________________________________________________________
 
