@@ -29,10 +29,12 @@ Route::middleware(['auth.sale'])->group(function () {
 
     // Order Routes
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/products', [OrderController::class,'products']);
+    Route::get('/product/{id}', [OrderController::class,'showProduct']);
+    Route::post('/product-order', [OrderController::class, 'productOrder']);
     Route::post('/orders/first-screen', [OrderController::class, 'storeFirstScreen']);
     Route::put('/orders/{order}/second-screen', [OrderController::class, 'storeSecondScreen']);
     Route::put('/orders/{order}/third-screen', [OrderController::class, 'storeThirdScreen']);
-    // Route::post('/orders', [OrderController::class, 'store']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::put('/orders/{id}', [OrderController::class, 'update']);
     Route::get('/new-orders', [OrderController::class, 'newOrders']);

@@ -1,7 +1,10 @@
 /.phpunit.cache
 /node_modules
 /public/build
-/public
+/public/products
+/public/banners
+/public/users
+/public/orders
 /public/storage
 /storage/*.key
 /vendor

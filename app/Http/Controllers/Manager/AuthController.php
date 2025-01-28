@@ -43,32 +43,33 @@ class AuthController extends Controller
             return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
         }
         return response()->json([
-            'key'=>'manager',
-            'message' => 'تم تسجيل المستخدم بنجاح'], 201);
-    } 
+            'key' => 'manager',
+            'message' => 'تم تسجيل المستخدم بنجاح'
+        ], 201);
+    }
 
     public function verify(Request $request)
     {
         $request->validate(['code' => 'required|string']);
-    
+
         $manager = Manager::where('verification_code', $request->code)->first();
-    
+
         if (!$manager) {
             return response()->json(['message' => ' الرمز غير صحيح'], 404);
         }
-    
+
         if ($manager->verified_at) {
-            return response()->json(['message' => '  تم التحقق بنجاح'], 400);
+            return response()->json(['message' => 'تم التحقق بنجاح برجاء الانتظار حتي يتم قبول طلبكم'], 400);
         }
-    
+
         if ($manager->verification_code_expires_at && $manager->verification_code_expires_at < now()) {
             return response()->json(['message' => 'الرمز لم يعد مفعل'], 400);
         }
-    
+
         $manager->verified_at = now();
         $manager->verification_code = null;
         $manager->save();
-    
+
         return response()->json(['message' => 'تم بنجاح'], 200);
     }
 
@@ -82,10 +83,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'لا يوجد مستخدم أو كلمة المرور غير صحيحة'], 404);
         }
 
-if($manager->verified_at === null){
-    return response()->json(['message'=>'لم يتم تفعيل الكود']);
-
-}
+        if ($manager->verified_at === null) {
+            return response()->json(['message' => 'لم يتم تفعيل الكود']);
+        }
 
         if ($manager->status === 'قيد الانتظار') {
             return response()->json(['message' => 'لم يتم القبول بعد'], 403);
@@ -97,13 +97,12 @@ if($manager->verified_at === null){
 
         $token = $manager->createToken('manager_token')->plainTextToken;
         return response()->json([
-            'key'=>'manager',
+            'key' => 'manager',
             'manager' => $manager,
             'token' => $token,
         ], 200);
-        
     }
-    
+
     public function logout()
     {
         Auth::logout();
@@ -134,48 +133,47 @@ if($manager->verified_at === null){
         ]);
     }
 
-public function verifyCode(request $request){
-    $validatedData = $request->validate([
-        'identifier'=>'required|string',
-        'code'=>'required|string',
-    ]);
-    $isEmail = filter_var($request->identifier, FILTER_VALIDATE_EMAIL);
-    $token = DB::table('password_reset_tokens')
-    ->where('email', $isEmail ? $request->identifier : $request->identifier)
-    ->where('token', $request->code)
-    ->first();
-    
-    if (!$token) {
-        return response()->json(['message' => ' رمز غير موجود', 'status'=>0], 404);
+    public function verifyCode(request $request)
+    {
+        $validatedData = $request->validate([
+            'identifier' => 'required|string',
+            'code' => 'required|string',
+        ]);
+        $isEmail = filter_var($request->identifier, FILTER_VALIDATE_EMAIL);
+        $token = DB::table('password_reset_tokens')
+            ->where('email', $isEmail ? $request->identifier : $request->identifier)
+            ->where('token', $request->code)
+            ->first();
+
+        if (!$token) {
+            return response()->json(['message' => ' رمز غير موجود', 'status' => 0], 404);
+        }
+        return response()->json(['message' => 'الرمز صحيح', 'status' => 1], 200);
     }
-    return response()->json(['message' => 'الرمز صحيح','status'=>1], 200);
-}
 
-public function resetPassword(request $request)
-{
-    $validatedData = $request->validate([
-        'identifier'=>'required|string',
-        'code'=>'required|string',
-        'password'=>'required|string',
-    ]);
-    $isEmail = filter_var($request->identifier, FILTER_VALIDATE_EMAIL);
-$manager=$isEmail
-?Manager::where('email',$request->identifier)->first()
-:Manager::where('phone',$request->identifier)->first();
+    public function resetPassword(request $request)
+    {
+        $validatedData = $request->validate([
+            'identifier' => 'required|string',
+            'code' => 'required|string',
+            'password' => 'required|string',
+        ]);
+        $isEmail = filter_var($request->identifier, FILTER_VALIDATE_EMAIL);
+        $manager = $isEmail
+            ? Manager::where('email', $request->identifier)->first()
+            : Manager::where('phone', $request->identifier)->first();
 
-if(!$manager){
-    return response()->json(['message'=>'المستخدم غير معرف']);
-}
+        if (!$manager) {
+            return response()->json(['message' => 'المستخدم غير معرف']);
+        }
 
-$manager->password = Hash::make($request->password);
-$manager->save();
+        $manager->password = Hash::make($request->password);
+        $manager->save();
 
-DB::table('password_reset_tokens')
-->where('email', $isEmail ? $request->identifier : $request->identifier)
-->delete();
+        DB::table('password_reset_tokens')
+            ->where('email', $isEmail ? $request->identifier : $request->identifier)
+            ->delete();
 
-return response()->json(['message','تم تعين كلمه مرور جديده بنجاح']);
-}
-
-
+        return response()->json(['message', 'تم تعين كلمه مرور جديده بنجاح']);
+    }
 }

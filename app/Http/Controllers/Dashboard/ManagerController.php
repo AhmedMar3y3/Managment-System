@@ -13,6 +13,8 @@ class ManagerController extends Controller
         return response()->json($managers, 200);
     }
 
+    // make notification for approved manager on email
+
     public function acceptManager($id)
     {
         $manager =  Manager::find($id);

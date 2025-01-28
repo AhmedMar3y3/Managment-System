@@ -2,48 +2,77 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Manager;
+use App\Models\Product;
 use App\Notifications\SendToManager;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\order\update;
 use App\Http\Requests\order\storeFirst;
 use App\Http\Requests\order\storeSecond;
 use App\Http\Requests\order\storeThird;
-use App\Http\Requests\order\update;
-use App\Models\Order;
-use App\Models\Manager;
+use App\Http\Requests\order\StoreOrderProduct;
 
 class OrderController extends Controller
 {
     public function index()
     {
         $orders = Order::where('sale_id', Auth('sale')->id())->get(['order_type', 'status', 'delivery_date', 'customer_name']);
-        return response()->json(['orders' => $orders], 200);
-        
+        return response()->json(['orders' => $orders], 200); 
+    }
+
+    public function products(){
+        $products = Product::get(['id', 'name', 'image']);
+        return response()->json(['products' => $products], 200);
+    }
+
+    public function showProduct($id){
+        $product = Product::findOrFail($id)->load('branch:id,name,address');
+        return response()->json(['product' => $product], 200);
+    }
+
+    public function productOrder(StoreOrderProduct $request){
+        $validatedData = $request->validated();
+        $validatedData['sale_id'] = Auth('sale')->id();
+        Order::create($validatedData);
+        return response()->json(['message' => 'تم إنشاء الطلب بنجاح'], 200);
     }
 
     public function storeFirstScreen(storeFirst $request)
-    {
-        $validatedData = $request->validated();
-        $validatedData['sale_id'] = Auth('sale')->id();
-        $order = Order::create($validatedData);
-        if ($request->has('images')) {
-            foreach ($request->file('images') as $image) {
-            
-                    $destinationPath = public_path('orders');
-                    $fileName = uniqid() . '_' . $image->getClientOriginalName();
-                    $image->move($destinationPath, $fileName);
-                    $imageFullUrl = url("orders/{$fileName}");
-                    $order->images()->create([
-                        'image' => $imageFullUrl,
-                        'order_id' => $order->id,
-                    ]);
-            }
-        }
+{
+    $validatedData = $request->validated();
+    $validatedData['sale_id'] = Auth('sale')->id();
+    $order = Order::create($validatedData);
 
-        return response()->json([
-            'message' => 'تم إنشاء الطلب بنجاح',
-            'order'   => $order,
-        ], 201);
+    if ($request->has('images')) {
+        foreach ($request->file('images') as $image) {
+            $destinationPath = public_path('orders');
+            $fileName = uniqid() . '_' . $image->getClientOriginalName();
+            $image->move($destinationPath, $fileName);
+            
+            $imageFullUrl = url("orders/{$fileName}");
+            
+            $order->images()->create([
+                'image' => $imageFullUrl,
+                'order_id' => $order->id,
+            ]);
+        }
     }
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $fileName = uniqid() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('orders'), $fileName);
+        $validatedData['image'] = url("orders/{$fileName}");
+        
+        $order->update(['image' => $validatedData['image']]);
+    }
+
+    return response()->json([
+        'message' => 'تم إنشاء الطلب بنجاح',
+        'order'   => $order,
+    ], 201);
+}
 
     // Second Screen: Update Order with Price Details
     public function storeSecondScreen(storeSecond $request, Order $order)
@@ -74,36 +103,9 @@ class OrderController extends Controller
         ], 200);
     }
 
-    // public function store(store $request)
-    // {
-    //     $validatedData = $request->validated();
-    //     $validatedData['sale_id'] = Auth('sale')->id();
-    //     $order = Order::create($validatedData);
-    //     if ($request->has('images')) {
-    //         foreach ($request->file('images') as $image) {
-            
-    //                 $destinationPath = public_path('orders');
-    //                 $fileName = uniqid() . '_' . $image->getClientOriginalName();
-    //                 $image->move($destinationPath, $fileName);
-    //                 $imageFullUrl = url("orders/{$fileName}");
-    //                 $order->images()->create([
-    //                     'image' => $imageFullUrl,
-    //                     'order_id' => $order->id,
-    //                 ]);
-    //         }
-    //     }
-
-    //     $managers = Manager::all();
-    // foreach ($managers as $manager) {
-    //     $manager->notify(new SendToManager($order));
-    
-    // }
-    //     return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'order' => $order], 201);
-    // }
-
     public function show($id)
     {
-        $order = Order::where('sale_id', Auth('sale')->id())->findOrFail($id)->load('images');
+        $order = Order::where('sale_id', Auth('sale')->id())->findOrFail($id)->load('images','flowers');
         return response()->json(['order' => $order], 200);
     }
     public function update(update $request, $id)
