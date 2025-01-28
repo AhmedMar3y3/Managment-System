@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\ManagerController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SalesController;
+use App\Http\Controllers\Dashboard\SpecializationController;
 
 //////////////////////////////////////////Admin routes//////////////////////////////////////////
 
@@ -79,6 +80,11 @@ use App\Http\Controllers\Dashboard\SalesController;
     Route::post('/store-product', [ProductController::class,'store']);
     Route::post('/update-product/{id}', [ProductController::class,'update']);
     Route::delete('/product/{id}', [ProductController::class,'destroy']);
+
+    // Specialization routes
+    Route::get('/specializations', [SpecializationController::class,'index']);
+    Route::post('/specialization', [SpecializationController::class,'store']);
+    Route::delete('/specialization/{id}', [SpecializationController::class,'destroy']);
 });
 
 

@@ -18,7 +18,8 @@ class Chef extends Authenticatable
         'password',
         'phone',
         'image',
-        'specialization', 
+        'specialization_id',
+        'bio', 
         'status',
         'verification_code',
         'verified_at',
@@ -48,6 +49,10 @@ class Chef extends Authenticatable
 
     public function report(){
         return $this->hasMany(Report::class);
+    }
+
+    public function specialization(){
+        return $this->hasOne(Specialization::class);
     }
 
 }
