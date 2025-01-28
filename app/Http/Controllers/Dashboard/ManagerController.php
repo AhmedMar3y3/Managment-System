@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Manager;
+use App\Notifications\ManagerApproved;
 
 class ManagerController extends Controller
 {
@@ -20,6 +21,7 @@ class ManagerController extends Controller
         $manager =  Manager::find($id);
         if ($manager->status == 'قيد الانتظار') {
             $manager->update(['status' => 'مقبول']);
+            $manager->notify(new ManagerApproved($manager));
             return response()->json('تم قبول المدير', 200);
         }
         return response()->json('لا يمكن إجراء ذلك', 200);

@@ -27,7 +27,7 @@ class OrderController extends Controller
     }
 
     public function showProduct($id){
-        $product = Product::findOrFail($id)->load('branch:id,name,address');
+        $product = Product::findOrFail($id,['id','name','image','description','branch_id'])->load('branch:id,name,address');
         return response()->json(['product' => $product], 200);
     }
 
