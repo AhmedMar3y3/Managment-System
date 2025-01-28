@@ -24,7 +24,7 @@ class OrderRejectedNotification extends Notification
     }
 
     public function toMail($notifiable)
-    {
+    { 
         return (new MailMessage)
             ->subject('إشعار رفض الطلب')
             ->line(' تاكد من انك تريد اعاده ارسال الطلب'.' تم رفض طلبك  ' . $this->order->order_type)
