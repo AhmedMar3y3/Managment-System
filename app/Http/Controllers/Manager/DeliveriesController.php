@@ -64,7 +64,7 @@ public function assignOrderToDelivery(Request $request)
         }
         return response()->json(['message' => 'خطأ'], 403);
 
-        }
+        } 
 // ______________________________________________________________________________________________
 }
 
