@@ -13,6 +13,8 @@ class Branch extends Model
         'name',
         'phone',
         'address',
+        'long',
+        'lat',
     ];
 
     public function manager()

@@ -52,22 +52,6 @@ class OrderController extends Controller
         return response()->json(['message' => 'تم تحديث حالة الطلب مسبقاً'], 200);
     }
 
-    public function declineOrder($id)
-    {
-        $order = Order::where('chef_id', Auth('chef')->id())->findOrFail($id);
-        if ($order->status == 'وافق المدير') {
-            $order->status = 'تم الرفض';
-            $order->chef_id = null;
-            $order->save();
-            $managerId = $order->manager_id;
-            $manager = Manager::where('id', $managerId)->first();
-            $manager->notify(new orderDeclined($order));
-            return response()->json(['message' => 'تم تحديث حالة الطلب'], 200);
-        }
-        return response()->json(['message' => 'تم تحديث حالة الطلب مسبقاً'], 200);
-
-    }
-
     public function orderInProgress($id)
     {
         $order = Order::where('chef_id', Auth('chef')->id())->findOrFail($id);

@@ -25,6 +25,8 @@ class update extends FormRequest
             'name'    => 'nullable|string',
             'phone'   => 'nullable|string',
             'address' => 'nullable|string',
+            'long'    => 'nullable|string',
+            'lat'    => 'nullable|string',
         ];
     }
 }

@@ -34,11 +34,9 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{id}', [OrderController::class, 'getOrderDetails']);
     Route::get('/completed-orders', [OrderController::class, 'completedOrders']);
-    // Route::get('/new-orders', [OrderController::class, 'newOrders']);
     Route::get('/accepted-orders', [OrderController::class, 'acceptedOrders']);
     Route::get('/pending-orders', [OrderController::class,'pendingOrders']);
     Route::put('/accept-order/{id}', [OrderController::class, 'acceptOrder']);
-    Route::put('/decline-order/{id}', [OrderController::class, 'declineOrder']);
     Route::put('/order-in-progress/{id}', [OrderController::class, 'orderInProgress']);
     Route::put('/order-done/{id}', [OrderController::class, 'orderDone']);
     Route::get('/home-stats', [HomeController::class, 'homeStats']);    

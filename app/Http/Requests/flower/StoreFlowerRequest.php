@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\branch;
+namespace App\Http\Requests\flower;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class store extends FormRequest
+class StoreFlowerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,8 @@ class store extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => 'required|string',
-            'phone'   => 'required|string',
-            'address' => 'required|string',
-            'long'    => 'required|string',
-            'lat'     => 'required|string',
+            'type' => ['required', 'string'],
+            'branch_id'=> ['required','string', 'exists:branches,id'],
         ];
     }
 }

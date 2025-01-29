@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\branch;
+namespace App\Http\Requests\specialization;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,11 +22,7 @@ class store extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => 'required|string',
-            'phone'   => 'required|string',
-            'address' => 'required|string',
-            'long'    => 'required|string',
-            'lat'     => 'required|string',
+            "name"=> "required|string",
         ];
     }
 }

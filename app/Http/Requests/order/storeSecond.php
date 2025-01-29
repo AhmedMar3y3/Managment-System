@@ -22,9 +22,12 @@ class storeSecond extends FormRequest
     public function rules(): array
     {
         return [
-            'price'    => ['required', 'numeric'],
-            'deposit'  => ['nullable', 'numeric'],
-            'remaining'=> ['required', 'numeric'],
+            'price'          => ['nullable', 'numeric'],
+            'flower_price'   => ['nullable','numeric'],
+            'deposit'        => ['nullable', 'numeric'],
+            'remaining'      => ['required', 'numeric'],
+            'delivery_price' => ['required','numeric'],
+            'total_price'    => ['required','numeric'],
         ];
     }
 }

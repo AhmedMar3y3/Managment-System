@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sales\AuthController;
+use App\Http\Controllers\Sales\DeliveryController;
 use App\Http\Controllers\Sales\OrderController;
 use App\Http\Controllers\Sales\ProfileController;
 use App\Http\Controllers\Sales\HomeController;
@@ -29,16 +30,21 @@ Route::middleware(['auth.sale'])->group(function () {
 
     // Order Routes
     Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/products', [OrderController::class,'products']);
+    Route::get('/product/{id}', [OrderController::class,'showProduct']);
+    Route::post('/product-order', [OrderController::class, 'productOrder']);
     Route::post('/orders/first-screen', [OrderController::class, 'storeFirstScreen']);
     Route::put('/orders/{order}/second-screen', [OrderController::class, 'storeSecondScreen']);
     Route::put('/orders/{order}/third-screen', [OrderController::class, 'storeThirdScreen']);
-    // Route::post('/orders', [OrderController::class, 'store']);
     Route::get('/orders/{id}', [OrderController::class, 'show']);
     Route::put('/orders/{id}', [OrderController::class, 'update']);
     Route::get('/new-orders', [OrderController::class, 'newOrders']);
     Route::get('/preparing-orders', [OrderController::class, 'preparingOrders']);
     Route::get('/delivered-orders', [OrderController::class, 'deliveredOrders']);
 
-
+    // Delivery Routes
+    Route::get('/deliveries', [DeliveryController::class,'deliveries']);
+    Route::get('/deliveries/{id}', [DeliveryController::class,'show']);
+    Route::post('/assign-to-delivery/{id}', [DeliveryController::class,'assignToDelivery']);
 
 });

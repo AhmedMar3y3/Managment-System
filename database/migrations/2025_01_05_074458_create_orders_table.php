@@ -15,12 +15,19 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             // first screen
             $table->id();
-            $table->enum('order_type', ['كيك','ورد'])->default('كيك');
-            $table->text('order_details');
-            $table->integer('quantity')->default(1);
-            $table->date('delivery_date');
+            $table->enum('order_type', ['كيك','ورد', 'كيك و ورد'])->default('كيك');
+            $table->text('order_details')->nullable();
+            $table->foreignId('flower_id')->nullable()->constrained('flowers')->onDelete('cascade');
+            $table->integer('flower_quantity')->default(0);
+            $table->string('image')->nullable();
+            $table->integer('quantity')->default(0);
+            $table->time('delivery_time')->nullable();
+            $table->date('delivery_date')->nullable();
             // second screen
             $table->double('price')->nullable();
+            $table->double('flower_price')->nullable();
+            $table->double('delivery_price')->nullable();
+            $table->double('total_price')->nullable();
             $table->double('deposit')->default(0);
             $table->double('remaining')->nullable();
             // third screen
@@ -30,11 +37,15 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('map_desc')->nullable();
             $table->text('additional_data')->nullable();
+
+            // other way 
+            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
             // another screens for المرتجعات
             $table->boolean('is_returned')->default(false);
             $table->text('problem')->nullable(); 
             // another data
-            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","تم الرفض","قيد التنفيذ", "تم التجهيز","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","قيد التنفيذ", "تم التجهيز","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('payment_method', ["cash","visa"])->default('cash');
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
             $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('cascade');
             $table->foreignId('chef_id')->nullable()->constrained('chefs')->onDelete('cascade');

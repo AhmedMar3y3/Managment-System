@@ -13,8 +13,15 @@ class Order extends Model
         'order_type',
         'order_details',
         'quantity',
+        'flower_id',
+        'flower_quantity',
+        'image',
         'delivery_date',
+        'delivery_time',
         'price',
+        'flower_price',
+        'delivery_price',
+        'total_price',
         'deposit',
         'remaining',
         'customer_name',
@@ -26,6 +33,7 @@ class Order extends Model
         'is_returned',
         'problem',
         'status',
+        'product_id',
         'sale_id',
         'manager_id',
         'chef_id',
@@ -56,5 +64,13 @@ class Order extends Model
         return $this->hasMany(OrderImage::class);
     }
 
+    public function product()
+    {
+        return $this->hasOne(Product::class);
+    }
 
+    public function flowers()
+    {
+        return $this->hasOne(Flower::class);
+    }
 }

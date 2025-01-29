@@ -22,14 +22,39 @@ class storeFirst extends FormRequest
     public function rules(): array
     {       
 
-        return [
-            'order_type'       => ['required', 'string', 'in:كيك,ورد'],
-            'order_details'    => ['required', 'string'],
-            'quantity'         => ['required', 'numeric', 'min:1'],
+        $rules = [
+            'order_type'       => ['required', 'string', 'in:كيك,ورد,كيك و ورد'],
+            'order_details'    => ['nullable', 'string'],
+            'flower_id'        => ['nullable', 'string', 'exists:flowers,id'],
+            'flower_quantity'  => ['nullable', 'numeric', 'min:0'],
+            'image'            => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'],
+            'quantity'         => ['nullable', 'numeric', 'min:0'],
+            'delivery_time'    => ['required', 'date_format:H:i'],
             'delivery_date'    => ['required', 'date'],
             'images'           => ['nullable', 'array'],
-            'images.*'         => ['nullable', 'image','mimes:png,jpg,jpeg,gif','max:2048'],
-        
+            'images.*'         => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'],
         ];
+
+        if ($this->order_type === 'كيك') {
+            $rules['flower_id'] = ['nullable', 'string', 'exists:flowers,id'];
+            $rules['flower_quantity'] = ['nullable', 'numeric', 'min:0'];
+            $rules['flower_image'] = ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'];
+            $rules['order_details'] = ['required', 'string'];
+            $rules['quantity'] = ['required', 'numeric', 'min:1'];
+        } elseif ($this->order_type === 'ورد') {
+            $rules['flower_id'] = ['required', 'string', 'exists:flowers,id'];
+            $rules['flower_quantity'] = ['required', 'numeric', 'min:0'];
+            $rules['flower_image'] = ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'];
+            $rules['order_details'] = ['nullable', 'string'];
+            $rules['quantity'] = ['nullable', 'numeric', 'min:0'];
+        } elseif ($this->order_type === 'كيك و ورد') {
+            $rules['flower_id'] = ['required', 'string', 'exists:flowers,id'];
+            $rules['flower_quantity'] = ['required', 'numeric', 'min:0'];
+            $rules['flower_image'] = ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'];
+            $rules['order_details'] = ['required', 'string'];
+            $rules['quantity'] = ['required', 'numeric', 'min:0'];
+        }
+
+        return $rules;
     }
 }

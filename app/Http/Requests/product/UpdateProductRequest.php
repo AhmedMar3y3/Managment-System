@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\branch;
+namespace App\Http\Requests\product;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class store extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,10 @@ class store extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => 'required|string',
-            'phone'   => 'required|string',
-            'address' => 'required|string',
-            'long'    => 'required|string',
-            'lat'     => 'required|string',
+            "name"        => "nullable|string",
+            "description" => "nullable|string",
+            "image"       => "nullable|image",
+            "branch_id"   => "nullable|exists:branches,id",
         ];
     }
 }

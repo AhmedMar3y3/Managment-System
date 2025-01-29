@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('image')->nullable();
-            $table->string('specialization');
+            $table->foreignId('specialization_id')->constrained('specializations')->cascadeOnDelete();
+            $table->text('bio')->nullable();
             $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
             $table->enum('status', ["قيد الانتظار", "مقبول", "مرفوض"])->default("قيد الانتظار");
             $table->rememberToken();
