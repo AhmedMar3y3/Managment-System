@@ -29,4 +29,21 @@ class HomeController extends Controller
             'deliveries'=> $deliveries,
         ],200);
     }
+
+    public function orders(){
+        $newOrders = Order::where('status', 'جاري الاستلام')->count();
+        $completedOrders = Order::where('status', 'تم التجهيز')->count();
+        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
+        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
+        $returnedOrdersa = Order::where('status', 'مرتجع')->count();
+        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+        return response()->json([
+            'newOrders'=> $newOrders,
+            'completedOrders' => $completedOrders,
+            'pendingOrders'=> $pendingOrders,
+            'deliveredOrders'=> $deliveredOrders,
+            'returnedOrders'=> $returnedOrdersa,
+            'declinedOrders'=> $declinedOrders,
+        ],200);
+    }
 }
