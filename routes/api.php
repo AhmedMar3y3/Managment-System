@@ -29,7 +29,7 @@ Route::get('/all-branches', [Controller::class, 'branches']);
         
     // Home routes
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('orders', [HomeController::class,'orders']);
+    Route::get('/orders-stats', [HomeController::class,'orders']);
     Route::get('/stats', [HomeController::class,'stats']);
 
     //Branch routes
