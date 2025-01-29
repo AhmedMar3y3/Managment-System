@@ -31,6 +31,8 @@ Route::get('/all-branches', [Controller::class, 'branches']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/orders-stats', [HomeController::class,'orders']);
     Route::get('/stats', [HomeController::class,'stats']);
+    Route::get('/requests', [HomeController::class,'requests']);
+    Route::get('/percentages', [HomeController::class,'percentages']);
 
     //Branch routes
     Route::get('/branches', [BranchController::class, 'index']);
