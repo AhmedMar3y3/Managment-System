@@ -11,7 +11,7 @@ class ManagerController extends Controller
     public function pendingManagers()
     {
         $managers = Manager::where('status', 'قيد الانتظار')->with('branch:id,name')->get(['id', 'first_name', 'last_name','image', 'branch_id']);
-        return response()->json(['key'=>'سيلز','data'=>$managers], 200);
+        return response()->json(['key'=>'مدير','data'=>$managers], 200);
     }
 
     // make notification for approved manager on email
