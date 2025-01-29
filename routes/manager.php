@@ -44,14 +44,13 @@ use App\Http\Controllers\Manager\ReturnOrdersController;
     Route::get('/delivered-orders', [OrdersDeliveredController::class,'deliveredOrders']);
     Route::get('/show-order/{id}', [OrdersCompletedController::class, 'show']);
     Route::get('/chef-reject-orders', [RejectedOrdersController::class, 'chefRejectedOrders']);
-    Route::get('/delivery-reject-orders', [RejectedOrdersController::class, 'deliveryRejectedOrders']);
+    Route::get('/delivery-reject-orders/{id}', [RejectedOrdersController::class, 'problem']);
     Route::get('/returned-orders', [ReturnOrdersController::class, 'returnRequests']);
-    Route::get('/problem-orders', [RejectedOrdersController::class, 'problem']);
 
     // Order Maniuplation Routes
     Route::post('/accept-order/{id}', [ManagerController::class, 'acceptOrder']);
     Route::post('/assign-to-Chef', [ManagerController::class, 'assignToChef']);
-    Route::post('/assign-order-delivery', [DeliveriesController::class, 'assignOrderToDelivery']);
+    Route::post('/assign-order-delivery', [DeliveriesController::class,'assignOrderToDelivery']);
 
     // Employees Routes
     Route::get('/chefs', [ChefController::class, 'chefs']);

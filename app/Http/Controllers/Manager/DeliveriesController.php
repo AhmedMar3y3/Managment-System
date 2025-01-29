@@ -56,7 +56,7 @@ public function assignOrderToDelivery(Request $request)
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
         ]);
-        if (in_array($order->status, ['تم الرفض', 'مرتجع'])) {
+        if (in_array($order->status, ['تم التجهيز','رفض السائق' , 'مرتجع'])) {
         
             $delivery = Delivery::find($validatedData['delivery_id']);
             $delivery->notify(new OrderRejectedNotification($order));

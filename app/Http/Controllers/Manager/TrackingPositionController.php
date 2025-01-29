@@ -52,9 +52,6 @@ class TrackingPositionController extends Controller
             ->first();
         return response()->json($position);
     }     
-    
-
-
 
 //__________________________________________________________________________________________________
 

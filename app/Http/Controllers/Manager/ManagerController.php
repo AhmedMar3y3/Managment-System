@@ -28,11 +28,10 @@ public function assignToChef(Request $request)
 
     $order = Order::find($validatedData['order_id']);
     if ($order) {
-        if ($order->status == "وافق المدير" || $order->status == "تم الرفض") {
+        if ($order->status == "وافق المدير") {
             $order->update([
                 'chef_id' => $validatedData['chef_id'],
-                
-            ]);
+            ]); 
 
             return response()->json(['message' => 'تم ارسال الطلب إلى الشيف بنجاح']);
         }

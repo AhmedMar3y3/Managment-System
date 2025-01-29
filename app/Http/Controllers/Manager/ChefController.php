@@ -67,6 +67,4 @@ public function CurrentRequestsDelivery()
     return response()->json(['orders'=>$orders],200);
 }
 
-
-
 }

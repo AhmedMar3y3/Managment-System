@@ -12,32 +12,39 @@ class RejectedOrdersController extends Controller
 {
     
 //________________________________________________________________________________________________________
-    public function chefRejectedOrders()
-    {
-        $orders = Order::whereIn('status', ['تم الرفض', 'رفض السائق'])
-            ->where('manager_id', auth('manager')->id()) 
-            ->get(['id', 'order_type', 'updated_at']);
-            $now = now();
+    // public function chefRejectedOrders()
+    // {
+    //     $orders = Order::whereIn('status', ['مرتجع', 'رفض السائق'])
+    //         ->where('manager_id', auth('manager')->id()) 
+    //         ->get(['id', 'order_type', 'updated_at']);
+    //         $now = now();
     
-            $ordersWithDetails = $orders->map(function ($order) use ($now) {
-            $timeDifference = $now->diffInMinutes(Carbon::parse($order->updated_at));
+    //         $ordersWithDetails = $orders->map(function ($order) use ($now) {
+    //         $timeDifference = $now->diffInMinutes(Carbon::parse($order->updated_at));
 
-            $order->time_difference = $timeDifference . ' ' . 
-                ($timeDifference == 1 ? 'دقيقة' : 'دقائق');
-            return $order;
-        });
-        return response()->json([
-            'orders' => $ordersWithDetails,
-        ], 200);
-    } 
+    //         $order->time_difference = $timeDifference . ' ' . 
+    //             ($timeDifference == 1 ? 'دقيقة' : 'دقائق');
+    //         return $order;
+    //     });
+    //     return response()->json([
+    //         'orders' => $ordersWithDetails,
+    //     ], 200);
+    // } 
 
 //___________________________________show_________________________________________________________________
-public function problem(string $id){
+public function problem($id)
+{
 
-        $order = Order::findOrFail($id)->load(['images','chef:id,name', 'delivery:id,name'])
-        ->whereIn('status',["رفض السائق","مرتجع"]);
+    $managerId = Auth('manager')->id();
+
+    $order = Order::where('id', $id)
+    ->whereIn('status', ["رفض السائق", "مرتجع"])
+    ->with(['images', 'chef:id,first_name', 'delivery:id,first_name'])
+    ->firstOrFail();
+
     
-        if ($order->manager_id === auth('manager')->id()) {
+        $orderId = $order->manager_id;
+        if ($orderId == $managerId) {
             return response()->json([
                 'success' => true,
                 'chef_name' => $order->chef ? $order->chef->first_name : 'لم يتم اختياره بعد',

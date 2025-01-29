@@ -38,7 +38,7 @@ class OrdersCompletedController extends Controller
 //___________________________________________________________________________________________________________________
 public function show(string $id)
 {
-    $order = Order::findOrFail($id)->load(['images','chef:id,name', 'delivery:id,name']);
+    $order = Order::findOrFail($id)->load(['images','chef:id,first_name', 'delivery:id,first_name']);
 
     if ($order->manager_id === auth('manager')->id()) {
         return response()->json([
@@ -66,20 +66,6 @@ public function show(string $id)
     ], 403);
 }
 //___________________________________________________________________________________________________________________
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //___________________________________________________________________________________________________________________
 // public function resendOrder(string $delivery_id, $id)

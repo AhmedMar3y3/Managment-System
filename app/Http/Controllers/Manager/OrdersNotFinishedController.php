@@ -94,9 +94,4 @@ public function ShowNewOrder(string $id){
 }
 //___________________________________________________________________________________________________________________
 
-// $accept=Order::where('status','تم القبول')->count();
-// $dlivered=Order::where('status','تم التوصيل')->count();
-// $totaldlivered=$accept-$dlivered;
-// return response()->json(['delvered_orders'=>$totaldlivered]);
-
 }
