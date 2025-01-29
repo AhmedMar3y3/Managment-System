@@ -32,7 +32,37 @@ class RejectedOrdersController extends Controller
     } 
 
 //___________________________________show_________________________________________________________________
+public function problem(string $id){
 
+        $order = Order::findOrFail($id)->load(['images','chef:id,name', 'delivery:id,name'])
+        ->whereIn('status',["رفض السائق","مرتجع"]);
+    
+        if ($order->manager_id === auth('manager')->id()) {
+            return response()->json([
+                'success' => true,
+                'chef_name' => $order->chef ? $order->chef->first_name : 'لم يتم اختياره بعد',
+                'delivery_name' => $order->delivery ? $order->delivery->first_name : 'لم يتم اختياره بعد',
+                'additional_data' => $order->additional_data,
+                'delivery_date' => $order->delivery_date,
+                'customer_phone' => $order->customer_phone,
+                'customer_name' => $order->customer_name,
+                'order_details' => $order->order_details,
+                'order_type' => $order->order_type,
+                'created_at' => $order->created_at,
+                'remaining' => $order->remaining,
+                'deposit' => $order->deposit,
+                'images' => $order->images,
+                'status' => $order->status,
+                'problem' => $order->problem,
+                'price' => $order->price,
+            ], 200);
+        }
+    
+        return response()->json([
+            'success' => false,
+            'message' => 'You are not allowed to access this order',
+        ], 403);
+    }
 //________________________________________________________________________________________________________
 
     // public function deliveryRejectedOrders()

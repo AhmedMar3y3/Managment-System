@@ -47,7 +47,7 @@ public function show(string $id)
             'created_at' => $order->created_at,
             'order_details' => $order->order_details,
             'order_type' => $order->order_type,
-            'chef_name' => $order->chef ? $order->chef->first_name : 'لم يتم اختياره بعد', // Fixed: Removed extra comma
+            'chef_name' => $order->chef ? $order->chef->first_name : 'لم يتم اختياره بعد',
             'delivery_name' => $order->delivery ? $order->delivery->first_name : 'لم يتم اختياره بعد',
             'customer_phone' => $order->customer_phone,
             'customer_name' => $order->customer_name,

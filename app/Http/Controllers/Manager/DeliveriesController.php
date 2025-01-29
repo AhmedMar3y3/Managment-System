@@ -32,7 +32,7 @@ public function showDelivery(string $id)
     $Receiving = Order::where('status', 'استلام السائق')->count();
     $deliveryDates = Delivery::with('orders')->first();
     
-    if ($Receiving <= 1) {
+    if ($Receiving <= 2) {
         $canTakeOrder = 'متاح';
     } else {
         $canTakeOrder = 'غير متاح';

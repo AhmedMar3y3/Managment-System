@@ -46,6 +46,7 @@ use App\Http\Controllers\Manager\ReturnOrdersController;
     Route::get('/chef-reject-orders', [RejectedOrdersController::class, 'chefRejectedOrders']);
     Route::get('/delivery-reject-orders', [RejectedOrdersController::class, 'deliveryRejectedOrders']);
     Route::get('/returned-orders', [ReturnOrdersController::class, 'returnRequests']);
+    Route::get('/problem-orders', [RejectedOrdersController::class, 'problem']);
 
     // Order Maniuplation Routes
     Route::post('/accept-order/{id}', [ManagerController::class, 'acceptOrder']);
@@ -70,6 +71,7 @@ use App\Http\Controllers\Manager\ReturnOrdersController;
     // Tracking Routes
     Route::post('/store-tracking', [TrackingPositionController::class, 'store']);
     Route::get('/show-latest/{id}', [TrackingPositionController::class, 'latest']);
+    Route::get('/orders-with-delivery', [TrackingPositionController::class, 'getOrdersWithImages']);
     
 
 

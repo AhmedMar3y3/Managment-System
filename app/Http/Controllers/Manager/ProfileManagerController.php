@@ -9,6 +9,7 @@ use App\Models\Manager;
 
 class ProfileManagerController extends Controller
 {
+//____________________________________________________________________________________________________________-
     public function getProfilemanager()
     {
         $manager = auth('manager')->user();
@@ -21,7 +22,7 @@ class ProfileManagerController extends Controller
             'id'         => $manager->id,
         ], 200);
     }
-
+//____________________________________________________________________________________________________________-
     public function updateProfilemanager(update $request)
     {
         $manager = auth('manager')->user();
@@ -42,7 +43,7 @@ class ProfileManagerController extends Controller
             
     ], 200);
     }
-
+//________________________________________________________________________________________________________
     public function deleteAccountmanager()
     {
         $manager = auth('manager')->user();

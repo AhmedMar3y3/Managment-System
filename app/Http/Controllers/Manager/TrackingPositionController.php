@@ -30,7 +30,7 @@ class TrackingPositionController extends Controller
         return response()->json([
             'orders' => $ordersWithImages,
         ], 200);
-    }
+    }  
     
 //__________________________________________________________________________________________________
 

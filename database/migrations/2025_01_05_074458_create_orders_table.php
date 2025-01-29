@@ -32,7 +32,7 @@ return new class extends Migration
             $table->text('additional_data')->nullable();
             // another screens for المرتجعات
             $table->boolean('is_returned')->default(false);
-            $table->text('problem')->nullable();
+            $table->text('problem')->nullable(); 
             // another data
             $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","تم الرفض","قيد التنفيذ", "تم التجهيز","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
