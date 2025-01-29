@@ -58,7 +58,7 @@ class OrderController extends Controller
     public function show($id)
     {
 
-        $order = Order::find($id)->load('images');
+        $order = Order::find($id)->load('images','product','flowers');
         if ($order->delivery_id == Auth('delivery')->id()) {
             return response()->json(new OrderResource($order), 403);
         }
@@ -84,11 +84,15 @@ class OrderController extends Controller
         return response()->json(['message' => 'غير مصرح'], 404);
     }
 
-    public function orderDelivered($id)
+    public function orderDelivered($id, Request $request)
     {
+        $request->validate([
+            'payment_method' => 'required|in:cash,visa',
+        ]);
+
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
-            $order->update(['status' => 'تم التوصيل']);
+            $order->update(['status' => 'تم التوصيل', 'payment_method' => $request->payment_method]);
             return response()->json(['message' => 'تم توصيل الطلب بنجاح'], 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);

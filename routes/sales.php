@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Sales\AuthController;
+use App\Http\Controllers\Sales\DeliveryController;
 use App\Http\Controllers\Sales\OrderController;
 use App\Http\Controllers\Sales\ProfileController;
 use App\Http\Controllers\Sales\HomeController;
@@ -41,6 +42,9 @@ Route::middleware(['auth.sale'])->group(function () {
     Route::get('/preparing-orders', [OrderController::class, 'preparingOrders']);
     Route::get('/delivered-orders', [OrderController::class, 'deliveredOrders']);
 
-
+    // Delivery Routes
+    Route::get('/deliveries', [DeliveryController::class,'deliveries']);
+    Route::get('/deliveries/{id}', [DeliveryController::class,'show']);
+    Route::post('/assign-to-delivery/{id}', [DeliveryController::class,'assignToDelivery']);
 
 });

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Dashboard\AuthController;
 use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BannerController;
@@ -14,6 +15,10 @@ use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\SalesController;
 use App\Http\Controllers\Dashboard\SpecializationController;
+
+// public routes for all users
+Route::get('/all-specializations', [Controller::class, 'specializations']);
+Route::get('/all-branches', [Controller::class, 'branches']);
 
 //////////////////////////////////////////Admin routes//////////////////////////////////////////
 

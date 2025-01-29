@@ -17,10 +17,16 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::where('sale_id', Auth('sale')->id())->get(['order_type', 'status', 'delivery_date', 'customer_name']);
+        $orders = Order::get(['order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200); 
     }
-
+    
+    public function show($id)
+    {
+        $order = Order::findOrFail($id)->load('images','flowers');
+        return response()->json(['order' => $order], 200);
+    }
+    
     public function products(){
         $products = Product::get(['id', 'name', 'image']);
         return response()->json(['products' => $products], 200);
@@ -103,11 +109,6 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function show($id)
-    {
-        $order = Order::where('sale_id', Auth('sale')->id())->findOrFail($id)->load('images','flowers');
-        return response()->json(['order' => $order], 200);
-    }
     public function update(update $request, $id)
     {
         $order = Order::find($id);
