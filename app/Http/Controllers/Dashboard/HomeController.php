@@ -29,4 +29,56 @@ class HomeController extends Controller
             'deliveries'=> $deliveries,
         ],200);
     }
+
+    public function orders(){
+        $newOrders = Order::where('status', 'جاري الاستلام')->count();
+        $completedOrders = Order::where('status', 'تم التجهيز')->count();
+        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
+        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
+        $returnedOrdersa = Order::where('status', 'مرتجع')->count();
+        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+        return response()->json([
+            'newOrders'=> $newOrders,
+            'completedOrders' => $completedOrders,
+            'pendingOrders'=> $pendingOrders,
+            'deliveredOrders'=> $deliveredOrders,
+            'returnedOrders'=> $returnedOrdersa,
+            'declinedOrders'=> $declinedOrders,
+        ],200);
+    }
+
+    public function requests(){
+        $sales = Sale::where('status', 'قيد الانظار')->count();
+        $managers = Manager::where('status', 'قيد الانظار')->count();
+        return response()->json([
+            'sales'=> $sales,
+            'managers' => $managers,
+        ],200);
+    }
+
+    public function percentages(){
+        $totalOrders = Order::count();
+        $newOrders = Order::where('status', 'جاري الاستلام')->count();
+        $completedOrders = Order::where('status', 'تم التجهيز')->count();
+        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
+        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
+        $returnedOrders = Order::where('status', 'مرتجع')->count();
+        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+
+        $newOrdersPercentage = $totalOrders ? ($newOrders / $totalOrders) * 100 : 0;
+        $completedOrdersPercentage = $totalOrders ? ($completedOrders / $totalOrders) * 100 : 0;
+        $pendingOrdersPercentage = $totalOrders ? ($pendingOrders / $totalOrders) * 100 : 0;
+        $deliveredOrdersPercentage = $totalOrders ? ($deliveredOrders / $totalOrders) * 100 : 0;
+        $returnedOrdersPercentage = $totalOrders ? ($returnedOrders / $totalOrders) * 100 : 0;
+        $declinedOrdersPercentage = $totalOrders ? ($declinedOrders / $totalOrders) * 100 : 0;
+
+        return response()->json([
+            'newOrdersPercentage'=> $newOrdersPercentage,
+            'completedOrdersPercentage' => $completedOrdersPercentage,
+            'pendingOrdersPercentage'=> $pendingOrdersPercentage,
+            'deliveredOrdersPercentage'=> $deliveredOrdersPercentage,
+            'returnedOrdersPercentage'=> $returnedOrdersPercentage,
+            'declinedOrdersPercentage'=> $declinedOrdersPercentage,
+        ],200);
+    }
 }
