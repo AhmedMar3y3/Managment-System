@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function stats(){
+    public function stats()
+    {
         $sales = Sale::count();
         $chefs = Chef::count();
         $orders = Order::count();
@@ -21,16 +22,17 @@ class HomeController extends Controller
         $managers = Manager::count();
         $deliveries = Delivery::count();
         return response()->json([
-            'branches'=> $branches,
+            'branches' => $branches,
             'managers' => $managers,
-            'sales'=> $sales,
-            'orders'=> $orders,
-            'chefs'=> $chefs,
-            'deliveries'=> $deliveries,
-        ],200);
+            'sales' => $sales,
+            'orders' => $orders,
+            'chefs' => $chefs,
+            'deliveries' => $deliveries,
+        ], 200);
     }
 
-    public function orders(){
+    public function orders()
+    {
         $newOrders = Order::where('status', 'جاري الاستلام')->count();
         $completedOrders = Order::where('status', 'تم التجهيز')->count();
         $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
@@ -38,32 +40,35 @@ class HomeController extends Controller
         $returnedOrdersa = Order::where('status', 'مرتجع')->count();
         $declinedOrders = Order::where('status', 'رفض السائق')->count();
         return response()->json([
-            'newOrders'=> $newOrders,
+            'newOrders' => $newOrders,
             'completedOrders' => $completedOrders,
-            'pendingOrders'=> $pendingOrders,
-            'deliveredOrders'=> $deliveredOrders,
-            'returnedOrders'=> $returnedOrdersa,
-            'declinedOrders'=> $declinedOrders,
-        ],200);
+            'pendingOrders' => $pendingOrders,
+            'deliveredOrders' => $deliveredOrders,
+            'returnedOrders' => $returnedOrdersa,
+            'declinedOrders' => $declinedOrders,
+        ], 200);
     }
 
-    public function requests(){
+    public function requests()
+    {
         $sales = Sale::where('status', 'قيد الانظار')->count();
         $managers = Manager::where('status', 'قيد الانظار')->count();
         return response()->json([
-            'sales'=> $sales,
+            'sales' => $sales,
             'managers' => $managers,
-        ],200);
+        ], 200);
     }
 
-    public function percentages(){
-        $totalOrders = Order::count();
-        $newOrders = Order::where('status', 'جاري الاستلام')->count();
-        $completedOrders = Order::where('status', 'تم التجهيز')->count();
-        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
-        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
-        $returnedOrders = Order::where('status', 'مرتجع')->count();
-        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+    public function percentages(Request $request)
+    {
+        $year = $request->input('year');
+        $totalOrders = Order::whereYear('created_at', $year)->count();
+        $newOrders = Order::whereYear('created_at', $year)->where('status', 'جاري الاستلام')->count();
+        $completedOrders = Order::whereYear('created_at', $year)->where('status', 'تم التجهيز')->count();
+        $pendingOrders = Order::whereYear('created_at', $year)->where('status', 'قيد التنفيذ')->count();
+        $deliveredOrders = Order::whereYear('created_at', $year)->where('status', 'تم التوصيل')->count();
+        $returnedOrders = Order::whereYear('created_at', $year)->where('status', 'مرتجع')->count();
+        $declinedOrders = Order::whereYear('created_at', $year)->where('status', 'رفض السائق')->count();
 
         $newOrdersPercentage = $totalOrders ? ($newOrders / $totalOrders) * 100 : 0;
         $completedOrdersPercentage = $totalOrders ? ($completedOrders / $totalOrders) * 100 : 0;
@@ -73,12 +78,12 @@ class HomeController extends Controller
         $declinedOrdersPercentage = $totalOrders ? ($declinedOrders / $totalOrders) * 100 : 0;
 
         return response()->json([
-            'newOrdersPercentage'=> $newOrdersPercentage,
+            'newOrdersPercentage' => $newOrdersPercentage,
             'completedOrdersPercentage' => $completedOrdersPercentage,
-            'pendingOrdersPercentage'=> $pendingOrdersPercentage,
-            'deliveredOrdersPercentage'=> $deliveredOrdersPercentage,
-            'returnedOrdersPercentage'=> $returnedOrdersPercentage,
-            'declinedOrdersPercentage'=> $declinedOrdersPercentage,
-        ],200);
+            'pendingOrdersPercentage' => $pendingOrdersPercentage,
+            'deliveredOrdersPercentage' => $deliveredOrdersPercentage,
+            'returnedOrdersPercentage' => $returnedOrdersPercentage,
+            'declinedOrdersPercentage' => $declinedOrdersPercentage,
+        ], 200);
     }
 }

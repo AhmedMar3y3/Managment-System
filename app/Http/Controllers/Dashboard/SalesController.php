@@ -9,8 +9,8 @@ class SalesController extends Controller
 {
     public function pendingSales()
     {
-        $sales = Sale::where('status', 'قيد الانتظار')->get(['id', 'first_name', 'last_name','image']);
-        return response()->json(['key'=>'سيلز','data'=>$sales], 200);
+        $sales = Sale::where('status', 'قيد الانتظار')->get(['id', 'first_name', 'last_name', 'image']);
+        return response()->json(['key' => 'سيلز', 'data' => $sales], 200);
     }
 
     public function acceptSale($id)
