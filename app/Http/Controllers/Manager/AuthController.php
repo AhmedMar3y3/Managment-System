@@ -77,25 +77,27 @@ class AuthController extends Controller
     public function login(login $request)
     {
         $validatedData = $request->validated();
-        $manager = Manager::where('email', $request->input('email'))->first();
-
+    
+        $loginField = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        $manager = Manager::where($loginField, $request->input('login'))->first();
         if (!$manager || !Hash::check($request->input('password'), $manager->password)) {
             return response()->json(['message' => 'لا يوجد مستخدم أو كلمة المرور غير صحيحة'], 404);
         }
-
+    
         if ($manager->verified_at === null) {
             return response()->json(['message' => 'لم يتم تفعيل الكود']);
         }
-
+    
         if ($manager->status === 'قيد الانتظار') {
             return response()->json(['message' => 'لم يتم القبول بعد'], 403);
         }
-
+    
         if ($manager->status === 'مرفوض') {
             return response()->json(['message' => 'لقد تم رفض الطلب'], 403);
         }
-
+    
         $token = $manager->createToken('manager_token')->plainTextToken;
+    
         return response()->json([
             'key' => 'manager',
             'manager' => $manager,

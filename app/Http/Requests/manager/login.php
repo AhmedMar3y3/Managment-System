@@ -23,7 +23,16 @@ class login extends FormRequest
     {
         return [
             'password' =>'required|string',
-            'email' =>'required|email|exists:managers,email',
+            'login' =>'required|string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'login.required' => 'يجب إدخال البريد الإلكتروني أو رقم الهاتف',
+            'password.required' => 'يجب إدخال كلمة المرور',
         ];
     }
 }
+
