@@ -43,7 +43,7 @@ use App\Http\Controllers\Manager\ReturnOrdersController;
     Route::get('/completed-orders', [OrdersCompletedController::class, 'completedOrders']);
     Route::get('/delivered-orders', [OrdersDeliveredController::class,'deliveredOrders']);
     Route::get('/show-order/{id}', [OrdersCompletedController::class, 'show']);
-    Route::get('/chef-reject-orders', [RejectedOrdersController::class, 'chefRejectedOrders']);
+    Route::get('/rejected-orders', [RejectedOrdersController::class, 'deliveryRejectedOrders']);
     Route::get('/delivery-reject-orders/{id}', [RejectedOrdersController::class, 'problem']);
     Route::get('/returned-orders', [ReturnOrdersController::class, 'returnRequests']);
 

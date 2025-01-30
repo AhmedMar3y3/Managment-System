@@ -46,7 +46,7 @@ public function acceptOrder($id)
     
     $order = Order::findOrFail($id);
     if ($order->status === "جاري الاستلام") {
-        $order->status = "وافق المدير";
+        $order->status = "وافق المدير"; 
         $order->manager_id = Auth::guard('manager')->user()->id;
         $order->save();
         

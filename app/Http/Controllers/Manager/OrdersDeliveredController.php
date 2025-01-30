@@ -15,7 +15,7 @@ use App\Models\Delivery;
 
 class OrdersDeliveredController extends Controller
 {
-//______________________________________________________________________________________-
+//______________________________it has been delivered_and ended_______________________________________________________-
 public function deliveredOrders()
 {
     $manager = auth('manager')->user();

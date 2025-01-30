@@ -11,27 +11,30 @@ use Carbon\Carbon;
 class RejectedOrdersController extends Controller
 {
     
-//________________________________________________________________________________________________________
-    // public function chefRejectedOrders()
-    // {
-    //     $orders = Order::whereIn('status', ['مرتجع', 'رفض السائق'])
-    //         ->where('manager_id', auth('manager')->id()) 
-    //         ->get(['id', 'order_type', 'updated_at']);
-    //         $now = now();
-    
-    //         $ordersWithDetails = $orders->map(function ($order) use ($now) {
-    //         $timeDifference = $now->diffInMinutes(Carbon::parse($order->updated_at));
+//_____________________________all orders rejected___________________________________________________________________________
+public function deliveryRejectedOrders()
+{
+    $orders = Order::whereIn('status', ['مرتجع', 'رفض السائق'])
+        ->where('manager_id', auth('manager')->id()) 
+        ->get(['id', 'order_type', 'updated_at']);
 
-    //         $order->time_difference = $timeDifference . ' ' . 
-    //             ($timeDifference == 1 ? 'دقيقة' : 'دقائق');
-    //         return $order;
-    //     });
-    //     return response()->json([
-    //         'orders' => $ordersWithDetails,
-    //     ], 200);
-    // } 
+    $now = now();
 
-//___________________________________show_________________________________________________________________
+    $ordersWithDetails = $orders->map(function ($order) use ($now) {
+        $updatedAt = Carbon::parse($order->updated_at);
+        $diffHours = $updatedAt->diffInHours($now);
+        $diffMinutes = $updatedAt->diffInMinutes($now) % 60;
+
+        $order->time_difference =  $diffHours . 'دقيقة ' . $diffMinutes . ' و ' . 'ساعة' ;
+        return $order;
+    });
+
+    return response()->json([
+        'orders' => $ordersWithDetails,
+    ], 200);
+}
+
+//___________________________________show_reject_ orders _and _return_ orders____________________________________________________________
 public function problem($id)
 {
 

@@ -44,7 +44,7 @@ public function showChef(string $id)
 //____________________________________________________________________________________________________________
 public function CurrentRequests()
 {
-    $manager = auth('manager')->user();
+    $manager = auth('manager')->user(); 
     if (!$manager) {
         return response()->json(['error' => 'لايوجد مدير'], 401);
     }

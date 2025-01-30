@@ -11,7 +11,7 @@ use App\Models\OrderImage;
 class TrackingPositionController extends Controller
 {
     
-//__________________________________________________________________________________________________
+//_____________________________________all orders with deliveries_____________________________________________________________
     public function getOrdersWithImages()
     {
     
