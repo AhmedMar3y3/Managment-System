@@ -23,7 +23,7 @@ public function AllDeliveries()
     'orders'=>$deliveryStatus,
     
 ]);
-}
+} 
 //__________________________________________________________________________________________
 public function showDelivery(string $id)
 {

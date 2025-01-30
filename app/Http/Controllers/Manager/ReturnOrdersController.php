@@ -14,7 +14,7 @@ class ReturnOrdersController extends Controller
 
     public function returnRequests()
     {
-        $order = Order::where('status', "مرتجع")
+        $order = Order::where('status', 'مرتجع')
             ->where('manager_id', auth('manager')->user()->id)
             ->get(['id', 'order_type', 'customer_name', 'delivery_date', 'status']);
     
@@ -26,7 +26,7 @@ class ReturnOrdersController extends Controller
     
         return response()->json([
             'order' => $order,
-        ], 200);
+        ], 200); 
     }
 
 //________________________________________________________________________________________________________
