@@ -70,7 +70,7 @@ class AuthController extends Controller
         $manager->verification_code = null;
         $manager->save();
 
-        return response()->json(['message' => 'تم بنجاح'], 200);
+        return response()->json(['message' => 'تم التحقق من الرمز بنجاح'], 200);
     }
 
 
