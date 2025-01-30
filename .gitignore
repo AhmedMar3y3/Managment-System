@@ -4,3 +4,4 @@
 /public/orders
 /public/storage
 /vendor
+/.env
