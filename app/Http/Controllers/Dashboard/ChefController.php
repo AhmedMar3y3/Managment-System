@@ -17,19 +17,21 @@ class ChefController extends Controller
         return response()->json($chefs, 200);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $chef = Chef::find($id);
-        if($chef){
-        return response()->json($chef,200);
+        if ($chef) {
+            return response()->json($chef, 200);
         }
-        return response()->json('لا يمكن إجراء ذلك',404);
+        return response()->json('لا يمكن إجراء ذلك', 404);
     }
-    public function delete($id){
+    public function delete($id)
+    {
         $chef = Chef::find($id);
-        if($chef){
+        if ($chef) {
             $chef->delete();
-            return response()->json('تم حذف الشيف بنجاح',200);
+            return response()->json('تم حذف الشيف بنجاح', 200);
         }
-        return response()->json('لا يمكن إجراء ذلك',404);
+        return response()->json('لا يمكن إجراء ذلك', 404);
     }
 }

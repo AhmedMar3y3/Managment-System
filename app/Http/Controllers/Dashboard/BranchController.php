@@ -10,47 +10,50 @@ use App\Http\Requests\branch\update;
 
 class BranchController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $branches = Branch::all();
         return response()->json($branches, 200);
     }
 
-    public function store(store $request){
+    public function store(store $request)
+    {
         $validatedDate = $request->validated();
         $branch = Branch::create($validatedDate);
         return response()->json($branch, 201);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $branch = Branch::find($id);
         //->with('manager', 'chefs', 'deliveries')->first()
-        if($branch){
+        if ($branch) {
             return response()->json($branch, 200);
-        }else{
+        } else {
             return response()->json(['message' => 'الفرع غير موجود'], 404);
         }
     }
 
-    public function update(update $request, $id){
+    public function update(update $request, $id)
+    {
         $branch = Branch::find($id);
-        if($branch){
+        if ($branch) {
             $validatedDate = $request->validated();
             $branch->update($validatedDate);
             return response()->json($branch, 200);
-        }else{
+        } else {
             return response()->json(['message' => 'الفرع غير موجود'], 404);
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $branch = Branch::find($id);
-        if($branch){
+        if ($branch) {
             $branch->delete();
             return response()->json(['message' => 'تم حذف الفرع'], 200);
-        }else{
+        } else {
             return response()->json(['message' => 'الفرع غير موجود'], 404);
         }
     }
-
-    
 }

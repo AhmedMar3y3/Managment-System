@@ -17,19 +17,21 @@ class DeliveryController extends Controller
         return response()->json($deliveries, 200);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $delivery = Delivery::find($id);
-        if($delivery){
-        return response()->json($delivery,200);
+        if ($delivery) {
+            return response()->json($delivery, 200);
         }
-        return response()->json('لا يمكن إجراء ذلك',404);
+        return response()->json('لا يمكن إجراء ذلك', 404);
     }
-    public function delete($id){
+    public function delete($id)
+    {
         $delivery = Delivery::find($id);
-        if($delivery){
+        if ($delivery) {
             $delivery->delete();
-            return response()->json('تم حذف الشيف بنجاح',200);
+            return response()->json('تم حذف الشيف بنجاح', 200);
         }
-        return response()->json('لا يمكن إجراء ذلك',404);
+        return response()->json('لا يمكن إجراء ذلك', 404);
     }
 }
