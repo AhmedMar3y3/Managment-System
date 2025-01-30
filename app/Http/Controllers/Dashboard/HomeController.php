@@ -59,15 +59,16 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function percentages()
+    public function percentages(Request $request)
     {
-        $totalOrders = Order::count();
-        $newOrders = Order::where('status', 'جاري الاستلام')->count();
-        $completedOrders = Order::where('status', 'تم التجهيز')->count();
-        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
-        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
-        $returnedOrders = Order::where('status', 'مرتجع')->count();
-        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+        $year = $request->input('year');
+        $totalOrders = Order::whereYear('created_at', $year)->count();
+        $newOrders = Order::whereYear('created_at', $year)->where('status', 'جاري الاستلام')->count();
+        $completedOrders = Order::whereYear('created_at', $year)->where('status', 'تم التجهيز')->count();
+        $pendingOrders = Order::whereYear('created_at', $year)->where('status', 'قيد التنفيذ')->count();
+        $deliveredOrders = Order::whereYear('created_at', $year)->where('status', 'تم التوصيل')->count();
+        $returnedOrders = Order::whereYear('created_at', $year)->where('status', 'مرتجع')->count();
+        $declinedOrders = Order::whereYear('created_at', $year)->where('status', 'رفض السائق')->count();
 
         $newOrdersPercentage = $totalOrders ? ($newOrders / $totalOrders) * 100 : 0;
         $completedOrdersPercentage = $totalOrders ? ($completedOrders / $totalOrders) * 100 : 0;
