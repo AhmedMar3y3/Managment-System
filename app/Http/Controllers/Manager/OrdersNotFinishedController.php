@@ -35,6 +35,11 @@ public function stats()
         ->count();
 
 
+        $reciveCount = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', "استلام السائق")
+        ->count();
+
+
 $Count = Order::where('manager_id', auth('manager')->user()->id)
     ->where('status', "تم التوصيل")
     ->count();
@@ -48,6 +53,7 @@ return response()->json([
     'rejected' => $rejectedCount,
     'delivered' => $deliveredCount,
     'returned' => $returnedCount,
+    'recive' =>  $reciveCount,
     'percentage' => $Percentage . "%", 
     ], 200);
 } 
