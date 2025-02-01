@@ -17,6 +17,16 @@ class Branch extends Model
         'lat',
     ];
 
+    protected $appends = ['total_price'];
+
+
+
+    public function getTotalPriceAttribute()
+
+    {
+        return $this->orders()->sum('total_price');
+    }
+
     public function manager()
     {
         return $this->hasOne(Manager::class);
@@ -35,6 +45,11 @@ class Branch extends Model
     public function admin()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
 }

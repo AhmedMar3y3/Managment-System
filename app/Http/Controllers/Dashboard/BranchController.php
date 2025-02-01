@@ -10,9 +10,13 @@ use App\Http\Requests\branch\update;
 
 class BranchController extends Controller
 {
+
     public function index()
     {
-        $branches = Branch::all();
+        $branches = Branch::with('manager')->get();
+        $branches->each(function ($branch) {
+            $branch->total_price = $branch->orders()->sum('total_price');
+        });
         return response()->json($branches, 200);
     }
 
