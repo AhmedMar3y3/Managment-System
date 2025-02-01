@@ -17,7 +17,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::get(['order_type', 'status', 'delivery_date', 'customer_name']);
+        $orders = Order::get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200); 
     }
     

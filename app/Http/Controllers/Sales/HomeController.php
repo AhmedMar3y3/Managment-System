@@ -15,7 +15,7 @@ class HomeController extends Controller
     }
     public function readyOrders()
     {
-        $orders = Order::where('sale_id', Auth('sale')->id())->where('status', 'تم التجهيز')->with('chef:image','images')->get(['id','order_type','order_name', 'delivery_date']);
+        $orders = Order::where('sale_id', Auth('sale')->id())->count();
         return response()->json(['orders' => $orders], 200);
     }
 
