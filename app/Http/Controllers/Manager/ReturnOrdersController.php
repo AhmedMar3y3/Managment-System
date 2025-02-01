@@ -16,7 +16,7 @@ class ReturnOrdersController extends Controller
     {
         $order = Order::where('status', 'مرتجع')
             ->where('manager_id', auth('manager')->user()->id)
-            ->get(['id', 'order_type', 'customer_name', 'delivery_date', 'status']);
+            ->get(['id', 'customer_name', 'order_type','status','delivery_date','image']);
     
         if (!$order) {
             return response()->json([

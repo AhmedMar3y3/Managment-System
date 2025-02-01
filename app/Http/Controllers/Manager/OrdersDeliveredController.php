@@ -26,16 +26,16 @@ public function deliveredOrders()
     $orders = Order::where('manager_id', $manager->id)
         ->where('status', 'تم التوصيل')
         ->orderBy('delivery_date', 'desc')
-        ->get(['id', 'customer_name', 'order_details', 'order_type']);
+        ->get(['id', 'customer_name', 'order_type','status','delivery_date','image']);
 
-    $ordersWithImages = $orders->map(function ($order) {
-        $images = OrderImage::where('order_id', $order->id)->first();
-        $order->images = $images;
-        return $order;
-    });
+    // $ordersWithImages = $orders->map(function ($order) {
+    //     $images = OrderImage::where('order_id', $order->id)->first();
+    //     $order->images = $images;
+    //     return $order;
+    // });
 
     return response()->json([
-        'orders' => $ordersWithImages,
+        'orders' => $orders,
     ]);
 }
 //______________________________________________________________________________________-

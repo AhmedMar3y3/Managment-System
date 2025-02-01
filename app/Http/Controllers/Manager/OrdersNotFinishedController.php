@@ -43,6 +43,7 @@ public function stats()
 $Count = Order::where('manager_id', auth('manager')->user()->id)
     ->where('status', "تم التوصيل")
     ->count();
+    
 $totalOrders = Order::count();
 $Percentage = ($totalOrders > 0) ? ($Count / $totalOrders) * 100 : 0;
 
