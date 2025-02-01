@@ -10,15 +10,12 @@ use App\Http\Requests\branch\update;
 
 class BranchController extends Controller
 {
-
     public function index()
     {
         $branches = Branch::with('manager')->get();
-        $branches->each(function ($branch) {
-            $branch->total_price = $branch->orders()->sum('total_price');
-        });
         return response()->json($branches, 200);
     }
+
 
     public function store(store $request)
     {
@@ -29,8 +26,8 @@ class BranchController extends Controller
 
     public function show($id)
     {
-        $branch = Branch::find($id);
-        //->with('manager', 'chefs', 'deliveries')->first()
+        $branch = Branch::find($id)
+        ->with('manager', 'chefs', 'deliveries')->first();
         if ($branch) {
             return response()->json($branch, 200);
         } else {
