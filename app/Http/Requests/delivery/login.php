@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\manager;
+namespace App\Http\Requests\delivery;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +22,8 @@ class login extends FormRequest
     public function rules(): array
     {
         return [
-            'password' =>'required|string',
-            'login' =>'required|string',
+            'login' => 'required|string',
+            'password' => 'required|string',
         ];
     }
 
@@ -35,4 +35,3 @@ class login extends FormRequest
         ];
     }
 }
-
