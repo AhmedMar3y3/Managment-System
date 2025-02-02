@@ -27,6 +27,9 @@ class OrderResource extends JsonResource
             'latitude'=> $this->latitude,
             'map_desc' => $this->map_desc,
             'additional_data' => $this->additional_data,
+            'product' => $this->product,
+            'flowers' => $this->flowers,
+            'images' => $this->images,
         ];
         }
 }

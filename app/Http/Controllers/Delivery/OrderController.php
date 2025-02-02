@@ -57,10 +57,9 @@ class OrderController extends Controller
 
     public function show($id)
     {
-
-        $order = Order::find($id)->load('images','product','flowers');
-        if ($order->delivery_id == Auth('delivery')->id()) {
-            return response()->json(new OrderResource($order), 403);
+        $order = Order::find($id)->load('images','product', 'flowers');
+        if ($order && $order->delivery_id == Auth('delivery')->id()) {
+            return response()->json(new OrderResource($order), 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);
     }
@@ -111,23 +110,24 @@ class OrderController extends Controller
         return response()->json(['message' => 'غير مصرح'], 404);
     }
 
-    public function pendingOrders(){
+    public function pendingOrders()
+    {
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'استلام السائق')
             ->get(['id', 'quantity', 'updated_at']);
-            return response()->json( [
-                'message' => 'تم جلب الطلبات بنجاح',
-                'orders'  => $orders,
-            ], 200);
+        return response()->json([
+            'message' => 'تم جلب الطلبات بنجاح',
+            'orders'  => $orders,
+        ], 200);
     }
-    public function completedOrders(){
+    public function completedOrders()
+    {
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'تم التوصيل')
-            ->get(['id', 'quantity','updated_at']);
-            return response()->json( [
-                'message' => 'تم جلب الطلبات بنجاح',
-                'orders'  => $orders,
-            ], 200);
+            ->get(['id', 'quantity', 'updated_at']);
+        return response()->json([
+            'message' => 'تم جلب الطلبات بنجاح',
+            'orders'  => $orders,
+        ], 200);
     }
-
 }
