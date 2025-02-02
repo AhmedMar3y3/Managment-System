@@ -58,6 +58,7 @@ public function show(string $id)
             'additional_data' => $order->additional_data,
             'images' => $order->images,
             'status' => $order->status,
+            'quantity' => $order->quantity,
         ], 200);
     }
 
