@@ -60,7 +60,7 @@ class OrderController extends Controller
 
         $order = Order::find($id)->load('images','product','flowers');
         if ($order->delivery_id == Auth('delivery')->id()) {
-            return response()->json(new OrderResource($order), 403);
+            return response()->json(new OrderResource($order), 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);
     }
