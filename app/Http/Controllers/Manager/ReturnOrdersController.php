@@ -25,7 +25,7 @@ class ReturnOrdersController extends Controller
         }
     
         return response()->json([
-            'order' => $order,
+            'orders' => $order,
         ], 200); 
     }
 

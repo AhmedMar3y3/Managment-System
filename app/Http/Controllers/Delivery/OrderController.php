@@ -115,13 +115,19 @@ class OrderController extends Controller
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'استلام السائق')
             ->get(['id', 'quantity', 'updated_at']);
-            return response()->json( $orders, 200);
+            return response()->json( [
+                'message' => 'تم جلب الطلبات بنجاح',
+                'orders'  => $orders,
+            ], 200);
     }
     public function completedOrders(){
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'تم التوصيل')
             ->get(['id', 'quantity','updated_at']);
-            return response()->json( $orders, 200);
+            return response()->json( [
+                'message' => 'تم جلب الطلبات بنجاح',
+                'orders'  => $orders,
+            ], 200);
     }
 
 }

@@ -15,20 +15,21 @@ class TrackingPositionController extends Controller
     public function getOrdersWithImages()
     {
     
-        $orders = Order::where('status', 'استلام السائق')
-            ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name']);
+        $orders = Order::where('manager_id', auth('manager')->user()->id)
+        ->where('status', 'استلام السائق')
+            ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name','image']);
     
-        $ordersWithImages = $orders->map(function ($order) {
+        // $ordersWithImages = $orders->map(function ($order) {
 
-            $orderImage = OrderImage::where('order_id', $order->id)->value('image'); 
-            return [
-                'order' => $order,
-                'image' => $orderImage, 
-            ];
-        });
+        //     $orderImage = OrderImage::where('order_id', $order->id)->value('image'); 
+        //     return [
+        //         'order' => $order,
+        //         'image' => $orderImage, 
+        //     ];
+        // });
         
         return response()->json([
-            'orders' => $ordersWithImages,
+            'orders' => $orders,
         ], 200);
     }  
     
