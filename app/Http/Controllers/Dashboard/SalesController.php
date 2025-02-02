@@ -44,7 +44,7 @@ class SalesController extends Controller
 
     public function show($id)
     {
-        $sale = Sale::find($id)->load('orders:id,customer_name,delivery_date,total_price,status');
+        $sale = Sale::find($id)->load('orders');
         if ($sale) {
             return response()->json($sale, 200);
         }
