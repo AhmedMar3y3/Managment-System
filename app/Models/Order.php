@@ -66,11 +66,11 @@ class Order extends Model
 
     public function product()
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
-
+    
     public function flowers()
     {
-        return $this->hasOne(Flower::class);
+        return $this->belongsTo(Flower::class, 'flower_id');
     }
 }
