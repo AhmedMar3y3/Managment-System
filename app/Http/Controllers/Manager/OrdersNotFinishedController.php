@@ -36,7 +36,7 @@ public function stats()
 
 
         $reciveCount = Order::where('manager_id', auth('manager')->user()->id)
-        ->where('status', "استلام السائق")
+        ->where('status', 'استلام السائق')
         ->count();
 
 
