@@ -34,7 +34,7 @@ class SalesController extends Controller
 
     public function index()
     {
-        $sales = Sale::where('status', 'مقبول')->get(['id', 'first_name', 'last_name']);
+        $sales = Sale::where('status', 'مقبول')->get(['id', 'first_name', 'last_name', 'phone','email']);
         $sales = $sales->map(function ($sale) {
             $sale->orders_count = $sale->orders()->count();
             return $sale;
@@ -44,7 +44,7 @@ class SalesController extends Controller
 
     public function show($id)
     {
-        $sale = Sale::find($id);
+        $sale = Sale::find($id)->load('orders:id,customer_name,delivery_date,total_price,status');
         if ($sale) {
             return response()->json($sale, 200);
         }
