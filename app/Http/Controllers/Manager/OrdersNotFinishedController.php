@@ -23,7 +23,7 @@ public function stats()
         ->count();
 
     $rejectedCount = Order::where('manager_id', auth('manager')->user()->id)
-        ->where('status', "تم الرفض")
+        ->where('status','رفض السائق')
         ->count();
 
     $deliveredCount = Order::where('manager_id', auth('manager')->user()->id)

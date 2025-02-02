@@ -14,7 +14,7 @@ class RejectedOrdersController extends Controller
 //_____________________________all orders rejected___________________________________________________________________________
 public function deliveryRejectedOrders()
 {
-    $orders = Order::whereIn('status', ['مرتجع', 'رفض السائق'])
+    $orders = Order::whereIn('status', ['رفض السائق'])
         ->where('manager_id', auth('manager')->id()) 
         ->get(['id', 'order_type', 'updated_at','status']);
 
