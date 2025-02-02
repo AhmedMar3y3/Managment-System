@@ -16,7 +16,7 @@ public function deliveryRejectedOrders()
 {
     $orders = Order::whereIn('status', ['مرتجع', 'رفض السائق'])
         ->where('manager_id', auth('manager')->id()) 
-        ->get(['id', 'order_type', 'updated_at']);
+        ->get(['id', 'order_type', 'updated_at','status']);
 
     $now = now();
 
