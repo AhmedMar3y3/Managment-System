@@ -49,7 +49,7 @@ public function showChef(string $id)
 {
     $Chef = Chef::with(['specialization', 'orders' => function ($query) {
         $query->where('status', 'قيد التنفيذ');
-    }])->get(['first_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id'])->findOrFail($id);
+    }])->find($id,['first_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id']);
     return response()->json([
         'Chef' => $Chef,
     ],200);
