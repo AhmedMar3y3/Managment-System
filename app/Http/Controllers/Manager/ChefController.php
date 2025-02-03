@@ -48,11 +48,12 @@ public function chefs()
 public function showChef(string $id)
 {
     $Chef = Chef::with(['specialization', 'orders' => function ($query) {
-        $query->where('status', 'قيد التنفيذ');
-    }])->find($id,['first_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id']);
+        $query->where('status', 'قيد التنفيذ')->select('order_type', 'order_details', 'delivery_date', 'chef_id');
+    }])->find($id, ['first_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id']);
+    
     return response()->json([
         'Chef' => $Chef,
-    ],200);
+    ], 200);
 }
 //____________________________________________________________________________________________________________
 public function CurrentRequests()
