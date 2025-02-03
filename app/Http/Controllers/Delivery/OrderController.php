@@ -73,11 +73,18 @@ class OrderController extends Controller
         }
         return response()->json(['message' => 'غير مصرح'], 404);
     }
-    public function rejectOrder($id)
+    public function rejectOrder(Request $request, $id)
     {
+        $request->validate([
+            'rejection_cause' => 'nullable|string'
+        ]);
+
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
-            $order->update(['status' => 'رفض السائق']);
+            $order->update([
+                'status' => 'رفض السائق',
+                'rejection_cause' => $request->rejection_cause
+            ]);
             return response()->json(['message' => 'تم رفض الطلب بنجاح'], 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);

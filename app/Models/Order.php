@@ -38,6 +38,7 @@ class Order extends Model
         'manager_id',
         'chef_id',
         'delivery_id',
+        'rejection_cause',
     ];
 
     public function sale()
