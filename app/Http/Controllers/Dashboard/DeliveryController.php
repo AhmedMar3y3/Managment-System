@@ -9,7 +9,7 @@ class DeliveryController extends Controller
 {
     public function index()
     {
-        $deliveries = Delivery::where('status', 'مقبول')->get(['id', 'first_name', 'last_name']);
+        $deliveries = Delivery::where('status', 'مقبول')->with('branch')->get(['id', 'first_name', 'last_name','phone','branch_id']);
         $deliveries = $deliveries->map(function ($delivery) {
             $delivery->orders_count = $delivery->orders()->count();
             return $delivery;
@@ -19,7 +19,7 @@ class DeliveryController extends Controller
 
     public function show($id)
     {
-        $delivery = Delivery::find($id);
+        $delivery = Delivery::find($id)->load('orders');
         if ($delivery) {
             return response()->json($delivery, 200);
         }

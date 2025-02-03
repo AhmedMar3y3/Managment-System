@@ -9,7 +9,7 @@ class ChefController extends Controller
 {
     public function index()
     {
-        $chefs = Chef::where('status', 'مقبول')->get(['id', 'first_name', 'last_name']);
+        $chefs = Chef::where('status', 'مقبول')->with('branch')->get(['id', 'first_name', 'last_name','phone','branch_id']);
         $chefs = $chefs->map(function ($chef) {
             $chef->orders_count = $chef->orders()->count();
             return $chef;
@@ -19,7 +19,7 @@ class ChefController extends Controller
 
     public function show($id)
     {
-        $chef = Chef::find($id);
+        $chef = Chef::find($id)->load('orders');
         if ($chef) {
             return response()->json($chef, 200);
         }
