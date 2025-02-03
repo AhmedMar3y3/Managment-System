@@ -15,14 +15,34 @@ class ChefController extends Controller
 public function chefs()
 {
     $manager=auth('manager')->user();
-    $Allchefs= Chef::where('branch_id',$manager->branch_id)
-    ->get(['first_name', 'phone', 'email','image','id']);
-    $ordersDone= Chef::with('orders')->where('status', 'تم التجهيز" ')->count();
+    $chefs= Chef::where('branch_id',$manager->branch_id)
+    ->with('specialization')
+    ->withCount(['orders' => function ($query) {
+        $query->where('status', 'قيد التنفيذ');
+    }])->get(['id', 'first_name', 'last_name', 'phone', 'image','specialization_id']);
+
+    $chefs->each(function ($chef) {
+        $chef->canTakeOrder = $chef->orders_count > 5 ? 'غير متاح' : 'متاح';
+        $chef->orderCount = $chef->orders_count;
+        unset($chef->orders_count);
+    });
+    
     return response()->json([
-        'Allchefs'=>$Allchefs,
-        'ordersDone'=>$ordersDone,
-    ]);
+        'employees' => $chefs->map(function ($chef) {
+            return [
+                'id' => $chef->id,
+                'first_name' => $chef->first_name,
+                'last_name' => $chef->last_name,
+                'phone' => $chef->phone,
+                'image' => $chef->image,
+                'specialization'=> $chef->specialization->name,
+                'canTakeOrder' => $chef->canTakeOrder,
+                'orderCount' => $chef->orderCount,
+            ];
+        }),
+    ], 200);
 }
+
 //____________________________________________________________________________________________________________
 
 public function showChef(string $id)
