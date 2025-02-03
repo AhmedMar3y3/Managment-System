@@ -51,8 +51,10 @@ class Chef extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-    public function specialization(){
-        return $this->hasOne(Specialization::class);
-    }
+    public function specialization()
+
+{
+    return $this->belongsTo(Specialization::class, 'specialization_id');
+}
 
 }
