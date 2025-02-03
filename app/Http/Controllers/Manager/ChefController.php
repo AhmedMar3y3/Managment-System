@@ -47,18 +47,11 @@ public function chefs()
 
 public function showChef(string $id)
 {
-    $Chef = Chef::select('first_name', 'phone', 'image','email','id')->findOrFail($id);
-    $ordersDone = Chef::with('orders')->where('status', 'تم التجهيز')->count();
-    $Receiving = Chef::with('orders')->where('status', 'تم التجهيز')->count();
-    if ($Receiving <= 3) {
-        $canTakeOrder = 'متاح';
-    } else {
-        $canTakeOrder = 'غير متاح';
-    }
+    $Chef = Chef::with(['specialization', 'orders' => function ($query) {
+        $query->where('status', 'قيد التنفيذ');
+    }])->get(['first_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id'])->findOrFail($id);
     return response()->json([
-        
         'Chef' => $Chef,
-        'orders'=>$ordersDone,
     ],200);
 }
 //____________________________________________________________________________________________________________
