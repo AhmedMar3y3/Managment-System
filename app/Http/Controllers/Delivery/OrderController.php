@@ -20,7 +20,7 @@ class OrderController extends Controller
         $deliveryLat = $validatedData['lat'];
         $deliveryLon = $validatedData['long'];
 
-        $orders = Order::where('status', 'تم التجهيز')
+        $orders = Order::whereIn('status', ['تم التجهيز', 'رفض السائق', 'مرتجع'])
             ->where('delivery_id', Auth('delivery')->id())
             ->with('images')
             ->get(['id', 'latitude', 'longitude', 'price']);
