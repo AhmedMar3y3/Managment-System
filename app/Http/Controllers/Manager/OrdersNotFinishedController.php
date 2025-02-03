@@ -77,7 +77,8 @@ return response()->json([
 public function NewOrders(){
     $orders = Order::where('status', 'جاري الاستلام')
     ->orderBy('created_at', 'desc')
-    ->get(['id','order_type','delivery_date','order_details']);
+    ->with('flowers','images')
+    ->get();
     return response()->json([
         'orders' =>$orders
     ],200);
