@@ -65,6 +65,7 @@ public function problem($id)
                 'status' => $order->status,
                 'problem' => $order->problem,
                 'price' => $order->price,
+                'quantity' => $order->quantity,
             ], 200);
         }
     
