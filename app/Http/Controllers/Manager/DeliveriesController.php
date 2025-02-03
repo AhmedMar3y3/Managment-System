@@ -17,13 +17,18 @@ class DeliveriesController extends Controller
 //__________________________________________________________________________________________
 public function AllDeliveries()
 {
-    $deliveryInformation=Delivery::select('first_name', 'phone','image','id')->get();
-    $deliveryStatus=Delivery::where('status','مقبول')->get()->count();
-    return response()->json(['message'=> $deliveryInformation,
-    'orders'=>$deliveryStatus,
-    
-]);
-} 
+    $deliveries = Delivery::withCount(['orders' => function ($query) {
+        $query->where('status', 'استلام السائق');
+    }])->get(['first_name', 'last_name', 'phone', 'image', 'id']);
+
+    $deliveries->each(function ($delivery) {
+        $delivery->canTakeOrder = $delivery->orders_count > 2 ? 'غير متاح' : 'متاح';
+    });
+
+    return response()->json([
+        'deliveries' => $deliveries,
+    ], 200);
+}
 //__________________________________________________________________________________________
 public function showDelivery(string $id)
 {
