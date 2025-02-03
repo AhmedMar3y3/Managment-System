@@ -77,8 +77,7 @@ return response()->json([
 public function NewOrders(){
     $orders = Order::where('status', 'جاري الاستلام')
     ->orderBy('created_at', 'desc')
-    ->with('flowers','images')
-    ->get();
+    ->get(['id','order_type','delivery_date','order_details']);
     return response()->json([
         'orders' =>$orders
     ],200);
@@ -86,17 +85,10 @@ public function NewOrders(){
 //___________________________________________________________________________________________________________________
 public function ShowNewOrder(string $id){
     
-    $orders = Order::findOrFail($id);
+    $orders = Order::findOrFail($id)->load('Images','flowers');
     return response()->json([
-        'order_number' =>$orders->id,
-        'customer_address'=>$orders->customer_address,
-        'customer_phone'=>$orders->customer_phone,
-        'order_details'=>$orders->order_details,
-        'customer_name'=>$orders->customer_name,
-        'order_date' =>$orders->delivery_date,
-        'order_type' =>$orders->order_type,
-        'notes'=>$orders->notes,
-        'price'=>$orders->price,
+
+        'orders'=>$orders,
         
     ],200);
 }
