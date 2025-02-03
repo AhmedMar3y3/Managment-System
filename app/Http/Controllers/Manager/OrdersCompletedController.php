@@ -58,6 +58,8 @@ public function show(string $id)
             'additional_data' => $order->additional_data,
             'images' => $order->images,
             'status' => $order->status,
+            'problem' => $order->problem,
+            'rejection_cause' => $order->rejection_cause,
             'quantity' => $order->quantity,
         ], 200);
     }
