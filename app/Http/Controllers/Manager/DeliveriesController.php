@@ -48,24 +48,23 @@ class DeliveriesController extends Controller
 
         return response()->json([
             'delivery' => [
-            'id' => $delivery->id,
-            'first_name' => $delivery->first_name,
-            'last_name' => $delivery->last_name,
-            'phone' => $delivery->phone,
-            'image' => $delivery->image,
-            'email' => $delivery->email,
-            'delivered_orders_count' => $delivery->delivered_orders_count,
-            'canTakeOrder' => $delivery->canTakeOrder,
-            'orders' => $delivery->orders->where('status', 'استلام السائق')->values()->map(function ($order) {
-                return [
-                'order_type' => $order->order_type,
-                'order_details' => $order->order_details,
-                'delivery_date' => $order->delivery_date,
-                'delivery_id' => $order->delivery_id,
-                ];
-            }),
+                'id' => $delivery->id,
+                'first_name' => $delivery->first_name,
+                'last_name' => $delivery->last_name,
+                'phone' => $delivery->phone,
+                'image' => $delivery->image,
+                'email' => $delivery->email,
+                'delivered_orders_count' => $delivery->delivered_orders_count,
+                'canTakeOrder' => $delivery->canTakeOrder,
+                'orders' => $delivery->orders->where('status', 'استلام السائق')->values()->map(function ($order) {
+                    return [
+                        'order_type' => $order->order_type,
+                        'order_details' => $order->order_details,
+                        'delivery_date' => $order->delivery_date,
+                        'delivery_id' => $order->delivery_id,
+                    ];
+                }),
             ],
         ]);
     }
-
 }

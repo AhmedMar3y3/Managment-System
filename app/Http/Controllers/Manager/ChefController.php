@@ -44,13 +44,35 @@ class ChefController extends Controller
     // show chef details
     public function showChef(string $id)
     {
-        $Chef = Chef::with(['specialization', 'orders' => function ($query) {
-            $query->where('status', 'قيد التنفيذ')->select('order_type', 'order_details', 'delivery_date', 'chef_id');
-        }])->find($id, ['first_name', 'last_name', 'phone', 'image', 'email', 'id', 'bio', 'specialization_id']);
+        $Chef = Chef::withCount(['orders as completed_orders_count' => function ($query) {
+            $query->where('status', 'تم التجهيز');
+        }, 'orders as in_progress_orders_count' => function ($query) {
+            $query->where('status', 'قيد التنفيذ');
+        }])->find($id);
+
+        $Chef->canTakeOrder = $Chef->in_progress_orders_count > 5 ? 'غير متاح' : 'متاح';
 
         return response()->json([
-            'Chef' => $Chef,
-        ], 200);
+            'chef' => [
+                'id' => $Chef->id,
+                'first_name' => $Chef->first_name,
+                'last_name' => $Chef->last_name,
+                'phone' => $Chef->phone,
+                'image' => $Chef->image,
+                'email' => $Chef->email,
+                'specialization' => $Chef->specialization->name,
+                'bio' => $Chef->bio,
+                'completed_orders_count' => $Chef->completed_orders_count,
+                'canTakeOrder' => $Chef->canTakeOrder,
+                'orders' => $Chef->orders->where('status', 'قيد التنفيذ')->values()->map(function ($order) {
+                    return [
+                        'order_type' => $order->order_type,
+                        'order_details' => $order->order_details,
+                        'delivery_date' => $order->delivery_date,
+                        'delivery_id' => $order->delivery_id,
+                    ];
+                }),
+            ],
+        ]);
     }
-  
 }
