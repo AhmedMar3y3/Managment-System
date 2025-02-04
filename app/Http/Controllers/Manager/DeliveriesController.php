@@ -40,7 +40,7 @@ class DeliveriesController extends Controller
     {
         $delivery = Delivery::with(['orders' => function ($query) {
             $query->where('status', "استلام السائق")->select('order_type', 'order_details', 'delivery_date', 'delivery_id');
-        }])->find($id, ['first_name', 'phone', 'image', 'email', 'id']);
+        }])->find($id, ['first_name','last_name', 'phone', 'image', 'email', 'id']);
 
         return response()->json([
             'delivery' => $delivery,
