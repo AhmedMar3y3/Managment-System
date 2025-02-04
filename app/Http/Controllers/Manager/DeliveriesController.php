@@ -38,7 +38,9 @@ class DeliveriesController extends Controller
 
     public function showDelivery(string $id)
     {
-        $delivery = Delivery::withCount(['orders as delivered_orders_count' => function ($query) {
+        $delivery = Delivery::with(['orders' => function ($query) {
+            $query->where('status', "استلام السائق")->select('order_type', 'order_details', 'delivery_date', 'delivery_id');
+        }])->withCount(['orders as delivered_orders_count' => function ($query) {
             $query->where('status', 'تم التوصيل');
         }, 'orders as in_progress_orders_count' => function ($query) {
             $query->where('status', 'استلام السائق');
