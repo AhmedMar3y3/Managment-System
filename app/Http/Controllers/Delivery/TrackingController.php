@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers\Delivery;
 
+use App\Models\DeliveryPosition;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Tracking;
+use App\Http\Requests\tracking\storePositionRequest;
 
 class TrackingController extends Controller
 {
-    public function store(Request $request)
+    public function store(storePositionRequest $request)
     {
-        $validatedData = $request->validate([
-            'device_id' => 'required',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-        $position = Tracking::create($validatedData);
-        return response()->json($position);
+        $delivery = Auth('delivery')->user();
+        DeliveryPosition::create([$request->validated() + 'delivery_id' => $delivery->id]);
+        return response()->json(['message' =>'تم تخزين الموقع بنجاح'],200);
     }
 
-    public function latest($deviceId)
+    public function latest()
     {
-        $position = Tracking::where('device_id', $deviceId)
-            ->latest()
-            ->first();
+        $delivery = Auth('delivery')->user();
+        $position = DeliveryPosition::where('delivery_id', $delivery->id)->latest()->first();
         return response()->json($position);
     }
 }

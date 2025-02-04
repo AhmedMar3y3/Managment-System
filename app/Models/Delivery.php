@@ -12,16 +12,16 @@ class Delivery extends Authenticatable
     use HasFactory, HasApiTokens, Notifiable;
 
     protected $fillable = [
-    'first_name',
-    'last_name',
-    'email',
-    'password',
-    'phone',
-    'image',
-    'status',
-    'verification_code',
-    'verified_at',
-    'branch_id',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'phone',
+        'image',
+        'status',
+        'verification_code',
+        'verified_at',
+        'branch_id',
     ];
 
     protected $hidden = [
@@ -38,5 +38,9 @@ class Delivery extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
-    
+
+    public function positions()
+    {
+        return $this->hasMany(DeliveryPosition::class);
+    }
 }
