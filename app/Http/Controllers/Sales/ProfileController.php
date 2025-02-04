@@ -8,13 +8,15 @@ use App\Models\Sale;
 
 class ProfileController extends Controller
 {
-    public function getProfile(){
+    public function getProfile()
+    {
         $sale = Sale::where('id', Auth('sale')->id())
-        ->get(['first_name', 'last_name', 'email', 'phone', 'image','id']);
-        return response()->json($sale,200);
+            ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
+        return response()->json($sale, 200);
     }
 
-    public function updateProfile(update $request){
+    public function updateProfile(update $request)
+    {
         $user = Auth('sale')->user();
         $sale = Sale::find($user->id);
         $validatedData = $request->validated();
@@ -28,7 +30,8 @@ class ProfileController extends Controller
         return response()->json(['message' => 'تم تحديث البيانات بنجاح'], 200);
     }
 
-    public function deleteAccount(){
+    public function deleteAccount()
+    {
         $user = Auth('sale')->user();
         $sale = Sale::find($user->id);
         $sale->delete();

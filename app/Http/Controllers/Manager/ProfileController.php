@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\manager\update;
-use App\Models\Manager;
 
-class ProfileManagerController extends Controller
+class ProfileController extends Controller
 {
-//____________________________________________________________________________________________________________-
     public function getProfilemanager()
     {
         $manager = auth('manager')->user();
@@ -22,7 +19,6 @@ class ProfileManagerController extends Controller
             'id'         => $manager->id,
         ], 200);
     }
-//____________________________________________________________________________________________________________-
     public function updateProfilemanager(update $request)
     {
         $manager = auth('manager')->user();
@@ -39,11 +35,10 @@ class ProfileManagerController extends Controller
 
         return response()->json([
             'message' => 'تم تحديث البيانات بنجاح',
-            'update'=>$manager
-            
-    ], 200);
+            'update' => $manager
+
+        ], 200);
     }
-//________________________________________________________________________________________________________
     public function deleteAccountmanager()
     {
         $manager = auth('manager')->user();
