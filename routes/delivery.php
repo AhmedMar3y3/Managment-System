@@ -43,7 +43,7 @@ Route::middleware(['auth.delivery'])->group(function () {
 
     //Tracking Routes
     Route::post('store',                     [TrackingController::class,'store']);
-    Route::get('latest-position/{deviceId}', [TrackingController::class,'latest']);
+    Route::get('latest-position', [TrackingController::class,'latest']);
 
 
 });
