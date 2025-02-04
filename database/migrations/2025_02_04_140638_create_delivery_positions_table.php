@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('delivery_positions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('delivery_id')->constrained()->cascadeOnDelete();
-            $table->decimal('long',20,18)->nullable();
-            $table->decimal('lat',20,18)->nullable();
+            $table->decimal('long', 10, 8)->nullable();
+            $table->decimal('lat', 11, 8)->nullable();
             $table->timestamps();
         });
     }
