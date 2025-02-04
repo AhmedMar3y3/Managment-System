@@ -83,7 +83,8 @@ class OrderController extends Controller
         if ($order->delivery_id == Auth('delivery')->id()) {
             $order->update([
                 'status' => 'رفض السائق',
-                'rejection_cause' => $request->rejection_cause
+                'rejection_cause' => $request->rejection_cause,
+                'delivery_id' => null
             ]);
             return response()->json(['message' => 'تم رفض الطلب بنجاح'], 200);
         }
