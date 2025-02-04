@@ -11,7 +11,7 @@ class TrackingController extends Controller
     public function store(storePositionRequest $request)
     {
         $delivery = Auth('delivery')->user();
-        DeliveryPosition::create([$request->validated() + 'delivery_id' => $delivery->id]);
+        DeliveryPosition::create(array_merge($request->validated(), ['delivery_id' => $delivery->id]));
         return response()->json(['message' =>'تم تخزين الموقع بنجاح'],200);
     }
 
