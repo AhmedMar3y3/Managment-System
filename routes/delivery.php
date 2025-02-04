@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Delivery\AuthController;
 use App\Http\Controllers\Delivery\HomeController;
 use App\Http\Controllers\Delivery\ProfileController;
+use App\Http\Controllers\Delivery\TrackingController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -36,6 +37,10 @@ Route::middleware(['auth.delivery'])->group(function () {
     //Home Routes
     Route::get('/search', [HomeController::class,'search']);
     Route::get('/branch-address', [HomeController::class,'branchAddress']);
+
+    //Tracking Routes
+    Route::post('store',                     [TrackingController::class,'store']);
+    Route::get('latest-position/{deviceId}', [TrackingController::class,'latest']);
 
 
 });
