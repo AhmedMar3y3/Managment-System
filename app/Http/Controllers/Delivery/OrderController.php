@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id)->load('product', 'flowers');
+        $order = Order::find($id)->load('product', 'flowers','branch:id,name,lat,long');
         if ($order && $order->delivery_id == Auth('delivery')->id()) {
             return response()->json(new OrderResource($order), 200);
         }
