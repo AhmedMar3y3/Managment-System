@@ -56,7 +56,7 @@ class DeliveriesController extends Controller
                 'email' => $delivery->email,
                 'delivered_orders_count' => $delivery->delivered_orders_count,
                 'canTakeOrder' => $delivery->canTakeOrder,
-                'orders' => $delivery->orders->map(function ($order) {
+                'orders' => $delivery->orders->where('status', 'استلام السائق')->map(function ($order) {
                     return [
                         'order_type' => $order->order_type,
                         'order_details' => $order->order_details,
