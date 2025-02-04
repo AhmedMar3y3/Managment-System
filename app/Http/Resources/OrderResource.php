@@ -29,7 +29,7 @@ class OrderResource extends JsonResource
             'additional_data' => $this->additional_data,
             'product' => $this->product,
             'flowers' => $this->flowers,
-            'images' => $this->images,
+            'branch' => $this->delivery->branch,
         ];
         }
 }
