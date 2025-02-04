@@ -15,11 +15,18 @@ class EmployeeController extends Controller
         $manager = auth('manager')->user();
         $manager_branch = $manager->branch_id;
         $chef = Chef::where('status', 'قيد الانتظار')
+            ->with('specialization')
             ->where('branch_id', $manager_branch)
-            ->get(['created_at', 'phone', 'first_name', 'image', 'id', 'email']);
+            ->get(['created_at', 'phone', 'first_name', 'last_name', 'image', 'id', 'email', 'specialization_id']);
+
+
         $delivery = Delivery::where('status', 'قيد الانتظار')
             ->where('branch_id', $manager_branch)
-            ->get(['created_at', 'phone', 'first_name', 'image', 'id', 'email']);
+            ->get(['created_at', 'phone', 'first_name', 'last_name', 'image', 'id', 'email'])
+            ->map(function ($item) {
+                $item['key'] = 'مندوب توصيل';
+                return $item;
+            });
         return response()->json([
             'chef' => $chef,
             'delivery' => $delivery,
