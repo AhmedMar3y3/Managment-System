@@ -42,7 +42,7 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
             // another screens for المرتجعات
             $table->boolean('is_returned')->default(false);
-            $table->text('problem')->nullable(); 
+            $table->text('problem')->nullable();  
             // another data
             $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","قيد التنفيذ", "تم التجهيز","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
             $table->enum('payment_method', ["cash","visa"])->default('cash');

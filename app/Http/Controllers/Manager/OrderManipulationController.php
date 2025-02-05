@@ -66,7 +66,11 @@ class OrderManipulationController extends Controller
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
         ]);
+
         if (in_array($order->status, ['تم التجهيز', 'رفض السائق', 'مرتجع'])) {
+            
+                $order->update(['status' => 'تم التجهيز']);
+        
 
             $delivery = Delivery::find($validatedData['delivery_id']);
             $delivery->notify(new OrderRejectedNotification($order));
@@ -74,4 +78,5 @@ class OrderManipulationController extends Controller
         }
         return response()->json(['message' => 'خطأ'], 403);
     }
+
 }
