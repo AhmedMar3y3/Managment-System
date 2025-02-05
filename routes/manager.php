@@ -26,7 +26,7 @@ Route::middleware('auth.manager')->group(function () {
 
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'getProfilemanager']);
-    Route::post('/profile', [ProfileController::class, 'updateProfilemanager']);
+    Route::put('/profile', [ProfileController::class, 'updateProfilemanager']);
     Route::delete('/delete-account', [ProfileController::class, 'deleteAccountmanager']);
 
     // Home Routes
