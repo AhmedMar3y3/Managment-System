@@ -72,6 +72,7 @@ class HomeController extends Controller
     public function NewOrders()
     {
         $orders = Order::where('status', 'جاري الاستلام')
+        ->whereNotNull('customer_name') 
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
         return response()->json([
