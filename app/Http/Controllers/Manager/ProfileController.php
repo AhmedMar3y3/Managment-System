@@ -34,9 +34,12 @@ class ProfileController extends Controller
         $manager->update($validatedData);
 
         return response()->json([
-            'message' => 'تم تحديث البيانات بنجاح',
-            'update' => $manager
-
+            'first_name' => $manager->first_name,
+            'last_name'  => $manager->last_name,
+            'email'      => $manager->email,
+            'phone'      => $manager->phone,
+            'image'      => $manager->image,
+            'id'         => $manager->id,
         ], 200);
     }
     public function deleteAccountmanager()
