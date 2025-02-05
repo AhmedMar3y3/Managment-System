@@ -27,7 +27,7 @@ class BranchController extends Controller
     public function show($id)
     {
         $branch = Branch::find($id)
-        ->with('manager', 'chefs', 'deliveries')->first();
+        ->load('manager', 'chefs', 'deliveries');
         if ($branch) {
             return response()->json($branch, 200);
         } else {
