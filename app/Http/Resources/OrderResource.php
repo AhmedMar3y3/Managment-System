@@ -30,6 +30,7 @@ class OrderResource extends JsonResource
             'product' => $this->product,
             'flowers' => $this->flowers,
             'branch' => $this->delivery->branch,
+            'status' => $this->status,
         ];
         }
 }
