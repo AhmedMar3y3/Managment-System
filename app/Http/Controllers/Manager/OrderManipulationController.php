@@ -65,18 +65,13 @@ class OrderManipulationController extends Controller
         $order = Order::find($validatedData['order_id']);
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
+            'status' => 'تم التجهيز',
         ]);
-
-        if (in_array($order->status, ['تم التجهيز', 'رفض السائق', 'مرتجع'])) {
-            
-                $order->update(['status' => 'تم التجهيز']);
-        
 
             $delivery = Delivery::find($validatedData['delivery_id']);
             $delivery->notify(new OrderRejectedNotification($order));
             return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
-        }
-        return response()->json(['message' => 'خطأ'], 403);
+        
     }
 
 }
