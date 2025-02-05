@@ -14,19 +14,19 @@ class OrderController extends Controller
 {
     public function completedOrders()
     {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['id','order_name']);
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم التجهيز')->get(['id', 'quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 
     public function acceptedOrders()
     {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id','order_name']);
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id', 'quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
     
     public function pendingOrders()
     {
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->with('images')->get(['id','order_name']);
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->get(['id', 'quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
     
