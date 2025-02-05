@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Chef;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\chef\update;
 use App\Models\Chef;
-use Illuminate\Http\Request;
+use App\Http\Requests\chef\update;
+use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {

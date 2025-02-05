@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Chef;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class NotificationsController extends Controller
-{public function getNotifications()
+{
+    public function getNotifications()
     {
         $chef = auth('chef')->user();
 
@@ -18,6 +18,4 @@ class NotificationsController extends Controller
 
         return response()->json(['notifications' => $notifications]);
     }
-    
-    
 }

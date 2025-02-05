@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Chef;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Manager;
-use App\Notifications\OrderAccepted;
-use App\Notifications\orderAcceptedByChef;
-use App\Notifications\orderDeclined;
 use App\Notifications\orderDone;
+use App\Http\Controllers\Controller;
+use App\Notifications\orderAcceptedByChef;
 
 class OrderController extends Controller
 {
@@ -23,13 +21,13 @@ class OrderController extends Controller
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'تم القبول')->get(['id', 'quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
-    
+
     public function pendingOrders()
     {
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'قيد التنفيذ')->get(['id', 'quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
-    
+
     public function getOrderDetails($id)
     {
         $order = Order::where('chef_id', Auth('chef')->id())
@@ -75,17 +73,5 @@ class OrderController extends Controller
             return response()->json(['message' => 'تم تحديث حالة الطلب', 'status' => 1], 200);
         }
         return response()->json(['message' => 'تم تحديث حالة الطلب مسبقاً', 'status' => 0], 200);
-
     }
-
-    // public function submitProblem(){
-    //     $data = request()->validate([
-    //         'problem' => 'required',
-    //         'order_id' => 'required',
-    //     ]);
-    //     $order = Order::where('chef_id', Auth('chef')->id())->findOrFail($data['order_id']);
-    //     $order->problem = $data['problem'];
-    //     $order->save();
-    //     return response()->json(['message' => 'تم تقديم الشكوى'], 200);
-    // }
 }

@@ -73,7 +73,7 @@ class AuthController extends Controller
     // Login user
     public function login(login $request)
     {
-        $validatedData = $request->validated();
+        $request->validated();
 
         $loginField = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         $chef = Chef::where($loginField, $request->input('login'))->first();

@@ -11,12 +11,11 @@ use App\Http\Controllers\Chef\NotificationsController;
 
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verify', [AuthController::class, 'verify']);
+Route::post('/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/verify-reset-code', [AuthController::class, 'verifyResetCode']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-Route::get('/branches', [AuthController::class, 'branches']);
 
 Route::middleware(['auth.chef'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -39,7 +38,7 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::put('/accept-order/{id}', [OrderController::class, 'acceptOrder']);
     Route::put('/order-in-progress/{id}', [OrderController::class, 'orderInProgress']);
     Route::put('/order-done/{id}', [OrderController::class, 'orderDone']);
-    Route::get('/home-stats', [HomeController::class, 'homeStats']);    
+
     //ReportAproblem
     Route::post('/store-report', [ReportController::class, 'store']);
     Route::get('/show-report/{id}', [ReportController::class, 'show']); 

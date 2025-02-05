@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Chef;
 use App\Models\Delivery;
 use App\Http\Controllers\Controller;
+use App\Notifications\EmployeeAcceptence;
+use App\Notifications\EmployeeRejection;
 
 class EmployeeController extends Controller
 {
@@ -38,6 +40,7 @@ class EmployeeController extends Controller
         $chef = Chef::findOrFail($id);
         if ($chef->branch_id === Auth('manager')->user()->branch_id) {
             $chef->update(['status' => 'مقبول']);
+            $chef->notify(new EmployeeAcceptence());
             return response()->json([
                 'message' => 'تم قبول الشيف بنجاح',
             ], 200);
@@ -55,6 +58,7 @@ class EmployeeController extends Controller
         if ($chef->branch_id === auth('manager')->user()->branch_id) {
             $chef->update(['status' => 'مرفوض']);
 
+            $chef->notify(new EmployeeRejection());
             return response()->json([
                 'message' => 'تم رفض الشيف بنجاح',
             ], 200);
@@ -71,6 +75,7 @@ class EmployeeController extends Controller
         if ($delivery->branch_id === auth('manager')->user()->branch_id) {
 
             $delivery->update(['status' => 'مقبول']);
+            $delivery->notify(new EmployeeAcceptence());
             return response()->json([
                 'message' => 'تم قبول المندوب',
             ], 200);
@@ -88,6 +93,7 @@ class EmployeeController extends Controller
         if ($delivery->branch_id === auth('manager')->user()->branch_id) {
 
             $delivery->update(['status' => 'مرفوض']);
+            $delivery->notify(new EmployeeRejection());
             return response()->json([
                 'message' => 'تم رفض المندوب بنجاح',
             ], 200);

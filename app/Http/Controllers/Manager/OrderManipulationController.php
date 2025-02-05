@@ -55,7 +55,7 @@ class OrderManipulationController extends Controller
     }
 
     // Assign order to delivery
-    
+
     public function assignOrderToDelivery(Request $request)
     {
         $validatedData = $request->validate([
@@ -68,10 +68,8 @@ class OrderManipulationController extends Controller
             'status' => 'تم التجهيز',
         ]);
 
-            $delivery = Delivery::find($validatedData['delivery_id']);
-            $delivery->notify(new OrderRejectedNotification($order));
-            return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
-        
+        $delivery = Delivery::find($validatedData['delivery_id']);
+        $delivery->notify(new OrderRejectedNotification($order));
+        return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
     }
-
 }
