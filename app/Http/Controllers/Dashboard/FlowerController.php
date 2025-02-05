@@ -12,7 +12,7 @@ class FlowerController extends Controller
 
     public function index()
     {
-        $flowers = Flower::get(['id', 'type', 'branch_id']);
+        $flowers = Flower::with('branch')->get(['id', 'type', 'branch_id']);
         return response()->json($flowers, 200);
     }
     public function store(StoreFlowerRequest $request)
