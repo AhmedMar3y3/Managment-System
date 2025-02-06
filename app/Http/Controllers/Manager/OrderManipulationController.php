@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Chef;
 use App\Models\Delivery;
+use App\Notifications\orderRecievedToChef;
 use App\Notifications\OrderRejectedNotification;
 
 class OrderManipulationController extends Controller
@@ -46,6 +48,9 @@ class OrderManipulationController extends Controller
                 $order->update([
                     'chef_id' => $validatedData['chef_id'],
                 ]);
+                $chefId = $order->chef_id;
+                $chef = Chef::find($chefId);
+                $chef->notify(new orderRecievedToChef());
 
                 return response()->json(['message' => 'تم ارسال الطلب إلى الشيف بنجاح']);
             }

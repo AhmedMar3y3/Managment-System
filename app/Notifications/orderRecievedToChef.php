@@ -35,9 +35,8 @@ class orderRecievedToChef extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('New Order')
+                    ->line('You have assigned a new order to prepare.');
     }
 
     /**
