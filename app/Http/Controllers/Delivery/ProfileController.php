@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Delivery;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\delivery\update;
 use App\Models\Delivery;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\delivery\update;
+use App\Http\Requests\chef\ChangePasswordRequest;
 
 class ProfileController extends Controller
 {
-    public function getProfile(){
+    public function getProfile()
+    {
         $delivery = Delivery::where('id', Auth('delivery')->id())
-        ->get(['first_name', 'last_name', 'email', 'phone', 'image','id']);
-        return response()->json($delivery,200);
+            ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
+        return response()->json($delivery, 200);
     }
 
-    public function updateProfile(update $request){
+    public function updateProfile(update $request)
+    {
         $user = Auth('delivery')->user();
         $delivery = delivery::find($user->id);
         $validatedData = $request->validated();
@@ -29,10 +32,22 @@ class ProfileController extends Controller
         return response()->json(['message' => 'تم تحديث البيانات بنجاح'], 200);
     }
 
-    public function deleteAccount(){
+    public function deleteAccount()
+    {
         $user = Auth('delivery')->user();
         $delivery = delivery::find($user->id);
         $delivery->delete();
         return response()->json(['message' => 'تم حذف الحساب بنجاح'], 200);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $user = Auth('delivery')->user();
+        $delivery = Delivery::find($user->id);
+        if (Hash::check($request->old_password, $delivery->password)) {
+            $delivery->update(['password' => Hash::make($request->new_password)]);
+            return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
+        }
+        return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
     }
 }

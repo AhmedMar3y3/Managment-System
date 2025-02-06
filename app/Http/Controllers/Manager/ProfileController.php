@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Manager;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\manager\update;
+use App\Http\Requests\chef\ChangePasswordRequest;
 
 class ProfileController extends Controller
 {
@@ -47,5 +50,16 @@ class ProfileController extends Controller
         $manager = auth('manager')->user();
         $manager->delete();
         return response()->json(['message' => 'تم حذف الحساب بنجاح'], 200);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $user = Auth('manager')->user();
+        $manager = Manager::find($user->id);
+        if (Hash::check($request->old_password, $manager->password)) {
+            $manager->update(['password' => Hash::make($request->new_password)]);
+            return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
+        }
+        return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
     }
 }

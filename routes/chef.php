@@ -23,6 +23,7 @@ Route::middleware(['auth.chef'])->group(function () {
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'getProfile']);
     Route::put('/profile', [ProfileController::class, 'updateProfile']);
+    Route::post('/change-password', [ProfileController::class,'changePassword']);
     Route::delete('/delete-account', [ProfileController::class, 'deleteAccount']);
 
     // Home Routes
