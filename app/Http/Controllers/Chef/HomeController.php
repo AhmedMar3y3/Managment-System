@@ -19,6 +19,6 @@ class HomeController extends Controller
     {
 
         $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id', 'order_type', 'order_details', 'delivery_date']);
-        return response()->json($orders, 200);
+        return response()->json(['orders'=>$orders], 200);
     }
 }
