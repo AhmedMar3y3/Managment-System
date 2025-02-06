@@ -26,7 +26,7 @@ class orderRecievedToChef extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -47,7 +47,8 @@ class orderRecievedToChef extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title'   => 'New Order Received',
+            'message' => 'You have been assigned a new order to prepare.',
         ];
     }
 }
