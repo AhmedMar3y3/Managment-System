@@ -44,6 +44,6 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::get('/show-report/{id}', [ReportController::class, 'show']); 
     
     //Notifications
-    Route::get('/Notifications', [NotificationsController::class, 'getNotifications']);
+    Route::get('/notifications', [NotificationsController::class, 'getNotifications']);
 
 });
