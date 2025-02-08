@@ -16,6 +16,13 @@ class NotificationsController extends Controller
             return response()->json(['notifications' => 'لا يوجد اشعارات']);
         }
 
-        return response()->json(['notifications' => $notifications]);
+        $formattedNotifications = $notifications->map(function ($notification) {
+            return [
+                'data' => $notification->data,
+                'created_at' => $notification->created_at,
+            ];
+        });
+
+        return response()->json(['notifications' => $formattedNotifications]);
     }
 }
