@@ -10,10 +10,22 @@ use App\Http\Requests\chef\ChangePasswordRequest;
 
 class ProfileController extends Controller
 {
+
+    public function getProfilemanager()
+    {
+        $manager = auth('manager')->user();
+        return response()->json([
+            'first_name' => $manager->first_name,
+            'last_name'  => $manager->last_name,
+            'email'      => $manager->email,
+            'phone'      => $manager->phone,
+            'image'      => $manager->image,
+            'id'         => $manager->id,
+        ], 200);
+    }
     public function getProfile()
     {
-        $chef = Chef::where('id', Auth('chef')->id())
-            ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
+        $chef = Auth('chef')->user();
         return response()->json([
             'id' => $chef->id,
             'first_name'=> $chef->first_name,
