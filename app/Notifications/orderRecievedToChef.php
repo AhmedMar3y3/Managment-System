@@ -48,11 +48,13 @@ class orderRecievedToChef extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $orderImages = $this->order->Images()->get(['id', 'image'])->toArray();
+
         return [
             'title'      => 'طلب جديد',
             'id'         => $this->order->id,
             'order_type' => $this->order->order_type,
-            'images'     => $this->order->images,
+            'order_images' => $orderImages,
         ];
     }
 }
