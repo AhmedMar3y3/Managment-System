@@ -26,7 +26,7 @@ class Controller extends BaseController
 
     public function flowers()
     {
-        $flowers = Flower::get(['id', 'name']);
+        $flowers = Flower::with('branch')->get(['id', 'type', 'branch_id']);
         return response()->json(['flowers' => $flowers], 200);
     }
 }
