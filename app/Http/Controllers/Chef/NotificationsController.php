@@ -10,7 +10,7 @@ class NotificationsController extends Controller
     {
         $chef = auth('chef')->user();
 
-        $notifications = $chef->notifications()->orderBy('created_at', 'desc')->get();
+        $notifications = $chef->notifications()->orderBy('created_at', 'desc')->with('images')->get();
 
         if ($notifications->isEmpty()) {
             return response()->json(['notifications' => 'لا يوجد اشعارات']);
@@ -18,8 +18,11 @@ class NotificationsController extends Controller
 
         $formattedNotifications = $notifications->map(function ($notification) {
             return [
-                'data' => $notification->data,
-                'created_at' => $notification->created_at,
+                'title'                     => $notification->data['title'] ?? null,
+                'id'                        => $notification->data['id'] ?? null,
+                'order_type'                => $notification->data['order_type'] ?? null,
+                'images'                    => $notification->data['images'] ?? null,
+                'notification_created_at'   => $notification->created_at,
             ];
         });
 
