@@ -14,7 +14,14 @@ class ProfileController extends Controller
     {
         $chef = Chef::where('id', Auth('chef')->id())
             ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
-        return response()->json(['chef'=>$chef], 200);
+        return response()->json([
+            'id' => $chef->id,
+            'first_name'=> $chef->first_name,
+            'last_name'=> $chef->last_name,
+            'image'=> $chef->image,
+            'email'=> $chef->email,
+            'phone'=> $chef->phone,
+        ], 200);
     }
 
     public function updateProfile(update $request)
