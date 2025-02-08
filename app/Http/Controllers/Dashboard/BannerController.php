@@ -29,7 +29,7 @@ class BannerController extends Controller
     }
     public function show($id)
     {
-        $banner = Banner::find($id)->get(['id', 'title', 'image']);
+        $banner = Banner::find($id, ['id', 'title', 'image']);
         return response()->json($banner, 200);
     }
 
