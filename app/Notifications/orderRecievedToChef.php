@@ -54,6 +54,7 @@ class orderRecievedToChef extends Notification
             'title'      => 'طلب جديد',
             'id'         => $this->order->id,
             'order_type' => $this->order->order_type,
+            'status' => $this->order->status,
             'order_images' => $orderImages,
         ];
     }

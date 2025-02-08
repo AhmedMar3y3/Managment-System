@@ -21,6 +21,7 @@ class NotificationsController extends Controller
                 'title'                   => $notification->data['title'] ?? null,
                 'id'                      => $notification->data['id'] ?? null,
                 'order_type'              => $notification->data['order_type'] ?? null,
+                'status'              => $notification->data['status'] ?? null,
                 'order_images'            => $notification->data['order_images'] ?? [],
                 'notification_created_at' => $notification->created_at,
             ];
