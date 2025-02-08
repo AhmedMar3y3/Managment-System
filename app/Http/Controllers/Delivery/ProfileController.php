@@ -12,9 +12,15 @@ class ProfileController extends Controller
 {
     public function getProfile()
     {
-        $delivery = Delivery::where('id', Auth('delivery')->id())
-            ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
-        return response()->json($delivery, 200);
+        $delivery = Auth('delivery')->user();
+        return response()->json([
+            'id' => $delivery->id,
+            'first_name' => $delivery->first_name,
+            'last_name' => $delivery->last_name,
+            'image' => $delivery->image,
+            'email' => $delivery->email,
+            'phone' => $delivery->phone,
+        ], 200);
     }
 
     public function updateProfile(update $request)

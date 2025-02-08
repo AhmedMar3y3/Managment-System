@@ -11,12 +11,14 @@ class orderRecievedToChef extends Notification
 {
     use Queueable;
 
+    public $order;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -47,8 +49,10 @@ class orderRecievedToChef extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title'   => 'New Order Received',
-            'message' => 'You have been assigned a new order to prepare.',
+            'title'      => 'طلب جديد',
+            'id'         => $this->order->id,
+            'order_type' => $this->order->order_type,
+            'created_at' => $this->order->created_at,
         ];
     }
 }

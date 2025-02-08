@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\chef\ChangePasswordRequest;
-use App\Http\Requests\sales\update;
 use App\Models\Sale;
+use App\Http\Requests\sales\update;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\chef\ChangePasswordRequest;
 
 class ProfileController extends Controller
 {
     public function getProfile()
     {
-        $sale = Sale::where('id', Auth('sale')->id())
-            ->get(['first_name', 'last_name', 'email', 'phone', 'image', 'id']);
-        return response()->json($sale, 200);
+        $sale = Auth('sale')->user();
+        return response()->json([
+            'id' => $sale->id,
+            'first_name' => $sale->first_name,
+            'last_name' => $sale->last_name,
+            'image' => $sale->image,
+            'email' => $sale->email,
+            'phone' => $sale->phone,
+        ], 200);
     }
-
     public function updateProfile(update $request)
     {
         $user = Auth('sale')->user();

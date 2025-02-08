@@ -50,7 +50,7 @@ class OrderManipulationController extends Controller
                 ]);
                 $chefId = $order->chef_id;
                 $chef = Chef::find($chefId);
-                $chef->notify(new orderRecievedToChef());
+                $chef->notify(new orderRecievedToChef($order));
 
                 return response()->json(['message' => 'تم ارسال الطلب إلى الشيف بنجاح']);
             }
