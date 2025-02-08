@@ -7,6 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Specialization;
 use App\Models\Branch;
+use App\Models\Flower;
 
 class Controller extends BaseController
 {
@@ -21,5 +22,11 @@ class Controller extends BaseController
     {
         $branches = Branch::get(['id', 'name']);
         return response()->json(['branches' => $branches], 200);
+    }
+
+    public function flowers()
+    {
+        $flowers = Flower::get(['id', 'name']);
+        return response()->json(['flowers' => $flowers], 200);
     }
 }

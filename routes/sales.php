@@ -7,6 +7,7 @@ use App\Http\Controllers\Sales\DeliveryController;
 use App\Http\Controllers\Sales\OrderController;
 use App\Http\Controllers\Sales\ProfileController;
 use App\Http\Controllers\Sales\HomeController;
+use App\Http\Controllers\Controller;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -33,6 +34,7 @@ Route::middleware(['auth.sale'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/products', [OrderController::class,'products']);
     Route::get('/product/{id}', [OrderController::class,'showProduct']);
+    Route::get('/flowers', [Controller::class,'flowers']);
     Route::post('/product-order', [OrderController::class, 'productOrder']);
     Route::post('/orders/first-screen', [OrderController::class, 'storeFirstScreen']);
     Route::put('/orders/{order}/second-screen', [OrderController::class, 'storeSecondScreen']);
