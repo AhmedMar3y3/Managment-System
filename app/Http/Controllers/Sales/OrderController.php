@@ -74,6 +74,8 @@ class OrderController extends Controller
         $order->update(['image' => $validatedData['image']]);
     }
 
+    $order->load('images');
+
     return response()->json([
         'message' => 'تم إنشاء الطلب بنجاح',
         'order'   => $order,
