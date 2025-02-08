@@ -10,7 +10,7 @@ class NotificationsController extends Controller
     {
         $chef = auth('chef')->user();
 
-        $notifications = $chef->notifications()->orderBy('created_at', 'desc')->get(['data', 'created_at']);
+        $notifications = $chef->notifications()->orderBy('created_at', 'desc')->get();
 
         if ($notifications->isEmpty()) {
             return response()->json(['notifications' => 'لا يوجد اشعارات']);
