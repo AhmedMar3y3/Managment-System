@@ -9,7 +9,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy("created_at", "desc")->get(['order_type', 'price', 'status']);
+        $orders = Order::orderBy("created_at", "desc")->get(['id','order_type', 'price', 'status']);
         return response()->json($orders, 200);
     }
 
