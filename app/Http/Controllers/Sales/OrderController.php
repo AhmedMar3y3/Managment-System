@@ -56,8 +56,8 @@ class OrderController extends Controller
     {
         $validatedData = $request->validated();
         $validatedData['sale_id'] = Auth('sale')->id();
-        Order::create($validatedData);
-        return response()->json(['message' => 'تم إنشاء الطلب بنجاح'], 200);
+        $order = Order::create($validatedData);
+        return response()->json(['message' => 'تم إنشاء الطلب بنجاح', 'id'=>$order->id], 200);
     }
 
     public function storeFirstScreen(storeFirst $request)
