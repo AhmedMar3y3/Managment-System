@@ -19,12 +19,12 @@ class OrderController extends Controller
     public function search()
     {
         $search = request('search');
-        $orders = Order::where('sale_id', Auth('sale')->id())
-            ->where(function ($query) use ($search) {
+        $orders = Order::where(function ($query) use ($search) {
                 $query->where('customer_name', 'like', '%' . $search . '%')
                       ->orWhere('id', 'like', '%' . $search . '%')
                       ->orWhere('customer_phone', 'like', '%' . $search . '%');
             })
+            ->where('status', '!=', 'تم التوصيل')
             ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
     }
