@@ -82,6 +82,12 @@ Route::middleware(['auth.admin'])->group(function () {
     // Order routes
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/order/{id}', [OrderController::class, 'show']);
+    Route::get('/new-orders', [OrderController::class, 'newOrders']);
+    Route::get('/completed-orders', [OrderController::class, 'completedOrders']);
+    Route::get('/delivered-orders', [OrderController::class, 'deliveredOrders']);
+    Route::get('/rejected-orders', [OrderController::class, 'rejectedOrders']);
+    Route::get('/returned-orders', [OrderController::class, 'returnedOrders']);
+    Route::get('/pending-orders', [OrderController::class,'pendingOrders']);
 
     // Flower routes
     Route::get('/flowers', [FlowerController::class, 'index']);
