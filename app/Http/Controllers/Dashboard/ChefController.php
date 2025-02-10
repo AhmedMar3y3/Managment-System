@@ -19,7 +19,7 @@ class ChefController extends Controller
 
     public function show($id)
     {
-        $chef = Chef::find($id)->load('orders');
+        $chef = Chef::find($id)->load('orders','branch');
         if ($chef) {
             return response()->json($chef, 200);
         }

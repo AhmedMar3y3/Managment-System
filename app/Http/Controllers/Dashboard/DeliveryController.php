@@ -19,7 +19,7 @@ class DeliveryController extends Controller
 
     public function show($id)
     {
-        $delivery = Delivery::find($id)->load('orders');
+        $delivery = Delivery::find($id)->load('orders','branch');
         if ($delivery) {
             return response()->json($delivery, 200);
         }
