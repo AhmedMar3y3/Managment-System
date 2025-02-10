@@ -17,27 +17,30 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
-        return response()->json(['orders' => $orders], 200); 
+        $orders = Order::get(['id', 'order_type', 'status', 'delivery_date', 'customer_name']);
+        return response()->json(['orders' => $orders], 200);
     }
-    
+
     public function show($id)
     {
-        $order = Order::findOrFail($id)->load('images','flowers');
+        $order = Order::findOrFail($id)->load('images', 'flowers');
         return response()->json(['order' => $order], 200);
     }
-    
-    public function products(){
+
+    public function products()
+    {
         $products = Product::get(['id', 'name', 'image']);
         return response()->json(['products' => $products], 200);
     }
 
-    public function showProduct($id){
-        $product = Product::findOrFail($id,['id','name','image','description','status','branch_id'])->load('branch:id,name,address');
+    public function showProduct($id)
+    {
+        $product = Product::findOrFail($id, ['id', 'name', 'image', 'description', 'status', 'branch_id'])->load('branch:id,name,address');
         return response()->json(['product' => $product], 200);
     }
 
-    public function productOrder(StoreOrderProduct $request){
+    public function productOrder(StoreOrderProduct $request)
+    {
         $validatedData = $request->validated();
         $validatedData['sale_id'] = Auth('sale')->id();
         Order::create($validatedData);
@@ -45,42 +48,42 @@ class OrderController extends Controller
     }
 
     public function storeFirstScreen(storeFirst $request)
-{
-    $validatedData = $request->validated();
-    $validatedData['sale_id'] = Auth('sale')->id();
-    $order = Order::create($validatedData);
+    {
+        $validatedData = $request->validated();
+        $validatedData['sale_id'] = Auth('sale')->id();
+        $order = Order::create($validatedData);
 
-    if ($request->has('images')) {
-        foreach ($request->file('images') as $image) {
-            $destinationPath = public_path('orders');
-            $fileName = uniqid() . '_' . $image->getClientOriginalName();
-            $image->move($destinationPath, $fileName);
-            
-            $imageFullUrl = url("orders/{$fileName}");
-            
-            $order->images()->create([
-                'image' => $imageFullUrl,
-                'order_id' => $order->id,
-            ]);
+        if ($request->has('images')) {
+            foreach ($request->file('images') as $image) {
+                $destinationPath = public_path('orders');
+                $fileName = uniqid() . '_' . $image->getClientOriginalName();
+                $image->move($destinationPath, $fileName);
+
+                $imageFullUrl = url("orders/{$fileName}");
+
+                $order->images()->create([
+                    'image' => $imageFullUrl,
+                    'order_id' => $order->id,
+                ]);
+            }
         }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $fileName = uniqid() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('orders'), $fileName);
+            $validatedData['image'] = url("orders/{$fileName}");
+
+            $order->update(['image' => $validatedData['image']]);
+        }
+
+        $order->load('images');
+
+        return response()->json([
+            'message' => 'تم إنشاء الطلب بنجاح',
+            'order'   => $order,
+        ], 201);
     }
-
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $fileName = uniqid() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('orders'), $fileName);
-        $validatedData['image'] = url("orders/{$fileName}");
-        
-        $order->update(['image' => $validatedData['image']]);
-    }
-
-    $order->load('images');
-
-    return response()->json([
-        'message' => 'تم إنشاء الطلب بنجاح',
-        'order'   => $order,
-    ], 201);
-}
 
     // Second Screen: Update Order with Price Details
     public function storeSecondScreen(storeSecond $request, Order $order)
@@ -143,25 +146,24 @@ class OrderController extends Controller
     public function newOrders()
     {
         $orders = Order::whereDate('created_at', today())
-        ->where('sale_id', Auth('sale')->id())->with('images')
-        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
+            ->where('sale_id', Auth('sale')->id())->with('images')
+            ->get(['id', 'quantity', 'flower_quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 
     public function preparingOrders()
     {
         $orders = Order::where('status', 'قيد التنفيذ')
-        ->where('sale_id', Auth('sale')->id())
-        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
+            ->where('sale_id', Auth('sale')->id())
+            ->get(['id', 'quantity', 'flower_quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 
     public function deliveredOrders()
     {
         $orders = Order::where('status', 'تم التوصيل')
-        ->where('sale_id', Auth('sale')->id())
-        ->get(['id','order_type', 'status', 'delivery_date', 'customer_name']);
+            ->where('sale_id', Auth('sale')->id())
+            ->get(['id', 'quantity', 'flower_quantity', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
-
 }
