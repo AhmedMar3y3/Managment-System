@@ -31,6 +31,7 @@ Route::middleware(['auth.sale'])->group(function () {
     Route::get('/stats', [HomeController::class,'stats']);
 
     // Order Routes
+    Route::get('/search', [OrderController::class, 'search']);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/products', [OrderController::class,'products']);
     Route::get('/product/{id}', [OrderController::class,'showProduct']);
