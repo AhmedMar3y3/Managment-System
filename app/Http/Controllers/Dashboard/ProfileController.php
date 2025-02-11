@@ -13,23 +13,20 @@ class ProfileController extends Controller
 {
     public function profile()
     {
-        $admin = auth()->user();
+        $admin = Auth('admin')->user();
         return response()->json(['admin' => $admin], 200);
     }
 
     public function updateProfile(UpdateProfile $request)
     {
-        $admin = auth()->user();
+        $admin = Auth('admin')->user();
         $admin->update($request->validated());
         return response()->json(['message' => 'تم تحديث البيانات بنجاح'], 200);
     }
 
     public function changePassword(ChangePasswordRequest $request)
     {
-        $admin = Auth::user();
-        if (!$admin) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
+        $admin = Auth('admin')->user();
         $admin = User::find($admin->id);
         if (Hash::check($request->old_password, $admin->password)) {
             $admin->update(['password' => Hash::make($request->new_password)]);
