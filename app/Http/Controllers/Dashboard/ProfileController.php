@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\UpdateProfile;
 use App\Http\Requests\chef\ChangePasswordRequest;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -25,6 +26,8 @@ class ProfileController extends Controller
     public function changePassword(ChangePasswordRequest $request)
     {
         $admin = auth()->user();
+        $admin = User::find($admin->id);
+
         if (Hash::check($request->old_password, $admin->password)) {
             $admin->update(['password' => Hash::make($request->new_password)]);
             return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
