@@ -25,10 +25,10 @@ class ProfileController extends Controller
     public function changePassword(ChangePasswordRequest $request)
     {
         $admin = auth()->user();
-        if (!Hash::check($request->old_password, $admin->password)) {
-            return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
+        if (Hash::check($request->old_password, $admin->password)) {
+            $admin->update(['password' => Hash::make($request->new_password)]);
+            return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
         }
-        $admin->update(['password' => Hash::make($request->new_password)]);
-        return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
+        return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
     }
 }
