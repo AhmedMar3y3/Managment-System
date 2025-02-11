@@ -27,6 +27,9 @@ class ProfileController extends Controller
     public function changePassword(ChangePasswordRequest $request)
     {
         $admin = Auth::user();
+        if (!$admin) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
         $admin = User::find($admin->id);
         if (Hash::check($request->old_password, $admin->password)) {
             $admin->update(['password' => Hash::make($request->new_password)]);
