@@ -38,7 +38,7 @@ class OrderController extends Controller
     public function acceptOrder($id)
     {
         $order = Order::where('chef_id', Auth('chef')->id())->findOrFail($id);
-        if ($order->status == 'وافق المدير') {
+        if ($order->status == 'انتظار الشيف') {
             $order->status = 'تم القبول';
             $order->save();
 

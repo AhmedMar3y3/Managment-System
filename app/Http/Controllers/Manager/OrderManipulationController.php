@@ -46,6 +46,7 @@ class OrderManipulationController extends Controller
         if ($order) {
             if ($order->status == "وافق المدير") {
                 $order->update([
+                    'status' => 'انتظار الشيف',
                     'chef_id' => $validatedData['chef_id'],
                 ]);
                 $chefId = $order->chef_id;
@@ -70,7 +71,7 @@ class OrderManipulationController extends Controller
         $order = Order::find($validatedData['order_id']);
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
-            'status' => 'تم التجهيز',
+            'status' => 'انتظار السائق',
         ]);
 
         $delivery = Delivery::find($validatedData['delivery_id']);

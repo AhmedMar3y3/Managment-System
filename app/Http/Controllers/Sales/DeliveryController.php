@@ -39,8 +39,8 @@ class DeliveryController extends Controller
             'order_id' => 'required|exists:orders,id',
         ]);
         $order = Order::findOrFail($validatedData['order_id']);
-        if($order->status == 'جاري الاستلام') {
-            $order->update(['delivery_id' => $id, 'status'=> 'تم التجهيز']);
+        if($order->status == 'جاري الاستلام' || $order->status == 'رفض السائق') {
+            $order->update(['delivery_id' => $id, 'status'=> 'انتظار السائق']);
             $delivery = Delivery::findOrFail($id);
             $delivery->notify(new SalesAssignToDelivery($order));
             return response()->json(['message' => 'تم تعيين الطلب للسائق'], 200);

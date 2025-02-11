@@ -44,7 +44,7 @@ return new class extends Migration
             $table->boolean('is_returned')->default(false);
             $table->text('problem')->nullable();  
             // another data
-            $table->enum('status', ["جاري الاستلام","وافق المدير","تم القبول","قيد التنفيذ", "تم التجهيز","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('status', ["جاري الاستلام","انتظار الشيف","وافق المدير","تم القبول","قيد التنفيذ", "تم التجهيز","انتظار السائق","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
             $table->enum('payment_method', ["cash","visa"])->default('cash');
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
             $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('cascade');

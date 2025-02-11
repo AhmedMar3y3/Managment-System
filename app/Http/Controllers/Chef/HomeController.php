@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function newOrders()
     {
 
-        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'وافق المدير')->get(['id', 'order_type', 'order_details', 'delivery_date']);
+        $orders = Order::where('chef_id', Auth('chef')->id())->where('status', 'انتظار الشيف')->get(['id', 'order_type', 'order_details', 'delivery_date']);
         return response()->json(['orders'=>$orders], 200);
     }
 }
