@@ -34,7 +34,14 @@ class ProfileController extends Controller
             $validatedData['image'] = env('APP_URL') . '/public/users/' . $imageName;
         }
         $sale->update($validatedData);
-        return response()->json(['message' => 'تم تحديث البيانات بنجاح'], 200);
+        return response()->json([
+            'first_name' => $sale->first_name,
+            'last_name'  => $sale->last_name,
+            'email'      => $sale->email,
+            'phone'      => $sale->phone,
+            'image'      => $sale->image,
+            'id'         => $sale->id,
+        ], 200);
     }
 
     public function deleteAccount()
