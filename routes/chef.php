@@ -1,12 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Chef\AuthController;
 use App\Http\Controllers\Chef\ProfileController;
 use App\Http\Controllers\Chef\OrderController;
 use App\Http\Controllers\Chef\HomeController;
-use App\Http\Controllers\Chef\ReportController;
 use App\Http\Controllers\Chef\NotificationsController;
 
 
@@ -39,11 +37,7 @@ Route::middleware(['auth.chef'])->group(function () {
     Route::put('/accept-order/{id}', [OrderController::class, 'acceptOrder']);
     Route::put('/order-in-progress/{id}', [OrderController::class, 'orderInProgress']);
     Route::put('/order-done/{id}', [OrderController::class, 'orderDone']);
-
-    //ReportAproblem
-    Route::post('/store-report', [ReportController::class, 'store']);
-    Route::get('/show-report/{id}', [ReportController::class, 'show']); 
-    
+ 
     //Notifications
     Route::get('/notifications', [NotificationsController::class, 'getNotifications']);
 

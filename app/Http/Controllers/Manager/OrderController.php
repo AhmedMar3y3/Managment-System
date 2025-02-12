@@ -35,7 +35,7 @@ class OrderController extends Controller
     
         $manager = auth('manager')->user();
         if (!$manager) {
-            return response()->json(['message' => 'لا توجد معلومات '], 403);
+            return response()->json(['message' => 'No information'], 403);
         }
 
         $orders = Order::where('manager_id', $manager->id)
@@ -59,7 +59,7 @@ class OrderController extends Controller
         $to = Carbon::parse($request->to)->endOfDay();
         $manager = auth('manager')->user();
         if (!$manager) {
-            return response()->json(['message' => 'لا توجد معلومات '], 403);
+            return response()->json(['message' => 'No information'], 403);
         }
 
         $orders = Order::where('manager_id', $manager->id)

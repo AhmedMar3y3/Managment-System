@@ -84,7 +84,7 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'Order updated successfully (Second Screen)',
-            'updated_data' => $order->fresh()->toArray(),
+            'updated_data' => $validatedData,
         ], 200);
     }
 
@@ -132,7 +132,7 @@ class OrderController extends Controller
             }
         }
 
-        return response()->json(['message' => 'تم تحديث الطلب بنجاح', 'order' => $order], 200);
+        return response()->json(['message' => 'Order updated successfully', 'order' => $order], 200);
     }
 
     public function newOrders()
