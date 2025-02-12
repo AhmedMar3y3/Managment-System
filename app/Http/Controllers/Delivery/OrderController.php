@@ -61,7 +61,7 @@ class OrderController extends Controller
         if ($order && $order->delivery_id == Auth('delivery')->id()) {
             return response()->json(new OrderResource($order), 200);
         }
-        return response()->json(['message' => 'غير مصرح'], 404);
+        return response()->json(['message' => 'Unauthorized'], 404);
     }
 
     public function pendingOrders()

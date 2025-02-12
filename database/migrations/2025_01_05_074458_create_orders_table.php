@@ -24,7 +24,7 @@ return new class extends Migration
             //any order
             $table->boolean('is_sameday')->default(false);
             $table->time('delivery_time')->nullable();
-            $table->date('delivery_date')->default(DB::raw('CURRENT_DATE'));
+            $table->date('delivery_date')->default(today());
             $table->enum('order_type', ['cake','flower', 'cake and flower'])->default('cake');
 
             // second screen
@@ -44,7 +44,11 @@ return new class extends Migration
 
             // another screens for returned orders
             $table->boolean('is_returned')->default(false);
-            $table->text('problem')->nullable();  
+            $table->text('problem')->nullable();
+            
+            // when a driver decline order
+            $table->text('rejection_cause')->nullable();
+
             // another data
             $table->enum('status', ["new","manager accepted","chef waiting","chef approved","inprogress", "completed","delivery waiting","delivery recieved","delivery declined","returned", "delivered"])->default("new");
             $table->enum('payment_method', ["cash","visa"])->default('cash');

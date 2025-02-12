@@ -27,10 +27,6 @@ class ManagerOrderResource extends JsonResource
             'total_price' => $this->total_price, 
             'chef' => $this->chef ? $this->chef->first_name : 'Has not been assigned yet',
 
-            // 'longitude' => $this->longitude,
-            // 'latitude'=> $this->latitude,
-            // 'map_desc' => $this->map_desc,
-
         ];
     }
 }

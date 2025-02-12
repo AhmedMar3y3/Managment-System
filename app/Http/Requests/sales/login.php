@@ -30,8 +30,8 @@ class login extends FormRequest
     public function messages(): array
     {
         return [
-            'login.required' => 'يجب إدخال البريد الإلكتروني أو رقم الهاتف',
-            'password.required' => 'يجب إدخال كلمة المرور',
+           'login.required' => 'The email or phone number is required.',
+            'password.required' => 'The password is required.',
         ];
     }
 }

@@ -20,7 +20,6 @@ class OrderResource extends JsonResource
             'order_details' => $this->order_details,
             'total price' => $this->total_price,
             'deposit' => $this->deposit,
-            'remaining' => $this->remaining,
             'customer_name' => $this->customer_name,
             'customer_phone' => $this->customer_phone,
             'longitude' => $this->longitude,
