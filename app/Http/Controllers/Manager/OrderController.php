@@ -4,24 +4,35 @@ namespace App\Http\Controllers\Manager;
 
 use Carbon\Carbon;
 use App\Models\Order;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
 {
 
     // new not assigned orders
-    public function managerAcceptedOrders()
+    public function managerAcceptedOrders(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+    
         $orders = Order::where('manager_id', auth('manager')->id())
             ->where('status', 'manager accepted')
             ->orderBy('delivery_date', 'desc')
             ->with('images')
+            ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
-        return response()->json([$orders], 200);
+        return response()->json([
+            'ordersCount' => $orders->count(),
+            ,$orders
+        ], 200);
     }
     // completed orders
-    public function completedOrders()
+    public function completedOrders(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+    
         $manager = auth('manager')->user();
         if (!$manager) {
             return response()->json(['message' => 'لا توجد معلومات '], 403);
@@ -30,9 +41,11 @@ class OrderController extends Controller
         $orders = Order::where('manager_id', $manager->id)
             ->where('status', 'completed')
             ->orderBy('delivery_date', 'desc')
+            ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date', 'image']);
 
         return response()->json([
+            'ordersCount' => $orders->count(),
             'orders' => $orders,
 
         ], 200);
@@ -40,8 +53,10 @@ class OrderController extends Controller
 
     // delivered orders
 
-    public function deliveredOrders()
+    public function deliveredOrders(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
         $manager = auth('manager')->user();
         if (!$manager) {
             return response()->json(['message' => 'لا توجد معلومات '], 403);
@@ -50,9 +65,11 @@ class OrderController extends Controller
         $orders = Order::where('manager_id', $manager->id)
             ->where('status', 'delivered')
             ->orderBy('delivery_date', 'desc')
+            ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date', 'image']);
 
         return response()->json([
+            'ordersCount' => $orders->count(),
             'orders' => $orders,
         ]);
     }
@@ -90,14 +107,16 @@ class OrderController extends Controller
     }
 
     // rejected orders
-    public function deliveryRejectedOrders()
+    public function deliveryRejectedOrders(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $orders = Order::whereIn('status', ['delivery declined'])
             ->where('manager_id', auth('manager')->id())
+            ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'order_type', 'updated_at', 'status']);
-
         $now = now();
-
         $ordersWithDetails = $orders->map(function ($order) use ($now) {
             $updatedAt = Carbon::parse($order->updated_at);
             $diffHours = $updatedAt->diffInHours($now);
@@ -108,15 +127,20 @@ class OrderController extends Controller
         });
 
         return response()->json([
+            'ordersCount' => $orders->count(),
             'orders' => $ordersWithDetails,
         ], 200);
     }
 
     // returned orders
-    public function returnRequests()
+    public function returnRequests(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $order = Order::where('status', 'returned')
             ->where('manager_id', auth('manager')->user()->id)
+            
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date', 'image']);
 
         if (!$order) {
@@ -126,7 +150,8 @@ class OrderController extends Controller
         }
 
         return response()->json([
+            'ordersCount' => $order->count(),
             'orders' => $order,
         ], 200);
-    }
+    } 
 }

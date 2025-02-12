@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Order;
 
 class HomeController extends Controller
@@ -54,37 +56,49 @@ class HomeController extends Controller
     }
 
     // in progress orders
-    public function inProgressOrders()
+    public function inProgressOrders(Request $request)
     {
-        $orders = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status',  'inprogress')
-            ->orderBy('delivery_date', 'desc')
-            ->get(['id', 'customer_name', 'order_details', 'order_type']);
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+    
+    $orders = Order::where('manager_id', Auth::guard('manager')->id())
+        ->where('status', 'قيد التنفيذ')
+        ->whereBetween('delivery_date', [$from, $to])
+        ->orderByDesc('delivery_date')
+        ->get(['id', 'customer_name', 'order_details', 'order_type']);
 
-        return response()->json([
-
-            'orders' => $orders,
-            'rate' => 50
-        ], 200);
-    }
+    return response()->json([
+        'ordersCount' => $orders->count(),
+        'orders' => $orders,
+        'rate' => 50
+    ], 200);
+}
 
     // new orders
-    public function NewOrders()
+    public function NewOrders(Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+    
         $orders = Order::where('status', 'new')
             ->whereNotNull('customer_name') 
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
         return response()->json([
+            'ordersCount' => $orders->count(),
             'orders' => $orders
         ], 200);
     }
 
     // show new order
-    public function ShowNewOrder(string $id)
+    public function ShowNewOrder(string $id,Request $request)
     {
+        $from = Carbon::parse($request->from)->startOfDay();
+        $to = Carbon::parse($request->to)->endOfDay();
+
         $orders = Order::findOrFail($id)->load('Images');
         return response()->json([
+            'ordersCount' => $orders->count(),
             'orders' => $orders,
         ], 200);
     }
