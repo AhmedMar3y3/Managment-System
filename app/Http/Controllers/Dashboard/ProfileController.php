@@ -21,10 +21,10 @@ class ProfileController extends Controller
         $admin = Auth('admin')->user();
         $admin->update($request->validated());
         return response()->json(['message' => 'Profile updated successfully'], 200);
-        }
+    }
 
-        public function changePassword(ChangePasswordRequest $request)
-        {
+    public function changePassword(ChangePasswordRequest $request)
+    {
         $admin = Auth('admin')->user();
         $admin = User::find($admin->id);
         if (Hash::check($request->old_password, $admin->password)) {
@@ -32,5 +32,5 @@ class ProfileController extends Controller
             return response()->json(['message' => 'Password changed successfully'], 200);
         }
         return response()->json(['message' => 'Old password is incorrect'], 400);
-        }
+    }
 }

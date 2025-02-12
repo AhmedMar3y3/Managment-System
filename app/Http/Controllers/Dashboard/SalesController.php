@@ -34,7 +34,7 @@ class SalesController extends Controller
 
     public function index()
     {
-        $sales = Sale::where('status', 'approved')->get(['id', 'first_name', 'last_name', 'phone','email']);
+        $sales = Sale::where('status', 'approved')->get(['id', 'first_name', 'last_name', 'phone', 'email']);
         $sales = $sales->map(function ($sale) {
             $sale->orders_count = $sale->orders()->count();
             return $sale;

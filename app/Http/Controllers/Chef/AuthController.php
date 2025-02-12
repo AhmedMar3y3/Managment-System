@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Chef;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\chef\login;
 use App\Http\Requests\chef\register;
-use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Chef;
 use Illuminate\Support\Facades\Hash;

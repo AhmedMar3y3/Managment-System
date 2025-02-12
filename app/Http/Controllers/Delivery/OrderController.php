@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Delivery;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Order;
+use Illuminate\Http\Request;
 use App\Helpers\DistanceHelper;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
@@ -57,7 +57,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id)->load( 'delivery.branch:id,name,lat,long');
+        $order = Order::find($id)->load('delivery.branch:id,name,lat,long');
         if ($order && $order->delivery_id == Auth('delivery')->id()) {
             return response()->json(new OrderResource($order), 200);
         }
@@ -68,7 +68,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'delivery recieved')
-            ->get(['id','updated_at']);
+            ->get(['id', 'updated_at']);
         return response()->json([
             'message' => 'Orders fetched successfully',
             'orders'  => $orders,
@@ -78,7 +78,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('delivery_id', Auth('delivery')->id())
             ->where('status', 'delivered')
-            ->get(['id','updated_at']);
+            ->get(['id', 'updated_at']);
         return response()->json([
             'message' => 'Orders fetched successfully',
             'orders'  => $orders,

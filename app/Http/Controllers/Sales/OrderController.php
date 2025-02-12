@@ -18,10 +18,10 @@ class OrderController extends Controller
     {
         $search = request('search');
         $orders = Order::where(function ($query) use ($search) {
-                $query->where('customer_name', 'like', '%' . $search . '%')
-                      ->orWhere('id', 'like', '%' . $search . '%')
-                      ->orWhere('customer_phone', 'like', '%' . $search . '%');
-            })
+            $query->where('customer_name', 'like', '%' . $search . '%')
+                ->orWhere('id', 'like', '%' . $search . '%')
+                ->orWhere('customer_phone', 'like', '%' . $search . '%');
+        })
             ->where('status', '!=', 'delivered')
             ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name']);
         return response()->json(['orders' => $orders], 200);
@@ -94,11 +94,10 @@ class OrderController extends Controller
     {
         $validatedData = $request->validated();
         $order->update($validatedData);
-
-        // $managers = Manager::where('status', 'approved')->get();
-        // foreach ($managers as $manager) {
-        //     $manager->notify(new SendToManager($order));
-        // }
+        $managers = Manager::where('status', 'approved')->get();
+        foreach ($managers as $manager) {
+            $manager->notify(new SendToManager($order));
+        }
 
         return response()->json([
             'message' => 'Order updated successfully (Third Screen)',
@@ -139,7 +138,7 @@ class OrderController extends Controller
     {
         $orders = Order::whereDate('created_at', today())
             ->where('sale_id', Auth('sale')->id())->with('images')
-            ->get(['id','updated_at']);
+            ->get(['id', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 
@@ -147,7 +146,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('status', 'inprogress')
             ->where('sale_id', Auth('sale')->id())
-            ->get(['id','updated_at']);
+            ->get(['id', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 
@@ -155,7 +154,7 @@ class OrderController extends Controller
     {
         $orders = Order::where('status', 'delivered')
             ->where('sale_id', Auth('sale')->id())
-            ->get(['id','updated_at']);
+            ->get(['id', 'updated_at']);
         return response()->json(['orders' => $orders], 200);
     }
 }

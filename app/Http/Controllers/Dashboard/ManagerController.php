@@ -58,4 +58,3 @@ class ManagerController extends Controller
         return response()->json('Action not allowed', 404);
     }
 }
-

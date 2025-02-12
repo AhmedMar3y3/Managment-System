@@ -15,12 +15,12 @@ class HomeController extends Controller
 {
     public function stats()
     {
-        $sales = Sale::where('status','approved')->count();
-        $chefs = Chef::where('status','approved')->count();
+        $sales = Sale::where('status', 'approved')->count();
+        $chefs = Chef::where('status', 'approved')->count();
         $orders = Order::count();
         $branches = Branch::count();
-        $managers = Manager::where('status','approved')->count();
-        $deliveries = Delivery::where('status','approved')->count();
+        $managers = Manager::where('status', 'approved')->count();
+        $deliveries = Delivery::where('status', 'approved')->count();
         return response()->json([
             'branches' => $branches,
             'managers' => $managers,

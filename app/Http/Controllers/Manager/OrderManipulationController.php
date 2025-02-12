@@ -13,6 +13,7 @@ use App\Notifications\OrderRejectedNotification;
 
 class OrderManipulationController extends Controller
 {
+
     // Accept order
     public function acceptOrder($id)
     {
@@ -59,8 +60,8 @@ class OrderManipulationController extends Controller
         return response()->json(['message' => 'Order not found']);
     }
 
-    // Assign order to delivery
 
+    // Assign order to delivery
     public function assignOrderToDelivery(Request $request)
     {
         $validatedData = $request->validate([

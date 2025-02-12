@@ -18,10 +18,10 @@ class SpecializationController extends Controller
     {
         Specialization::create($request->validated());
         return response()->json(['message' => 'Specialization created successfully'], 201);
-        }
+    }
 
-        public function destroy($id)
-        {
+    public function destroy($id)
+    {
         $specializations = Specialization::findOrFail($id);
         $specializations->delete();
         return response()->json(['message' => 'Specialization deleted successfully'], 200);

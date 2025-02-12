@@ -36,7 +36,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Incorrect password'], 401);
         }
         $token = $admin->createToken('Api token of ' . $admin->name)->plainTextToken;
-    
+
         return response()->json([
             'admin' => $admin,
             'token' => $token

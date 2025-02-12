@@ -51,10 +51,10 @@ class ProfileController extends Controller
         $chef = Chef::find($user->id);
         $chef->delete();
         return response()->json(['message' => 'Account deleted successfully'], 200);
-        }
+    }
 
-        public function changePassword(ChangePasswordRequest $request)
-        {
+    public function changePassword(ChangePasswordRequest $request)
+    {
         $user = Auth('chef')->user();
         $chef = Chef::find($user->id);
         if (Hash::check($request->old_password, $chef->password)) {

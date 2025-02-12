@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
-use App\Models\Order;
+use App\Http\Controllers\Controller;
 use App\Notifications\SalesAssignToDelivery;
 
 class DeliveryController extends Controller
@@ -40,10 +40,10 @@ class DeliveryController extends Controller
         ]);
         $order = Order::findOrFail($validatedData['order_id']);
         if ($order->is_sameday) {
-                $order->update(['delivery_id' => $id, 'status'=> 'delivery waiting']);
-                $delivery = Delivery::findOrFail($id);
-                $delivery->notify(new SalesAssignToDelivery($order));
-                return response()->json(['message' => 'Order assigned to driver'], 200);
+            $order->update(['delivery_id' => $id, 'status' => 'delivery waiting']);
+            $delivery = Delivery::findOrFail($id);
+            $delivery->notify(new SalesAssignToDelivery($order));
+            return response()->json(['message' => 'Order assigned to driver'], 200);
         }
         return response()->json(['message' => 'You are not authorized to make this request'], 400);
     }

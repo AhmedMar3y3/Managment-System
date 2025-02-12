@@ -60,28 +60,28 @@ class HomeController extends Controller
     {
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
-    
-    $orders = Order::where('manager_id', Auth::guard('manager')->id())
-        ->where('status', 'قيد التنفيذ')
-        ->whereBetween('delivery_date', [$from, $to])
-        ->orderByDesc('delivery_date')
-        ->get(['id', 'customer_name', 'order_details', 'order_type']);
 
-    return response()->json([
-        'ordersCount' => $orders->count(),
-        'orders' => $orders,
-        'rate' => 50
-    ], 200);
-}
+        $orders = Order::where('manager_id', Auth::guard('manager')->id())
+            ->where('status', 'قيد التنفيذ')
+            ->whereBetween('delivery_date', [$from, $to])
+            ->orderByDesc('delivery_date')
+            ->get(['id', 'customer_name', 'order_details', 'order_type']);
+
+        return response()->json([
+            'ordersCount' => $orders->count(),
+            'orders' => $orders,
+            'rate' => 50
+        ], 200);
+    }
 
     // new orders
     public function NewOrders(Request $request)
     {
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
-    
+
         $orders = Order::where('status', 'new')
-            ->whereNotNull('customer_name') 
+            ->whereNotNull('customer_name')
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
         return response()->json([
@@ -91,7 +91,7 @@ class HomeController extends Controller
     }
 
     // show new order
-    public function ShowNewOrder(string $id,Request $request)
+    public function ShowNewOrder(string $id, Request $request)
     {
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
