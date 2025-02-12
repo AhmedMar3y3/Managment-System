@@ -34,17 +34,17 @@ class AuthController extends Controller
         $manager->save();
 
         if ($request->has('email')) {
-            Mail::raw("رمز التحقق الخاص بك هو: $verificationCode", function ($message) use ($manager) {
-                $message->to($manager->email)->subject('رمز التحقق');
+            Mail::raw("Your verification code is: $verificationCode", function ($message) use ($manager) {
+                $message->to($manager->email)->subject('Verification Code');
             });
-            return response()->json(['message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني'], 201);
+            return response()->json(['message' => 'Verification code sent to your email'], 201);
         } elseif ($request->has('phone')) {
             Notification::send($manager, new VerifyPhone($verificationCode));
-            return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
+            return response()->json(['message' => 'Verification code sent to your phone'], 201);
         }
         return response()->json([
             'key' => 'manager',
-            'message' => 'تم تسجيل المستخدم بنجاح'
+            'message' => 'User registered successfully'
         ], 201);
     }
 
@@ -55,49 +55,48 @@ class AuthController extends Controller
         $manager = Manager::where('verification_code', $request->code)->first();
 
         if (!$manager) {
-            return response()->json(['message' => ' الرمز غير صحيح'], 404);
+            return response()->json(['message' => 'Invalid code'], 404);
         }
 
         if ($manager->verified_at) {
-            return response()->json(['message' => 'تم التحقق بنجاح برجاء الانتظار حتي يتم قبول طلبكم'], 400);
+            return response()->json(['message' => 'Already verified, please wait for approval'], 400);
         }
 
         if ($manager->verification_code_expires_at && $manager->verification_code_expires_at < now()) {
-            return response()->json(['message' => 'الرمز لم يعد مفعل'], 400);
+            return response()->json(['message' => 'Code has expired'], 400);
         }
 
         $manager->verified_at = now();
         $manager->verification_code = null;
         $manager->save();
 
-        return response()->json(['message' => 'تم التحقق من الرمز بنجاح'], 200);
+        return response()->json(['message' => 'Code verified successfully'], 200);
     }
-
 
     public function login(login $request)
     {
         $validatedData = $request->validated();
-    
+
         $loginField = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         $manager = Manager::where($loginField, $request->input('login'))->first();
         if (!$manager || !Hash::check($request->input('password'), $manager->password)) {
-            return response()->json(['message' => 'لا يوجد مستخدم أو كلمة المرور غير صحيحة'], 404);
+            return response()->json(['message' => 'Invalid user or password'], 404);
         }
-    
+
         if ($manager->verified_at === null) {
-            return response()->json(['message' => 'لم يتم تفعيل الكود']);
+            return response()->json(['message' => 'Code not activated']);
         }
-    
-        if ($manager->status === 'قيد الانتظار') {
-            return response()->json(['message' => 'لم يتم القبول بعد'], 403);
+
+        if ($manager->status === 'pending') {
+            return response()->json(['message' => 'Not yet approved'], 403);
         }
-    
-        if ($manager->status === 'مرفوض') {
-            return response()->json(['message' => 'لقد تم رفض الطلب'], 403);
+
+        if ($manager->status === 'declined') {
+            return response()->json(['message' => 'Request rejected'], 403);
         }
-    
+
         $token = $manager->createToken('manager_token')->plainTextToken;
-    
+
         return response()->json([
             'key' => 'manager',
             'user' => $manager,
@@ -108,7 +107,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'تم تسجيل الخروج بنجاح'], 200);
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
     public function forgotPassword(ForgotRequest $request)
@@ -116,7 +115,7 @@ class AuthController extends Controller
         $validatedData = $request->validated();
         $manager = Manager::where('email', $request->email)->first();
         if (!$manager) {
-            return response()->json(['message' => 'لم يتم التعريف']);
+            return response()->json(['message' => 'User not identified']);
         }
 
         $code = mt_rand(2000, 99999);
@@ -131,7 +130,7 @@ class AuthController extends Controller
         });
 
         return response()->json([
-            'message' => 'ارسل الكود',
+            'message' => 'Code sent',
         ]);
     }
 
@@ -148,9 +147,9 @@ class AuthController extends Controller
             ->first();
 
         if (!$token) {
-            return response()->json(['message' => ' رمز غير موجود', 'status' => 0], 404);
+            return response()->json(['message' => 'Invalid code', 'status' => 0], 404);
         }
-        return response()->json(['message' => 'الرمز صحيح', 'status' => 1], 200);
+        return response()->json(['message' => 'Code is valid', 'status' => 1], 200);
     }
 
     public function resetPassword(request $request)
@@ -166,7 +165,7 @@ class AuthController extends Controller
             : Manager::where('phone', $request->identifier)->first();
 
         if (!$manager) {
-            return response()->json(['message' => 'المستخدم غير معرف']);
+            return response()->json(['message' => 'User not identified']);
         }
 
         $manager->password = Hash::make($request->password);
@@ -176,6 +175,6 @@ class AuthController extends Controller
             ->where('email', $isEmail ? $request->identifier : $request->identifier)
             ->delete();
 
-        return response()->json(['message', 'تم تعين كلمه مرور جديده بنجاح']);
+        return response()->json(['message' => 'Password reset successfully']);
     }
 }

@@ -29,7 +29,7 @@ class update extends FormRequest
                 'order_type'       => ['nullable', 'string'],
                 'order_details'    => ['nullable', 'string'],
                 'status'           => ['nullable', 'string'],
-                'price'            => ['nullable', 'numeric'],
+                'cake_price'            => ['nullable', 'numeric'],
                 'deposit'          => ['nullable', 'numeric'],
                 'delivery_date'    => ['nullable', 'date'],
                 'notes'            => ['nullable', 'string'],

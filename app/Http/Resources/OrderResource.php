@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
             "id"=> $this->id,
             'order_type' => $this->order_type,
             'order_details' => $this->order_details,
-            'price' => $this->total_price,
+            'total price' => $this->total_price,
             'deposit' => $this->deposit,
             'remaining' => $this->remaining,
             'customer_name' => $this->customer_name,
@@ -27,8 +27,6 @@ class OrderResource extends JsonResource
             'latitude'=> $this->latitude,
             'map_desc' => $this->map_desc,
             'additional_data' => $this->additional_data,
-            'product' => $this->product,
-            'flowers' => $this->flowers,
             'branch' => $this->delivery->branch,
             'status' => $this->status,
         ];

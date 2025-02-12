@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Chef;
 use App\Models\Delivery;
@@ -10,17 +9,18 @@ use App\Models\Manager;
 use App\Models\Sale;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
     public function stats()
     {
-        $sales = Sale::where('status','مقبول')->count();
-        $chefs = Chef::where('status','مقبول')->count();
+        $sales = Sale::where('status','approved')->count();
+        $chefs = Chef::where('status','approved')->count();
         $orders = Order::count();
         $branches = Branch::count();
-        $managers = Manager::where('status','مقبول')->count();
-        $deliveries = Delivery::where('status','مقبول')->count();
+        $managers = Manager::where('status','approved')->count();
+        $deliveries = Delivery::where('status','approved')->count();
         return response()->json([
             'branches' => $branches,
             'managers' => $managers,
@@ -33,12 +33,12 @@ class HomeController extends Controller
 
     public function orders()
     {
-        $newOrders = Order::where('status', 'جاري الاستلام')->count();
-        $completedOrders = Order::where('status', 'تم التجهيز')->count();
-        $pendingOrders = Order::where('status', 'قيد التنفيذ')->count();
-        $deliveredOrders = Order::where('status', 'تم التوصيل')->count();
-        $returnedOrdersa = Order::where('status', 'مرتجع')->count();
-        $declinedOrders = Order::where('status', 'رفض السائق')->count();
+        $newOrders = Order::where('status', 'new')->count();
+        $completedOrders = Order::where('status', 'completed')->count();
+        $pendingOrders = Order::where('status', 'inprogress')->count();
+        $deliveredOrders = Order::where('status', 'delivered')->count();
+        $returnedOrdersa = Order::where('status', 'returned')->count();
+        $declinedOrders = Order::where('status', 'delivery declined')->count();
         return response()->json([
             'newOrders' => $newOrders,
             'completedOrders' => $completedOrders,
@@ -51,8 +51,8 @@ class HomeController extends Controller
 
     public function requests()
     {
-        $sales = Sale::where('status', 'قيد الانتظار')->count();
-        $managers = Manager::where('status', 'قيد الانتظار')->count();
+        $sales = Sale::where('status', 'pending')->count();
+        $managers = Manager::where('status', 'pending')->count();
         return response()->json([
             'sales' => $sales,
             'managers' => $managers,
@@ -63,12 +63,12 @@ class HomeController extends Controller
     {
         $year = $request->input('year');
         $totalOrders = Order::whereYear('created_at', $year)->count();
-        $newOrders = Order::whereYear('created_at', $year)->where('status', 'جاري الاستلام')->count();
-        $completedOrders = Order::whereYear('created_at', $year)->where('status', 'تم التجهيز')->count();
-        $pendingOrders = Order::whereYear('created_at', $year)->where('status', 'قيد التنفيذ')->count();
-        $deliveredOrders = Order::whereYear('created_at', $year)->where('status', 'تم التوصيل')->count();
-        $returnedOrders = Order::whereYear('created_at', $year)->where('status', 'مرتجع')->count();
-        $declinedOrders = Order::whereYear('created_at', $year)->where('status', 'رفض السائق')->count();
+        $newOrders = Order::whereYear('created_at', $year)->where('status', 'new')->count();
+        $completedOrders = Order::whereYear('created_at', $year)->where('status', 'completed')->count();
+        $pendingOrders = Order::whereYear('created_at', $year)->where('status', 'inprogress')->count();
+        $deliveredOrders = Order::whereYear('created_at', $year)->where('status', 'delivered')->count();
+        $returnedOrders = Order::whereYear('created_at', $year)->where('status', 'returned')->count();
+        $declinedOrders = Order::whereYear('created_at', $year)->where('status', 'delivery declined')->count();
 
         $newOrdersPercentage = $totalOrders ? ($newOrders / $totalOrders) * 100 : 0;
         $completedOrdersPercentage = $totalOrders ? ($completedOrders / $totalOrders) * 100 : 0;

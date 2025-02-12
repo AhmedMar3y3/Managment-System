@@ -49,7 +49,7 @@ class ProfileController extends Controller
         $user = Auth('sale')->user();
         $sale = Sale::find($user->id);
         $sale->delete();
-        return response()->json(['message' => 'تم حذف الحساب بنجاح'], 200);
+        return response()->json(['message' => 'You have deleted your account successfully'], 200);
     }
 
     public function changePassword(ChangePasswordRequest $request)
@@ -58,8 +58,8 @@ class ProfileController extends Controller
         $sales = Sale::find($user->id);
         if (Hash::check($request->old_password, $sales->password)) {
             $sales->update(['password' => Hash::make($request->new_password)]);
-            return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
+            return response()->json(['message' => 'Password changed successfully'], 200);
         }
-        return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
+        return response()->json(['message' => 'The old password is incorrect'], 400);
     }
 }

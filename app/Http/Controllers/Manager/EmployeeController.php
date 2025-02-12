@@ -16,17 +16,17 @@ class EmployeeController extends Controller
     {
         $manager = auth('manager')->user();
         $manager_branch = $manager->branch_id;
-        $chef = Chef::where('status', 'قيد الانتظار')
+        $chef = Chef::where('status', 'pending')
             ->with('specialization')
             ->where('branch_id', $manager_branch)
             ->get(['created_at', 'phone', 'first_name', 'last_name', 'image', 'id', 'email', 'specialization_id']);
 
 
-        $delivery = Delivery::where('status', 'قيد الانتظار')
+        $delivery = Delivery::where('status', 'pending')
             ->where('branch_id', $manager_branch)
             ->get(['created_at', 'phone', 'first_name', 'last_name', 'image', 'id', 'email'])
             ->map(function ($item) {
-                $item['key'] = 'مندوب توصيل';
+                $item['key'] = 'Delivery Representative';
                 return $item;
             });
         return response()->json([
@@ -39,14 +39,14 @@ class EmployeeController extends Controller
     {
         $chef = Chef::findOrFail($id);
         if ($chef->branch_id === Auth('manager')->user()->branch_id) {
-            $chef->update(['status' => 'مقبول']);
+            $chef->update(['status' => 'approved']);
             $chef->notify(new EmployeeAcceptence());
             return response()->json([
-                'message' => 'تم قبول الشيف بنجاح',
+                'message' => 'Chef accepted successfully',
             ], 200);
         }
         return response()->json([
-            'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
+            'message' => 'Chef not found or does not belong to your branch',
         ], 404);
     }
 
@@ -56,15 +56,15 @@ class EmployeeController extends Controller
         $chef = Chef::findOrFail($id);
 
         if ($chef->branch_id === auth('manager')->user()->branch_id) {
-            $chef->update(['status' => 'مرفوض']);
+            $chef->update(['status' => 'declined']);
 
             $chef->notify(new EmployeeRejection());
             return response()->json([
-                'message' => 'تم رفض الشيف بنجاح',
+                'message' => 'Chef rejected successfully',
             ], 200);
         }
         return response()->json([
-            'message' => 'الشيف غير موجود أو لا ينتمي إلى الفرع الخاص بك',
+            'message' => 'Chef not found or does not belong to your branch',
         ], 404);
     }
 
@@ -74,32 +74,32 @@ class EmployeeController extends Controller
         $delivery = Delivery::findOrFail($id);
         if ($delivery->branch_id === auth('manager')->user()->branch_id) {
 
-            $delivery->update(['status' => 'مقبول']);
+            $delivery->update(['status' => 'approved']);
             $delivery->notify(new EmployeeAcceptence());
             return response()->json([
-                'message' => 'تم قبول المندوب',
+                'message' => 'Delivery representative accepted successfully',
             ], 200);
         }
         return response()->json([
-            'message' => 'المندوب لا ينتمي الي الفرع الخاص بك او غيلر موجود  ',
+            'message' => 'Delivery representative not found or does not belong to your branch',
         ], 404);
     }
 
 
-    public function  rejectDelivery(string $id)
+    public function rejectDelivery(string $id)
     {
 
         $delivery = Delivery::findOrFail($id);
         if ($delivery->branch_id === auth('manager')->user()->branch_id) {
 
-            $delivery->update(['status' => 'مرفوض']);
+            $delivery->update(['status' => 'declined']);
             $delivery->notify(new EmployeeRejection());
             return response()->json([
-                'message' => 'تم رفض المندوب بنجاح',
+                'message' => 'Delivery representative rejected successfully',
             ], 200);
         }
         return response()->json([
-            'message' => 'المندوب لا ينتمي الي الفرع الخاص بك او غيلر موجود  ',
+            'message' => 'Delivery representative not found or does not belong to your branch',
         ], 404);
     }
 }

@@ -13,7 +13,7 @@ class NotificationsController extends Controller
         $notifications = $chef->notifications()->orderBy('created_at', 'desc')->get();
 
         if ($notifications->isEmpty()) {
-            return response()->json(['notifications' => 'لا يوجد اشعارات']);
+            return response()->json(['message' => 'No notifications available']);
         }
 
         $formattedNotifications = $notifications->map(function ($notification) {

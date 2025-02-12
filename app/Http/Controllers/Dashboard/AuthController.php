@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\admin\login;
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\admin\login;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\admin\register;
 
 class AuthController extends Controller
@@ -15,13 +14,13 @@ class AuthController extends Controller
     public function register(register $request)
     {
         if (User::count() > 0) {
-            return response()->json(['message' => 'لا يمكن تسجيل أكثر من مستخدم واحد'], 403);
+            return response()->json(['message' => 'Only one user can be registered'], 403);
         }
 
         $validatedData = $request->validated();
         $validatedData['password'] = Hash::make($validatedData['password']);
         $admin = User::create($validatedData);
-        return response()->json(['message' => 'تم تسجيل المستخدم بنجاح'], 201);
+        return response()->json(['message' => 'User registered successfully'], 201);
     }
 
     // Login user
@@ -30,11 +29,11 @@ class AuthController extends Controller
         $validatedData = $request->validated();
         $admin = User::where('email', $request->input('email'))->first();
         if (!$admin) {
-            return response()->json(['message' => 'المستخدم غير موجود'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         if (!Hash::check($request->input('password'), $admin->password)) {
-            return response()->json(['message' => 'كلمة المرور غير صحيحة'], 401);
+            return response()->json(['message' => 'Incorrect password'], 401);
         }
         $token = $admin->createToken('Api token of ' . $admin->name)->plainTextToken;
     
@@ -48,6 +47,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'تم تسجيل الخروج بنجاح'], 200);
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

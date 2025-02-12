@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('specialization_id')->constrained('specializations')->cascadeOnDelete();
             $table->text('bio')->nullable();
             $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
-            $table->enum('status', ["قيد الانتظار", "مقبول", "مرفوض"])->default("قيد الانتظار");
+            $table->enum('status', ["pending", "approved", "declined"])->default("pending");
             $table->rememberToken();
             $table->string('password');
             $table->string('verification_code')->nullable();

@@ -25,8 +25,9 @@ class BannerController extends Controller
             $validated['image'] = env('APP_URL') . '/public/banners/' . $imageName;
         }
         Banner::create($validated);
-        return response()->json('تم اضافة البانر بنجاح', 200);
+        return response()->json('Banner added successfully', 200);
     }
+
     public function show($id)
     {
         $banner = Banner::find($id, ['id', 'title', 'image']);
@@ -36,6 +37,6 @@ class BannerController extends Controller
     public function destroy($id)
     {
         Banner::find($id)->delete();
-        return response()->json('تم مسح البانر بنجاح', 200);
+        return response()->json('Banner deleted successfully', 200);
     }
 }

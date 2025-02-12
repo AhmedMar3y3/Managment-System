@@ -17,7 +17,7 @@ class ReportController extends Controller
 
         $chef = Auth('chef')->user();
         if (!$chef) {
-            return response()->json(['message' => 'غير مصرح']);
+            return response()->json(['message' => 'Unauthorized']);
         }
 
         Report::create([
@@ -25,12 +25,13 @@ class ReportController extends Controller
             'chef_id' => $chef->id,
         ]);
 
-        return response()->json(['message' => 'لقد تم الحفظ']);
+        return response()->json(['message' => 'Saved successfully']);
     }
 
     public function show($id)
     {
         $problem = Report::with(['chef'])->findOrFail($id);
         return response()->json(['message' => $problem]);
+    }
     }
 }

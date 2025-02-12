@@ -21,9 +21,9 @@ class HomeController extends Controller
 
     public function stats(){
 
-        $newOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'جاري الاستلام')->count();
-        $inProgressOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'قيد التنفيذ')->count();
-        $completedOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'تم التجهيز')->count();
-        return response()->json(['طلب جديد' => $newOrders, 'طلب قيد التنفيذ' => $inProgressOrders, 'طلب مكتمل' => $completedOrders], 200);
+        $newOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'new')->count();
+        $inProgressOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'inprogress')->count();
+        $completedOrders = Order::where('sale_id', Auth('sale')->id())->where('status', 'completed')->count();
+        return response()->json(['new orders' => $newOrders, 'inprogress orders' => $inProgressOrders, 'completed orders' => $completedOrders], 200);
     }
 }

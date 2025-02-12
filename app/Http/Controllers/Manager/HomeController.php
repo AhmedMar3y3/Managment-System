@@ -13,29 +13,29 @@ class HomeController extends Controller
     {
 
         $preparedCount = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', "تم التجهيز")
+            ->where('status', "completed")
             ->count();
 
         $rejectedCount = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', 'رفض السائق')
+            ->where('status', 'delivery declined')
             ->count();
 
         $deliveredCount = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', "تم التوصيل")
+            ->where('status', "delivered")
             ->count();
 
         $returnedCount = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', "مرتجع")
+            ->where('status', "returned")
             ->count();
 
 
         $reciveCount = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', 'استلام السائق')
+            ->where('status', 'delivery recieved')
             ->count();
 
 
         $Count = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', "تم التوصيل")
+            ->where('status', "delivered")
             ->count();
 
         $totalOrders = Order::count();
@@ -57,7 +57,7 @@ class HomeController extends Controller
     public function inProgressOrders()
     {
         $orders = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status',  'قيد التنفيذ')
+            ->where('status',  'inprogress')
             ->orderBy('delivery_date', 'desc')
             ->get(['id', 'customer_name', 'order_details', 'order_type']);
 
@@ -71,7 +71,7 @@ class HomeController extends Controller
     // new orders
     public function NewOrders()
     {
-        $orders = Order::where('status', 'جاري الاستلام')
+        $orders = Order::where('status', 'new')
             ->whereNotNull('customer_name') 
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
@@ -83,7 +83,7 @@ class HomeController extends Controller
     // show new order
     public function ShowNewOrder(string $id)
     {
-        $orders = Order::findOrFail($id)->load('Images', 'flowers');
+        $orders = Order::findOrFail($id)->load('Images');
         return response()->json([
             'orders' => $orders,
         ], 200);

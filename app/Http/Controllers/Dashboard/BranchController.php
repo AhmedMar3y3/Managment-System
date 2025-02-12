@@ -31,7 +31,7 @@ class BranchController extends Controller
         if ($branch) {
             return response()->json($branch, 200);
         } else {
-            return response()->json(['message' => 'الفرع غير موجود'], 404);
+            return response()->json(['message' => 'Branch not found'], 404);
         }
     }
 
@@ -43,7 +43,7 @@ class BranchController extends Controller
             $branch->update($validatedDate);
             return response()->json($branch, 200);
         } else {
-            return response()->json(['message' => 'الفرع غير موجود'], 404);
+            return response()->json(['message' => 'Branch not found'], 404);
         }
     }
 
@@ -52,9 +52,9 @@ class BranchController extends Controller
         $branch = Branch::find($id);
         if ($branch) {
             $branch->delete();
-            return response()->json(['message' => 'تم حذف الفرع'], 200);
+            return response()->json(['message' => 'Branch deleted successfully'], 200);
         } else {
-            return response()->json(['message' => 'الفرع غير موجود'], 404);
+            return response()->json(['message' => 'Branch not found'], 404);
         }
     }
 }

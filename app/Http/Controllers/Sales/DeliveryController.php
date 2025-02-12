@@ -13,10 +13,10 @@ class DeliveryController extends Controller
     public function deliveries()
     {
         $deliveries = Delivery::withCount(['orders' => function ($query) {
-            $query->where('status', 'استلام السائق');
+            $query->where('status', 'delivery recieved');
         }])->get(['id', 'name', 'phone']);
         foreach ($deliveries as $delivery) {
-            $delivery->status = $delivery->orders_count > 2 ? 'غير متاح' : 'متاح';
+            $delivery->status = $delivery->orders_count > 2 ? 'Not available' : 'Available';
         }
         return response()->json($deliveries, 200);
     }
@@ -24,9 +24,9 @@ class DeliveryController extends Controller
     public function show($id)
     {
         $delivery = Delivery::findOrFail($id)->load(['orders:delivery_date,order_type' => function ($query) {
-            $query->where('status', 'استلام السائق');
+            $query->where('status', 'delivery recieved');
         }]);
-        $deliveryOrders = $delivery->orders::where('status', 'تم التوصيل')->count();
+        $deliveryOrders = $delivery->orders::where('status', 'delivered')->count();
         return response()->json([
             'count' => $deliveryOrders,
             'delivery' => $delivery
@@ -39,12 +39,12 @@ class DeliveryController extends Controller
             'order_id' => 'required|exists:orders,id',
         ]);
         $order = Order::findOrFail($validatedData['order_id']);
-        if($order->status == 'جاري الاستلام' || $order->status == 'رفض السائق') {
-            $order->update(['delivery_id' => $id, 'status'=> 'انتظار السائق']);
-            $delivery = Delivery::findOrFail($id);
-            $delivery->notify(new SalesAssignToDelivery($order));
-            return response()->json(['message' => 'تم تعيين الطلب للسائق'], 200);
+        if ($order->is_sameday) {
+                $order->update(['delivery_id' => $id, 'status'=> 'delivery waiting']);
+                $delivery = Delivery::findOrFail($id);
+                $delivery->notify(new SalesAssignToDelivery($order));
+                return response()->json(['message' => 'Order assigned to driver'], 200);
         }
-        return response()->json(['message' => 'لا يمكن تعيين الطلب للسائق'], 400);
+        return response()->json(['message' => 'You are not authorized to make this request'], 400);
     }
 }

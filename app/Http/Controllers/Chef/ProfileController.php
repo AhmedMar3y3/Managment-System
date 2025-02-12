@@ -50,17 +50,17 @@ class ProfileController extends Controller
         $user = Auth('chef')->user();
         $chef = Chef::find($user->id);
         $chef->delete();
-        return response()->json(['message' => 'تم حذف الحساب بنجاح'], 200);
-    }
+        return response()->json(['message' => 'Account deleted successfully'], 200);
+        }
 
-    public function changePassword(ChangePasswordRequest $request)
-    {
+        public function changePassword(ChangePasswordRequest $request)
+        {
         $user = Auth('chef')->user();
         $chef = Chef::find($user->id);
         if (Hash::check($request->old_password, $chef->password)) {
             $chef->update(['password' => Hash::make($request->new_password)]);
-            return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح'], 200);
+            return response()->json(['message' => 'Password changed successfully'], 200);
         }
-        return response()->json(['message' => 'كلمة المرور القديمة غير صحيحة'], 400);
+        return response()->json(['message' => 'Old password is incorrect'], 400);
     }
 }

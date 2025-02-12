@@ -15,11 +15,11 @@ class ChefController extends Controller
         $chefs = Chef::where('branch_id', $manager->branch_id)
             ->with('specialization')
             ->withCount(['orders' => function ($query) {
-                $query->where('status', 'قيد التنفيذ');
+                $query->where('status', 'inprogress');
             }])->get(['id', 'first_name', 'last_name', 'phone', 'image', 'specialization_id']);
 
         $chefs->each(function ($chef) {
-            $chef->canTakeOrder = $chef->orders_count > 5 ? 'غير متاح' : 'متاح';
+            $chef->canTakeOrder = $chef->orders_count > 5 ? 'Not available' : 'Available';
             $chef->orderCount = $chef->orders_count;
             unset($chef->orders_count);
         });
@@ -45,12 +45,12 @@ class ChefController extends Controller
     public function showChef(string $id)
     {
         $Chef = Chef::withCount(['orders as completed_orders_count' => function ($query) {
-            $query->where('status', 'تم التجهيز');
+            $query->where('status', 'completed');
         }, 'orders as in_progress_orders_count' => function ($query) {
-            $query->where('status', 'قيد التنفيذ');
+            $query->where('status', 'inprogress');
         }])->find($id);
 
-        $Chef->canTakeOrder = $Chef->in_progress_orders_count > 5 ? 'غير متاح' : 'متاح';
+        $Chef->canTakeOrder = $Chef->in_progress_orders_count > 5 ? 'not available' : 'Available';
 
         return response()->json([
             'chef' => [
@@ -64,7 +64,7 @@ class ChefController extends Controller
                 'bio' => $Chef->bio,
                 'completed_orders_count' => $Chef->completed_orders_count,
                 'canTakeOrder' => $Chef->canTakeOrder,
-                'orders' => $Chef->orders->where('status', 'قيد التنفيذ')->values()->map(function ($order) {
+                'orders' => $Chef->orders->where('status', 'inprogress')->values()->map(function ($order) {
                     return [
                         'order_type' => $order->order_type,
                         'order_details' => $order->order_details,

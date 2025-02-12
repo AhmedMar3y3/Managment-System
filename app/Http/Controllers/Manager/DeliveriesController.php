@@ -11,11 +11,11 @@ class DeliveriesController extends Controller
     {
         $manager = Auth('manager')->user();
         $deliveries = Delivery::where('branch_id', $manager->branch_id)->withCount(['orders' => function ($query) {
-            $query->where('status', 'تم التوصيل');
+            $query->where('status', 'delivered');
         }])->get(['id', 'first_name', 'last_name', 'phone', 'image']);
 
         $deliveries->each(function ($delivery) {
-            $delivery->canTakeOrder = $delivery->orders_count > 5 ? 'غير متاح' : 'متاح';
+            $delivery->canTakeOrder = $delivery->orders_count > 5 ? 'Not available' : 'Available';
             $delivery->orderCount = $delivery->orders_count;
             unset($delivery->orders_count);
         });
@@ -39,12 +39,12 @@ class DeliveriesController extends Controller
     public function showDelivery(string $id)
     {
         $delivery = Delivery::withCount(['orders as delivered_orders_count' => function ($query) {
-            $query->where('status', 'تم التوصيل');
+            $query->where('status', 'delivered');
         }, 'orders as in_progress_orders_count' => function ($query) {
-            $query->where('status', 'استلام السائق');
+            $query->where('status', 'delivery recieved');
         }])->find($id, ['first_name', 'last_name', 'phone', 'image', 'email', 'id']);
 
-        $delivery->canTakeOrder = $delivery->in_progress_orders_count > 5 ? 'غير متاح' : 'متاح';
+        $delivery->canTakeOrder = $delivery->in_progress_orders_count > 5 ? 'Not available' : 'Available';
 
         return response()->json([
             'delivery' => [
@@ -56,7 +56,7 @@ class DeliveriesController extends Controller
                 'email' => $delivery->email,
                 'delivered_orders_count' => $delivery->delivered_orders_count,
                 'canTakeOrder' => $delivery->canTakeOrder,
-                'orders' => $delivery->orders->where('status', 'استلام السائق')->values()->map(function ($order) {
+                'orders' => $delivery->orders->where('status', 'delivery recieved')->values()->map(function ($order) {
                     return [
                         'order_type' => $order->order_type,
                         'order_details' => $order->order_details,

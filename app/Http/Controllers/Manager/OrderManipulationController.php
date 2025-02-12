@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Order;
 use App\Models\Chef;
+use App\Models\Order;
 use App\Models\Delivery;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\orderRecievedToChef;
 use App\Notifications\OrderRejectedNotification;
 
@@ -18,19 +18,18 @@ class OrderManipulationController extends Controller
     {
 
         $order = Order::findOrFail($id);
-        if ($order->status === "جاري الاستلام") {
-            $order->status = "وافق المدير";
+        if ($order->status === "new") {
+            $order->status = "manager accepted";
             $order->manager_id = Auth::guard('manager')->user()->id;
             $order->save();
-
             return response()->json([
-                'message' => 'تم الموافقة على الطلب بنجاح',
+                'message' => 'Order accepted successfully',
                 'order_id' => $order->id,
                 'manager_id' => $order->manager_id,
                 'status' => $order->status,
             ]);
         }
-        return response()->json(['message' => 'حالة الطلب غير صحيحة']);
+        return response()->json(['message' => 'Invalid order status']);
     }
 
 
@@ -44,20 +43,20 @@ class OrderManipulationController extends Controller
 
         $order = Order::find($validatedData['order_id']);
         if ($order) {
-            if ($order->status == "وافق المدير") {
+            if ($order->status == "manager accepted") {
                 $order->update([
-                    'status' => 'انتظار الشيف',
+                    'status' => 'chef waiting',
                     'chef_id' => $validatedData['chef_id'],
                 ]);
                 $chefId = $order->chef_id;
                 $chef = Chef::find($chefId);
                 $chef->notify(new orderRecievedToChef($order));
 
-                return response()->json(['message' => 'تم ارسال الطلب إلى الشيف بنجاح']);
+                return response()->json(['message' => 'Order successfully assigned to chef']);
             }
-            return response()->json(['message' => 'في انتظار موافقة الشيف']);
+            return response()->json(['message' => 'Waiting for chef approval']);
         }
-        return response()->json(['message' => 'الطلب غير موجود']);
+        return response()->json(['message' => 'Order not found']);
     }
 
     // Assign order to delivery
@@ -71,11 +70,11 @@ class OrderManipulationController extends Controller
         $order = Order::find($validatedData['order_id']);
         $order->update([
             'delivery_id' => $validatedData['delivery_id'],
-            'status' => 'انتظار السائق',
+            'status' => 'delivery waiting',
         ]);
 
         $delivery = Delivery::find($validatedData['delivery_id']);
         $delivery->notify(new OrderRejectedNotification($order));
-        return response()->json(['message' => 'تم إرسال الطلب إلى موظف التوصيل بنجاح'], 200);
+        return response()->json(['message' => 'Order successfully assigned to delivery'], 200);
     }
 }

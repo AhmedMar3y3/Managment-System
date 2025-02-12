@@ -21,7 +21,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('password');
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
-            $table->enum('status', ["قيد الانتظار", "مقبول", "مرفوض"])->default("قيد الانتظار");
+            $table->enum('status', ["pending", "approved", "declined"])->default("pending");
             $table->string('verification_code')->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->timestamps();

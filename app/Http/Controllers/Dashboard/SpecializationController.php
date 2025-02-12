@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Models\Specialization;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\specialization\store;
-use App\Models\Specialization;
-use Illuminate\Http\Request;
 
 class SpecializationController extends Controller
 {
@@ -18,13 +17,13 @@ class SpecializationController extends Controller
     public function store(store $request)
     {
         Specialization::create($request->validated());
-        return response()->json(['message' => 'تم إنشاء التخصص بنجاح'], 201);
-    }
+        return response()->json(['message' => 'Specialization created successfully'], 201);
+        }
 
-    public function destroy($id)
-    {
+        public function destroy($id)
+        {
         $specializations = Specialization::findOrFail($id);
         $specializations->delete();
-        return response()->json(['message' => 'تم حذف التخصص بنجاح'], 200);
+        return response()->json(['message' => 'Specialization deleted successfully'], 200);
     }
 }

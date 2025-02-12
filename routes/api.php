@@ -8,11 +8,9 @@ use App\Http\Controllers\Dashboard\BranchController;
 use App\Http\Controllers\Dashboard\BannerController;
 use App\Http\Controllers\Dashboard\ChefController;
 use App\Http\Controllers\Dashboard\DeliveryController;
-use App\Http\Controllers\Dashboard\FlowerController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\ManagerController;
 use App\Http\Controllers\Dashboard\OrderController;
-use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\SalesController;
 use App\Http\Controllers\Dashboard\SpecializationController;
@@ -88,18 +86,6 @@ Route::middleware(['auth.admin'])->group(function () {
     Route::get('/rejected-orders', [OrderController::class, 'rejectedOrders']);
     Route::get('/returned-orders', [OrderController::class, 'returnedOrders']);
     Route::get('/pending-orders', [OrderController::class,'pendingOrders']);
-
-    // Flower routes
-    Route::get('/flowers', [FlowerController::class, 'index']);
-    Route::post('/store-flower', [FlowerController::class, 'store']);
-    Route::delete('/flower/{id}', [FlowerController::class, 'destroy']);
-
-    // Product routes
-    Route::get('/products', [ProductController::class, 'index']);
-    Route::get('/product/{id}', [ProductController::class, 'show']);
-    Route::post('/store-product', [ProductController::class, 'store']);
-    Route::post('/update-product/{id}', [ProductController::class, 'update']);
-    Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 
     // Specialization routes
     Route::get('/specializations', [SpecializationController::class, 'index']);

@@ -32,7 +32,7 @@ class HomeController extends Controller
             ->get();
     
         return response()->json([
-            'message' => 'تم استرجاع نتائج البحث بنجاح',
+            'message' => 'Search results retrieved successfully',
             'orders' => $orders
         ]);
     }

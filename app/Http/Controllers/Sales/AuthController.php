@@ -36,17 +36,17 @@ class AuthController extends Controller
         $sale->save();
 
         if ($request->has('email')) {
-            Mail::raw("رمز التحقق الخاص بك هو: $verificationCode", function ($message) use ($sale) {
-                $message->to($sale->email)->subject('رمز التحقق');
+            Mail::raw("Your Verification Code is: $verificationCode", function ($message) use ($sale) {
+                $message->to($sale->email)->subject('Verify Your Email Address');
             });
 
-            return response()->json(['message' => 'تم إرسال رمز التحقق إلى بريدك الإلكتروني'], 201);
+            return response()->json(['message' => 'Verification code has been sent to your email'], 201);
         } elseif ($request->has('phone')) {
             Notification::send($sale, new VerifyPhone($verificationCode));
-            return response()->json(['message' => 'تم إرسال رمز التحقق إلى هاتفك'], 201);
+            return response()->json(['message' => 'Verification code has been sent to your phone'], 201);
         }
 
-        return response()->json(['key' => 'sales', 'message' => 'تم تسجيل المستخدم بنجاح'], 201);
+        return response()->json(['key' => 'sales', 'message' => 'You have registered your account successfully'], 201);
     }
 
     // Verify account (email or phone)
@@ -57,14 +57,14 @@ class AuthController extends Controller
         $sale = Sale::where('verification_code', $request->code)->first();
 
         if (!$sale) {
-            return response()->json(['message' => 'رمز التحقق غير صالح'], 404);
+            return response()->json(['message' => 'The verification code is wrong'], 404);
         }
 
         $sale->verified_at = now();
         $sale->verification_code = null;
         $sale->save();
 
-        return response()->json(['message' => 'تم التحقق من الحساب بنجاح'], 200);
+        return response()->json(['message' => 'Account verified successfully'], 200);
     }
 
     // Login user
@@ -75,19 +75,19 @@ class AuthController extends Controller
         $loginField = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         $sales = Sale::where($loginField, $request->input('login'))->first();
         if (!$sales || !Hash::check($request->input('password'), $sales->password)) {
-            return response()->json(['message' => 'لا يوجد مستخدم أو كلمة المرور غير صحيحة'], 404);
+            return response()->json(['message' => 'User not found or incorrect password'], 404);
         }
 
         if ($sales->verified_at === null) {
-            return response()->json(['message' => 'لم يتم تفعيل الكود']);
+            return response()->json(['message' => 'Verification code not activated']);
         }
 
-        if ($sales->status === 'قيد الانتظار') {
-            return response()->json(['message' => 'لم يتم القبول بعد'], 403);
+        if ($sales->status === 'pending') {
+            return response()->json(['message' => 'Not yet approved'], 403);
         }
 
-        if ($sales->status === 'مرفوض') {
-            return response()->json(['message' => 'لقد تم رفض الطلب'], 403);
+        if ($sales->status === 'declined') {
+            return response()->json(['message' => 'Request has been rejected'], 403);
         }
 
         $token = $sales->createToken('sales_token')->plainTextToken;
@@ -104,7 +104,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'تم تسجيل الخروج بنجاح'], 200);
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
 
@@ -120,7 +120,7 @@ class AuthController extends Controller
             : Sale::where('phone', $request->identifier)->first();
 
         if (!$sale) {
-            return response()->json(['message' => 'المستخدم غير موجود'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $code = mt_rand(1000, 9999);
@@ -130,13 +130,13 @@ class AuthController extends Controller
         );
 
         if ($isEmail) {
-            Mail::raw("رمز إعادة تعيين كلمة المرور الخاص بك هو: $code", function ($message) use ($sale) {
-                $message->to($sale->email)->subject('رمز إعادة تعيين كلمة المرور');
+            Mail::raw("Your password reset code is: $code", function ($message) use ($sale) {
+                $message->to($sale->email)->subject('Password Reset Code');
             });
-            return response()->json(['message' => 'تم إرسال رمز إعادة التعيين إلى بريدك الإلكتروني'], 200);
+            return response()->json(['message' => 'Reset code has been sent to your email'], 200);
         } else {
             Notification::send($sale, new ResetPassword($code));
-            return response()->json(['message' => 'تم إرسال رمز إعادة التعيين إلى هاتفك'], 200);
+            return response()->json(['message' => 'Reset code has been sent to your phone'], 200);
         }
     }
 
@@ -155,11 +155,12 @@ class AuthController extends Controller
             ->first();
 
         if (!$resetToken) {
-            return response()->json(['message' => 'رمز إعادة التعيين غير صالح', 'status' => 0], 404);
+            return response()->json(['message' => 'Invalid reset code', 'status' => 0], 404);
         }
 
-        return response()->json(['message' => 'رمز إعادة التعيين صحيح', 'status' => 1], 200);
+        return response()->json(['message' => 'Valid reset code', 'status' => 1], 200);
     }
+
     // Reset password (Step 3: Change password)
     public function resetPassword(Request $request)
     {
@@ -174,7 +175,7 @@ class AuthController extends Controller
             : Sale::where('phone', $request->identifier)->first();
 
         if (!$sale) {
-            return response()->json(['message' => 'المستخدم غير موجود'], 404);
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $sale->password = Hash::make($request->password);
@@ -184,6 +185,6 @@ class AuthController extends Controller
             ->where('email', $isEmail ? $request->identifier : $request->identifier)
             ->delete();
 
-        return response()->json(['message' => 'تم إعادة تعيين كلمة المرور بنجاح'], 200);
+        return response()->json(['message' => 'Password has been reset successfully'], 200);
     }
 }

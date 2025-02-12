@@ -9,7 +9,7 @@ class DeliveryController extends Controller
 {
     public function index()
     {
-        $deliveries = Delivery::where('status', 'مقبول')->with('branch')->get(['id', 'first_name', 'last_name','phone','branch_id']);
+        $deliveries = Delivery::where('status', 'approved')->with('branch')->get(['id', 'first_name', 'last_name','phone','branch_id']);
         $deliveries = $deliveries->map(function ($delivery) {
             $delivery->orders_count = $delivery->orders()->count();
             return $delivery;
@@ -23,15 +23,15 @@ class DeliveryController extends Controller
         if ($delivery) {
             return response()->json($delivery, 200);
         }
-        return response()->json('لا يمكن إجراء ذلك', 404);
-    }
-    public function delete($id)
-    {
+        return response()->json('Action cannot be performed', 404);
+        }
+        public function delete($id)
+        {
         $delivery = Delivery::find($id);
         if ($delivery) {
             $delivery->delete();
-            return response()->json('تم حذف الشيف بنجاح', 200);
+            return response()->json('Delivery deleted successfully', 200);
         }
-        return response()->json('لا يمكن إجراء ذلك', 404);
+        return response()->json('Action cannot be performed', 404);
     }
 }

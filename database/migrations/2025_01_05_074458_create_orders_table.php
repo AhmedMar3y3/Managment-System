@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -15,21 +16,24 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             // first screen
             $table->id();
-            $table->enum('order_type', ['كيك','ورد', 'كيك و ورد'])->default('كيك');
             $table->text('order_details')->nullable();
-            $table->foreignId('flower_id')->nullable()->constrained('flowers')->onDelete('cascade');
-            $table->integer('flower_quantity')->default(0);
+            //flowers
             $table->string('image')->nullable();
-            $table->integer('quantity')->default(0);
+            $table->text('description')->nullable();
+            
+            //any order
+            $table->boolean('is_sameday')->default(false);
             $table->time('delivery_time')->nullable();
-            $table->date('delivery_date')->nullable();
+            $table->date('delivery_date')->default(DB::raw('CURRENT_DATE'));
+            $table->enum('order_type', ['cake','flower', 'cake and flower'])->default('cake');
+
             // second screen
-            $table->double('price')->nullable();
-            $table->double('flower_price')->nullable();
-            $table->double('delivery_price')->nullable();
-            $table->double('total_price')->nullable();
+            $table->double('cake_price')->default(0);
+            $table->double('flower_price')->default(0);
+            $table->double('delivery_price')->default(0);
             $table->double('deposit')->default(0);
-            $table->double('remaining')->nullable();
+            $table->double('total_price')->default(0);
+
             // third screen
             $table->string('customer_name')->nullable();
             $table->string('customer_phone')->nullable();
@@ -38,13 +42,11 @@ return new class extends Migration
             $table->string('map_desc')->nullable();
             $table->text('additional_data')->nullable();
 
-            // other way 
-            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade');
-            // another screens for المرتجعات
+            // another screens for returned orders
             $table->boolean('is_returned')->default(false);
             $table->text('problem')->nullable();  
             // another data
-            $table->enum('status', ["جاري الاستلام","انتظار الشيف","وافق المدير","تم القبول","قيد التنفيذ", "تم التجهيز","انتظار السائق","استلام السائق","رفض السائق","مرتجع", "تم التوصيل"])->default("جاري الاستلام");
+            $table->enum('status', ["new","manager accepted","chef waiting","chef approved","inprogress", "completed","delivery waiting","delivery recieved","delivery declined","returned", "delivered"])->default("new");
             $table->enum('payment_method', ["cash","visa"])->default('cash');
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
             $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('cascade');

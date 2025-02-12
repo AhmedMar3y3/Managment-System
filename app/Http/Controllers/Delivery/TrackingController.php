@@ -12,7 +12,7 @@ class TrackingController extends Controller
     {
         $delivery = Auth('delivery')->user();
         DeliveryPosition::create(array_merge($request->validated(), ['delivery_id' => $delivery->id]));
-        return response()->json(['message' =>'تم تخزين الموقع بنجاح'],200);
+        return response()->json(['message' => 'Location stored successfully'], 200);
     }
 
     public function latest()

@@ -12,7 +12,7 @@ class OrderManipulationController extends Controller
     {
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
-            $order->update(['status' => 'استلام السائق']);
+            $order->update(['status' => 'delivery recieved']);
             return response()->json(['message' => 'تم قبول الطلب بنجاح'], 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);
@@ -26,7 +26,7 @@ class OrderManipulationController extends Controller
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
             $order->update([
-                'status' => 'رفض السائق',
+                'status' => 'delivery declined',
                 'rejection_cause' => $request->rejection_cause,
                 'delivery_id' => null
             ]);
@@ -46,13 +46,28 @@ class OrderManipulationController extends Controller
 
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
-            $order->update(['status' => 'تم التوصيل', 'payment_method' => $request->payment_method]);
+            $order->update(['status' => 'delivered', 'payment_method' => $request->payment_method]);
             return response()->json(['message' => 'تم توصيل الطلب بنجاح'], 200);
         }
         return response()->json(['message' => 'غير مصرح'], 404);
     }
 
-    // public function orderDelivered($id, Request $request)
+    public function cancelOrder(Request $request, $id)
+    {
+        $order = Order::find($id);
+        if ($order->delivery_id == Auth('delivery')->id()) {
+            $request->validate([
+                'problem' => 'nullable|string'
+            ]);
+            $order->update(['status' => 'returned', 'is_returned' => true, 'problem' => $request->problem]);
+            return response()->json(['message' => 'تم بنجاح'], 200);
+        }
+        return response()->json(['message' => 'غير مصرح'], 404);
+    }
+}
+
+
+// public function orderDelivered($id, Request $request)
     // {
     //     // Validate the request to include the payment method and the current delivery coordinates.
     //     $request->validate([
@@ -85,7 +100,7 @@ class OrderManipulationController extends Controller
     //     // Check if the distance is 20 meters or less (0.02 kilometers).
     //     if ($distance <= 0.02) {
     //         $order->update([
-    //             'status'         => 'تم التوصيل',
+    //             'status'         => 'delivered',
     //             'payment_method' => $request->input('payment_method'),
     //         ]);
 
@@ -94,17 +109,3 @@ class OrderManipulationController extends Controller
     //         return response()->json(['message' => 'لم تصل إلى المكان المطلوب'], 400);
     //     }
     // }
-
-    public function cancelOrder(Request $request, $id)
-    {
-        $order = Order::find($id);
-        if ($order->delivery_id == Auth('delivery')->id()) {
-            $request->validate([
-                'problem' => 'nullable|string'
-            ]);
-            $order->update(['status' => 'مرتجع', 'is_returned' => true, 'problem' => $request->problem]);
-            return response()->json(['message' => 'تم بنجاح'], 200);
-        }
-        return response()->json(['message' => 'غير مصرح'], 404);
-    }
-}
