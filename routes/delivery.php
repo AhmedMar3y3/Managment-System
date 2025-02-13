@@ -37,7 +37,7 @@ Route::middleware(['auth.delivery'])->group(function () {
     Route::post('/reject-order/{id}',    [OrderManipulationController::class,'rejectOrder']);
     Route::post('/order-delivered/{id}', [OrderManipulationController::class,'orderDelivered']);
     Route::post('/cancel-order/{id}',    [OrderManipulationController::class,'cancelOrder']);
-    Route::post('/start-ride',           [OrderManipulationController::class,'startRide']);
+    Route::post('/start-ride/{id}',           [OrderManipulationController::class,'startRide']);
 
     //Home Routes
     Route::get('/search',         [HomeController::class,'search']);
