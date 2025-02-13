@@ -54,7 +54,7 @@ class HomeController extends Controller
             'delivered' => $deliveredCount,
             'returned' => $returnedCount,
             'recive' =>  $reciveCount,
-            'not assigned' => $notAssignedOrders,
+            'not_assigned' => $notAssignedOrders,
             'percentage' => $Percentage . "%",
         ], 200);
     }
