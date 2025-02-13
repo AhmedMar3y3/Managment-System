@@ -97,6 +97,7 @@ class OrderController extends Controller
                 'customer_phone' => $order->customer_phone,
                 'customer_name' => $order->customer_name,
                 'additional_data' => $order->additional_data,
+                'created_at' => $order->created_at,
                 'images' => $order->images,
                 'problem' => $order->problem ?? 'Order has not been returned',
                 'rejection_cause' => $order->rejection_cause ?? 'Order has not been rejected',
