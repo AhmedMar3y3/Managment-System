@@ -42,6 +42,9 @@ class OrderController extends Controller
             ->where('status', 'completed')
             ->orderBy('delivery_date', 'desc')
             ->whereBetween('delivery_date', [$from, $to])
+            ->with(['images' => function ($query) {
+                $query->take(1);
+            }])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
 
         return response()->json([
@@ -65,6 +68,9 @@ class OrderController extends Controller
             ->where('status', 'delivered')
             ->orderBy('delivery_date', 'desc')
             ->whereBetween('delivery_date', [$from, $to])
+            ->with(['images' => function ($query) {
+                $query->take(1);
+            }])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
 
         return response()->json([
@@ -119,6 +125,9 @@ class OrderController extends Controller
         $orders = Order::whereIn('status', ['delivery declined'])
             ->where('manager_id', auth('manager')->id())
             ->whereBetween('delivery_date', [$from, $to])
+            ->with(['images' => function ($query) {
+                $query->take(1);
+            }])
             ->get(['id', 'order_type', 'updated_at', 'status']);
         $now = now();
         $ordersWithDetails = $orders->map(function ($order) use ($now) {
@@ -143,7 +152,9 @@ class OrderController extends Controller
 
         $order = Order::where('status', 'returned')
             ->where('manager_id', auth('manager')->user()->id)
-
+            ->with(['images' => function ($query) {
+                $query->take(1);
+            }])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date', 'image']);
 
         if (!$order) {
