@@ -15,7 +15,7 @@ class TrackingPositionController extends Controller
     {
 
         $orders = Order::where('manager_id', auth('manager')->user()->id)
-            ->where('status', 'delivery recieved')
+            ->whereIn('status', ['delivery received', 'start ride'])
             ->with(['images' => function ($query) {
                 $query->take(1);
             }])
