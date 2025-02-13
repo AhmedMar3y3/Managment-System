@@ -16,7 +16,7 @@ class OrderController extends Controller
         $from = Carbon::parse($request->from)->startOfDay();
         $to = Carbon::parse($request->to)->endOfDay();
 
-        $orders = Order::where('manager_id', auth('manager')->id())
+        $orders = Order::where('manager_id', Auth('manager')->id())
             ->where('status', 'manager accepted')
             ->whereBetween('delivery_date', [$from, $to])
             ->with(['images' => function ($query) {
