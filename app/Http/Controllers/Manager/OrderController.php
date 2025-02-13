@@ -40,22 +40,26 @@ class OrderController extends Controller
     // completed orders
     public function completedOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
-
         $manager = auth('manager')->user();
         if (!$manager) {
             return response()->json(['message' => 'No information'], 403);
         }
 
-        $orders = Order::where('manager_id', $manager->id)
+        $query = Order::where('manager_id', $manager->id)
             ->where('status', 'completed')
             ->orderBy('delivery_date', 'desc')
-            ->whereBetween('delivery_date', [$from, $to])
             ->with(['images' => function ($query) {
                 $query->take(1);
-            }])
-            ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
+            }]);
+
+            if ($request->has('from') && $request->has('to')) {
+                $from = Carbon::parse($request->from)->startOfDay();
+                $to = Carbon::parse($request->to)->endOfDay();
+                $query->whereBetween('delivery_date', [$from, $to]);
+            }
+    
+            $orders = $query->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
+    
 
         return response()->json([
             'orders' => $orders,
@@ -67,21 +71,25 @@ class OrderController extends Controller
 
     public function deliveredOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
         $manager = auth('manager')->user();
         if (!$manager) {
             return response()->json(['message' => 'No information'], 403);
         }
 
-        $orders = Order::where('manager_id', $manager->id)
+        $query = Order::where('manager_id', $manager->id)
             ->where('status', 'delivered')
             ->orderBy('delivery_date', 'desc')
-            ->whereBetween('delivery_date', [$from, $to])
             ->with(['images' => function ($query) {
                 $query->take(1);
-            }])
-            ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
+            }]);
+
+            if ($request->has('from') && $request->has('to')) {
+                $from = Carbon::parse($request->from)->startOfDay();
+                $to = Carbon::parse($request->to)->endOfDay();
+                $query->whereBetween('delivery_date', [$from, $to]);
+            }
+    
+            $orders = $query->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
 
         return response()->json([
             'orders' => $orders,
@@ -129,16 +137,21 @@ class OrderController extends Controller
     // rejected orders
     public function deliveryRejectedOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+       
 
-        $orders = Order::whereIn('status', ['delivery declined'])
+        $query = Order::whereIn('status', ['delivery declined'])
             ->where('manager_id', auth('manager')->id())
-            ->whereBetween('delivery_date', [$from, $to])
             ->with(['images' => function ($query) {
                 $query->take(1);
-            }])
-            ->get(['id', 'order_type', 'updated_at', 'status']);
+            }]);
+
+            if ($request->has('from') && $request->has('to')) {
+                $from = Carbon::parse($request->from)->startOfDay();
+                $to = Carbon::parse($request->to)->endOfDay();
+                $query->whereBetween('delivery_date', [$from, $to]);
+            }
+    
+            $orders = $query->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
         $now = now();
         $ordersWithDetails = $orders->map(function ($order) use ($now) {
             $updatedAt = Carbon::parse($order->updated_at);
@@ -157,24 +170,22 @@ class OrderController extends Controller
     // returned orders
     public function returnedOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
-
-        $order = Order::where('status', 'returned')
+        $query = Order::where('status', 'returned')
             ->where('manager_id', auth('manager')->user()->id)
             ->with(['images' => function ($query) {
                 $query->take(1);
-            }])
-            ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date', 'image']);
+            }]);
 
-        if (!$order) {
-            return response()->json([
-                'message' => 'No information available',
-            ], 404);
-        }
+            if ($request->has('from') && $request->has('to')) {
+                $from = Carbon::parse($request->from)->startOfDay();
+                $to = Carbon::parse($request->to)->endOfDay();
+                $query->whereBetween('delivery_date', [$from, $to]);
+            }
+    
+            $orders = $query->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
 
         return response()->json([
-            'orders' => $order,
+            'orders' => $orders,
         ], 200);
     }
 }
