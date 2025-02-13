@@ -40,6 +40,9 @@ class HomeController extends Controller
             ->where('status', "delivered")
             ->count();
 
+            $notAssignedOrders = Order::where("manager_id", auth("manager")->user()->id)
+            ->whereIn("status", "manager accepted")->count();
+
         $totalOrders = Order::count();
         $Percentage = ($totalOrders > 0) ? ($Count / $totalOrders) * 100 : 0;
 
@@ -51,6 +54,7 @@ class HomeController extends Controller
             'delivered' => $deliveredCount,
             'returned' => $returnedCount,
             'recive' =>  $reciveCount,
+            'not assigned' => $notAssignedOrders,
             'percentage' => $Percentage . "%",
         ], 200);
     }
