@@ -16,7 +16,10 @@ class TrackingPositionController extends Controller
 
         $orders = Order::where('manager_id', auth('manager')->user()->id)
             ->where('status', 'delivery recieved')
-            ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name', 'image']);
+            ->with(['images' => function ($query) {
+                $query->take(1);
+            }])
+            ->get(['id', 'order_type', 'status', 'delivery_date', 'customer_name']);
 
         return response()->json([
             'orders' => $orders,
