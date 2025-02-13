@@ -18,8 +18,6 @@ class OrderController extends Controller
 
         $orders = Order::where('manager_id', auth('manager')->id())
             ->where('status', 'manager accepted')
-            ->orderBy('delivery_date', 'desc')
-            ->with('images')
             ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
         return response()->json([
