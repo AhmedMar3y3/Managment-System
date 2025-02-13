@@ -13,16 +13,26 @@ class OrderController extends Controller
     // new not assigned orders
     public function managerAcceptedOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+        $manager = auth('manager')->user();
+        if (!$manager) {
+            return response()->json(['message' => 'No information'], 403);
+        }
 
-        $orders = Order::where('manager_id', Auth('manager')->id())
+        $query = Order::where('manager_id', $manager->id)
             ->where('status', 'manager accepted')
-            ->whereBetween('delivery_date', [$from, $to])
+            ->orderBy('delivery_date', 'desc')
             ->with(['images' => function ($query) {
                 $query->take(1);
-            }])
-            ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
+            }]);
+
+        if ($request->has('from') && $request->has('to')) {
+            $from = Carbon::parse($request->from)->startOfDay();
+            $to = Carbon::parse($request->to)->endOfDay();
+            $query->whereBetween('delivery_date', [$from, $to]);
+        }
+
+        $orders = $query->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
+
         return response()->json([
             'orders' => $orders
         ], 200);
