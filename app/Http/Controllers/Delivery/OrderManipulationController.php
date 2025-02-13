@@ -12,7 +12,7 @@ class OrderManipulationController extends Controller
     {
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
-            $order->update(['status' => 'delivery received']);
+            $order->update(['status' => 'delivery recieved']);
             return response()->json(['message' => 'Order accepted successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);
