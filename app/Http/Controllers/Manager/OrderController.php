@@ -23,7 +23,7 @@ class OrderController extends Controller
             ->whereBetween('delivery_date', [$from, $to])
             ->get(['id', 'customer_name', 'order_type', 'status', 'delivery_date']);
         return response()->json([
-            'ordersCount' => $orders->count(),,
+            'ordersCount' => $orders->count(),
             $orders
         ], 200);
     }
