@@ -62,15 +62,13 @@ class HomeController extends Controller
         $to = Carbon::parse($request->to)->endOfDay();
 
         $orders = Order::where('manager_id', Auth::guard('manager')->id())
-            ->where('status', 'قيد التنفيذ')
+            ->where('status', 'inprogress')
             ->whereBetween('delivery_date', [$from, $to])
             ->orderByDesc('delivery_date')
             ->get(['id', 'customer_name', 'order_details', 'order_type']);
 
         return response()->json([
-            'ordersCount' => $orders->count(),
             'orders' => $orders,
-            'rate' => 50
         ], 200);
     }
 
@@ -85,7 +83,6 @@ class HomeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
         return response()->json([
-            'ordersCount' => $orders->count(),
             'orders' => $orders
         ], 200);
     }
@@ -98,7 +95,6 @@ class HomeController extends Controller
 
         $orders = Order::findOrFail($id)->load('Images');
         return response()->json([
-            'ordersCount' => $orders->count(),
             'orders' => $orders,
         ], 200);
     }

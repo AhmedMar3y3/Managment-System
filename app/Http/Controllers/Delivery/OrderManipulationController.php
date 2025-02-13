@@ -36,6 +36,16 @@ class OrderManipulationController extends Controller
         return response()->json(['message' => 'Unauthorized'], 404);
     }
 
+    public function startRide($id)
+    {
+        $order = Order::find($id);
+        if ($order->delivery_id == Auth('delivery')->id()) {
+            $order->update(['status' => 'start ride']);
+            return response()->json(['message' => 'Ride started successfully'], 200);
+        }
+        return response()->json(['message' => 'Unauthorized'], 404);
+    }
+
     public function orderDelivered($id, Request $request)
     {
         $request->validate([
