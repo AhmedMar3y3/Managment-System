@@ -19,17 +19,18 @@ class Chef extends Authenticatable
         'phone',
         'image',
         'specialization_id',
-        'bio', 
+        'bio',
         'status',
         'verification_code',
         'verified_at',
         'branch_id',
+        'fcm_token',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
-    ]; 
+    ];
 
     public function branch()
     {
@@ -41,17 +42,19 @@ class Chef extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function manager(){
-    return $this->belongsTo(Manager::class);
-
+    public function manager()
+    {
+        return $this->belongsTo(Manager::class);
     }
-
-
 
     public function specialization()
 
-{
-    return $this->belongsTo(Specialization::class, 'specialization_id');
-}
+    {
+        return $this->belongsTo(Specialization::class, 'specialization_id');
+    }
 
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 }

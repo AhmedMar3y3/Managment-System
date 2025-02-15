@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status', ["pending", "approved", "declined"])->default("pending");
             $table->string('verification_code')->nullable();
             $table->timestamp('verified_at')->nullable();
+            $table->text('fcm_token')->nullable();
             $table->timestamps();
         }); 
     } 

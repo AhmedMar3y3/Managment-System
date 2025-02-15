@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Chef;
 
 use App\Models\Order;
 use App\Models\Manager;
-use App\Notifications\orderDone;
+use App\Notifications\Manager\orderDone;
 use App\Http\Controllers\Controller;
-use App\Notifications\orderAcceptedByChef;
+use App\Notifications\Manager\orderAcceptedByChef;
 
 class OrderController extends Controller
 {

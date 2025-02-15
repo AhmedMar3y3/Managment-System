@@ -40,13 +40,11 @@ class HomeController extends Controller
             ->where('status', "delivered")
             ->count();
 
-            $notAssignedOrders = Order::where("manager_id", auth("manager")->user()->id)
+        $notAssignedOrders = Order::where("manager_id", auth("manager")->user()->id)
             ->where("status", "manager accepted")->count();
 
         $totalOrders = Order::count();
         $Percentage = ($totalOrders > 0) ? ($Count / $totalOrders) * 100 : 0;
-
-
 
         return response()->json([
             'prepared' => $preparedCount,
@@ -62,41 +60,43 @@ class HomeController extends Controller
     // in progress orders
     public function inProgressOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
+
 
         $orders = Order::where('manager_id', Auth::guard('manager')->id())
             ->where('status', 'inprogress')
-            ->whereBetween('delivery_date', [$from, $to])
-            ->orderByDesc('delivery_date')
             ->get(['id', 'customer_name', 'order_details', 'order_type']);
+
+        if ($request->has('from') && $request->has('to')) {
+            $from = Carbon::parse($request->from)->startOfDay();
+            $to = Carbon::parse($request->to)->endOfDay();
+            $orders->whereBetween('delivery_date', [$from, $to]);
+        }
 
         return response()->json([
             'orders' => $orders,
         ], 200);
     }
-
     // new orders
     public function NewOrders(Request $request)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
-
         $orders = Order::where('status', 'new')
             ->whereNotNull('customer_name')
             ->orderBy('created_at', 'desc')
             ->get(['id', 'order_type', 'delivery_date', 'order_details']);
+
+        if ($request->has('from') && $request->has('to')) {
+            $from = Carbon::parse($request->from)->startOfDay();
+            $to = Carbon::parse($request->to)->endOfDay();
+            $orders->whereBetween('delivery_date', [$from, $to]);
+        }
         return response()->json([
             'orders' => $orders
         ], 200);
     }
 
     // show new order
-    public function ShowNewOrder(string $id, Request $request)
+    public function ShowNewOrder(string $id)
     {
-        $from = Carbon::parse($request->from)->startOfDay();
-        $to = Carbon::parse($request->to)->endOfDay();
-
         $orders = Order::findOrFail($id)->load('Images');
         return response()->json([
             'orders' => $orders,

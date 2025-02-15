@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Mails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EmployeeAcceptence extends Notification
+class SaleApproved extends Notification
 {
     use Queueable;
 
+    public $sale;
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($sale)
     {
-        //
+        $this->sale = $sale;
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -26,7 +28,7 @@ class EmployeeAcceptence extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail'];
     }
 
     /**
@@ -35,8 +37,10 @@ class EmployeeAcceptence extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('Acceptance message')
-                    ->line('You have been accepted as an employee!');
+                    ->subject('Approval Notification')
+                    ->greeting('Hello ' . $this->sale->first_name . ',')
+                    ->line('We are pleased to inform you that you have been approved as a Sales representative.')
+                    ->line('Thank you for being a part of our team!');
     }
 
     /**

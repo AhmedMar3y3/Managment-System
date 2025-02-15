@@ -7,6 +7,8 @@ use App\Http\Requests\delivery\login;
 use App\Http\Requests\delivery\register;
 use Illuminate\Http\Request;
 use App\Models\Delivery;
+use App\Models\Manager;
+use App\Notifications\Manager\NewEmployee;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +64,9 @@ class AuthController extends Controller
         $delivery->verified_at = now();
         $delivery->verification_code = null;
         $delivery->save();
+
+        $manager = Manager::where('branch_id', $delivery->branch_id);
+        $manager->notify(new NewEmployee());
 
         return response()->json(['message' => 'Account verified successfully'], 200);
     }

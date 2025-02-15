@@ -24,7 +24,7 @@ return new class extends Migration
             //any order
             $table->boolean('is_sameday')->default(false);
             $table->time('delivery_time')->nullable();
-            $table->date('delivery_date')->default(today());
+            $table->date('delivery_date')->nullable();
             $table->enum('order_type', ['cake','flower', 'cake and flower'])->default('cake');
 
             // second screen

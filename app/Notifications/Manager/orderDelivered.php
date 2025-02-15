@@ -1,22 +1,25 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Manager;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
 
-class orderDelivered extends Notification
+class orderDelivered extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $order;
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -26,7 +29,7 @@ class orderDelivered extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return [FcmChannel::class, 'database'];
     }
 
     /**
@@ -40,6 +43,20 @@ class orderDelivered extends Notification
                     ->line('Thank you for using our application!');
     }
 
+    public function toFcm(object $notifiable): FcmMessage
+    {
+        return FcmMessage::create()
+            ->setNotification([
+                'title' => 'Order Delivered',
+                'body'  => 'The order with ID ' . $this->order->id . ' has been delivered successfully',
+            ])
+            ->setAndroid([
+                'notification' => [
+                    'color' => '#0A0A0A',
+                ],
+            ]);
+    }
+
     /**
      * Get the array representation of the notification.
      *
@@ -48,7 +65,8 @@ class orderDelivered extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title' => 'Order Delivered',
+            'body'  => 'The order with ID ' . $this->order->id . ' has been delivered successfully',
         ];
     }
 }

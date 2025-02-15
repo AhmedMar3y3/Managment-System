@@ -23,7 +23,7 @@ class Sale extends Authenticatable
         'verification_code',
         'verified_at',
         'password',
-
+        'fcm_token',
     ];
 
     protected $hidden = [
@@ -31,7 +31,12 @@ class Sale extends Authenticatable
         'remember_token',
     ];
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class);
+    }
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
     }
 }

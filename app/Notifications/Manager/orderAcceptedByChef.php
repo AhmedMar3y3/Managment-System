@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Manager;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
 
-class orderAcceptedByChef extends Notification
+class orderAcceptedByChef extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -28,7 +30,7 @@ class orderAcceptedByChef extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return [FcmChannel::class,'database'];
     }
 
     /**
@@ -43,6 +45,21 @@ class orderAcceptedByChef extends Notification
                     ->line('Thank you for using our application!');
     }
 
+
+    public function toFcm(object $notifiable): FcmMessage
+    {
+        return FcmMessage::create()
+            ->setNotification([
+                'title' => 'Order Accepted by Chef',
+                'body'  => 'The chef has accepted the order with the following ID: ' . $this->order->id,
+            ])
+            ->setAndroid([
+                'notification' => [
+                    'color' => '#0A0A0A',
+                ],
+            ]);
+    }
+
     /**
      * Get the array representation of the notification.
      *
@@ -51,7 +68,8 @@ class orderAcceptedByChef extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title' => 'Order Accepted by Chef',
+            'body'  => 'The chef has accepted the order with the following ID: ' . $this->order->id,
         ];
     }
 }

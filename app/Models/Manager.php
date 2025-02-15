@@ -24,27 +24,33 @@ class Manager extends Authenticatable
         'verified_at',
         'password',
         'remember_token',
-
+        'fcm_token',
     ];
 
     protected $hidden = [
         'password',
-        'remember_token', 
-    
-        
-    ];  
+        'remember_token',
 
-    public function branch(){
-    return $this->belongsTo(Branch::class);
+
+    ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 
-public function order(){
-    return $this->hasMany(Order::class);
-}
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
 
-public function chef()
-{
-    return $this->hasMany(Chef::class);
-} 
+    public function chef()
+    {
+        return $this->hasMany(Chef::class);
+    }
 
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 }

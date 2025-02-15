@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Manager;
 use App\Http\Controllers\Controller;
-use App\Notifications\ManagerApproved;
+use App\Notifications\Mails\ManagerApproved;
 
 class ManagerController extends Controller
 {

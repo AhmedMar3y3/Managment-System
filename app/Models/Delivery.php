@@ -22,6 +22,7 @@ class Delivery extends Authenticatable
         'verification_code',
         'verified_at',
         'branch_id',
+        'fcm_token',
     ];
 
     protected $hidden = [
@@ -42,5 +43,10 @@ class Delivery extends Authenticatable
     public function positions()
     {
         return $this->hasMany(DeliveryPosition::class);
+    }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
     }
 }

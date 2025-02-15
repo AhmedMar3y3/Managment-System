@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Delivery;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
 
-class OrderRejectedNotification extends Notification
+class OrderRecievedToDelivery extends Notification
 {
     use Queueable;
 
@@ -20,8 +22,7 @@ class OrderRejectedNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['mail'];
-    }
+        return [FcmChannel::class, 'database'];    }
 
     public function toMail($notifiable)
     { 
@@ -32,11 +33,25 @@ class OrderRejectedNotification extends Notification
             ->line('شكرًا لاستخدامك تطبيقنا!');
     }
 
+    public function toFcm(object $notifiable): FcmMessage
+    {
+        return FcmMessage::create()
+            ->setNotification([
+                'title' => 'New Order',
+                'body'  => 'You have been assigned a new order for delivery',
+            ])
+            ->setAndroid([
+                'notification' => [
+                    'color' => '#0A0A0A',
+                ],
+            ]);
+    }
+
     public function toArray($notifiable)
     {
         return [
-            'order_id' => $this->order->id,
-            'message' => 'تم رفض طلبك ' . $this->order->order_type,
+            'title' => 'New Order',
+            'body'  => 'You have been assigned a new order for delivery',
         ];
     }
 }

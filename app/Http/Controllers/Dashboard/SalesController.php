@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Sale;
 use App\Http\Controllers\Controller;
+use App\Notifications\Mails\SaleApproved;
 
 class SalesController extends Controller
 {
@@ -18,6 +19,7 @@ class SalesController extends Controller
         $sale =  Sale::find($id);
         if ($sale->status == 'pending') {
             $sale->update(['status' => 'approved']);
+            $sale->notify(new SaleApproved($sale));
             return response()->json('Sale accepted', 200);
         }
         return response()->json('Action cannot be performed', 200);

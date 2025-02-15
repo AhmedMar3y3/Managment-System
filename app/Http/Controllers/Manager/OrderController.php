@@ -110,7 +110,7 @@ class OrderController extends Controller
                 'delivery_date' => $order->delivery_date ?? 'Order in same day',
                 'delivery_time' => $order->delivery_time ?? 'Order in same day',
                 'description' => $order->description ?? 'No flowers',
-                'flower image' => $order->image ?? 'No flowers',
+                'flower image' => $order->image,
                 'cake_price' => $order->cake_price,
                 'flower_price' => $order->flower_price,
                 'deposit' => $order->deposit,

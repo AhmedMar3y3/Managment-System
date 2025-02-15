@@ -71,5 +71,11 @@ class Order extends Model
             
             $order->total_price = $cakePrice + $flowerPrice + $deliveryPrice;
         });
+
+        static::creating(function ($order) {
+            if (empty($order->delivery_date)) {
+                $order->delivery_date = now()->toDateString();
+            }
+        });
     }
 }

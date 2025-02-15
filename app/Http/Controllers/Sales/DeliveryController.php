@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Notifications\SalesAssignToDelivery;
+use App\Notifications\Delivery\SalesAssignToDelivery;
 
 class DeliveryController extends Controller
 {

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('verification_code')->nullable();
             $table->timestamp('verified_at')->nullable();
+            $table->text('fcm_token')->nullable();
             $table->timestamps();
         });
     }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Chef;
 use App\Models\Delivery;
 use App\Http\Controllers\Controller;
-use App\Notifications\EmployeeAcceptence;
-use App\Notifications\EmployeeRejection;
+use App\Notifications\Mails\EmployeeAcceptence;
+use App\Notifications\Mails\EmployeeRejection;
 
 class EmployeeController extends Controller
 {

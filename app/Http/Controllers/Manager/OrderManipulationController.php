@@ -8,8 +8,9 @@ use App\Models\Delivery;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\orderRecievedToChef;
-use App\Notifications\OrderRejectedNotification;
+use App\Notifications\Chef\orderRecievedToChef;
+use App\Notifications\Delivery\OrderRecievedToDelivery;
+use App\Notifications\Sales\ManagerAcceptedOrder;
 
 class OrderManipulationController extends Controller
 {
@@ -23,6 +24,8 @@ class OrderManipulationController extends Controller
             $order->status = "manager accepted";
             $order->manager_id = Auth::guard('manager')->user()->id;
             $order->save();
+            $sales = $order->sale;
+            $sales->notify(new ManagerAcceptedOrder($order));
             return response()->json([
                 'message' => 'Order accepted successfully',
                 'order_id' => $order->id,
@@ -75,7 +78,7 @@ class OrderManipulationController extends Controller
         ]);
 
         $delivery = Delivery::find($validatedData['delivery_id']);
-        $delivery->notify(new OrderRejectedNotification($order));
+        $delivery->notify(new OrderRecievedToDelivery($order));
         return response()->json(['message' => 'Order successfully assigned to delivery'], 200);
     }
 }

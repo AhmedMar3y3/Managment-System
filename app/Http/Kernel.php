@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'auth.sale' => \App\Http\Middleware\Sale::class,
         'auth.delivery' => \App\Http\Middleware\Delivery::class,
         'auth.admin' => \App\Http\Middleware\Admin::class,
+        'auth.multiguard' => \App\Http\Middleware\MultiGuardAuth::class,
     ];
 }

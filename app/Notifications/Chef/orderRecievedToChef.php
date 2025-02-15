@@ -1,22 +1,24 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Chef;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class orderRecievedToManager extends Notification
+class orderRecievedToChef extends Notification
 {
     use Queueable;
+
+    public $order;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
@@ -26,7 +28,7 @@ class orderRecievedToManager extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -35,9 +37,8 @@ class orderRecievedToManager extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->line('New Order')
+                    ->line('You have assigned a new order to prepare.');
     }
 
     /**
@@ -47,8 +48,14 @@ class orderRecievedToManager extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $orderImages = $this->order->Images()->get(['id', 'image'])->toArray();
+
         return [
-            //
+            'title'      => 'طلب جديد',
+            'id'         => $this->order->id,
+            'order_type' => $this->order->order_type,
+            'status' => $this->order->status,
+            'order_images' => $orderImages,
         ];
     }
 }

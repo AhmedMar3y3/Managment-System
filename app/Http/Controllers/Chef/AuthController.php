@@ -7,6 +7,8 @@ use App\Http\Requests\chef\login;
 use App\Http\Requests\chef\register;
 use Illuminate\Http\Request;
 use App\Models\Chef;
+use App\Models\Manager;
+use App\Notifications\Manager\NewEmployee;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +65,8 @@ class AuthController extends Controller
         $chef->verification_code = null;
         $chef->save();
 
+        $manager = Manager::where('branch_id', $chef->branch_id);
+        $manager->notify(new NewEmployee());
         return response()->json(['key' => 'chef', 'message' => 'Account verified successfully'], 200);
     }
 

@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Sales;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
 
-class orderDeclined extends Notification
+class ManagerAcceptedOrder extends Notification
 {
     use Queueable;
 
@@ -21,6 +23,7 @@ class orderDeclined extends Notification
         $this->order = $order;
     }
 
+
     /**
      * Get the notification's delivery channels.
      *
@@ -28,8 +31,7 @@ class orderDeclined extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
-    }
+        return [FcmChannel::class, 'database'];    }
 
     /**
      * Get the mail representation of the notification.
@@ -37,10 +39,23 @@ class orderDeclined extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Order Declined by Chef')
-                    ->line('The chef has declined the order with the following ID: ' . $this->order->id)
-                    ->action('View Order', url('/orders/' . $this->order->id))
+                    ->line('The introduction to the notification.')
+                    ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
+    }
+
+    public function toFcm(object $notifiable): FcmMessage
+    {
+        return FcmMessage::create()
+            ->setNotification([
+                'title' => 'Order Accepted',
+                'body'  => 'Your order has been accepted by a manager',
+            ])
+            ->setAndroid([
+                'notification' => [
+                    'color' => '#0A0A0A',
+                ],
+            ]);
     }
 
     /**
@@ -51,7 +66,8 @@ class orderDeclined extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+               'title' => 'Order Accepted',
+                'body'  => 'Your order has been accepted by a manager',
         ];
     }
 }

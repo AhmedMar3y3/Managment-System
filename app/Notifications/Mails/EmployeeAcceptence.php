@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Mails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ManagerApproved extends Notification
+class EmployeeAcceptence extends Notification
 {
     use Queueable;
-
-    public $manager;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($manager)
+    public function __construct()
     {
-        $this->manager = $manager;
+        //
     }
 
     /**
@@ -37,11 +35,8 @@ class ManagerApproved extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Approval Notification')
-                    ->greeting('Hello ' . $this->manager->first_name . ',')
-                    ->line('We are pleased to inform you that you have been approved as a manager.')
-                    ->action('View Dashboard', url('/dashboard'))
-                    ->line('Thank you for being a part of our team!');
+                    ->line('Acceptance message')
+                    ->line('You have been accepted as an employee!');
     }
 
     /**

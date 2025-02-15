@@ -1,24 +1,28 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Mails;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\AndroidConfig;
+use NotificationChannels\Fcm\Resources\AndroidNotification;
 
-class orderRecievedToChef extends Notification
+class ManagerApproved extends Notification
 {
     use Queueable;
 
-    public $order;
+    public $manager;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($order)
+    public function __construct($manager)
     {
-        $this->order = $order;
+        $this->manager = $manager;
     }
 
     /**
@@ -28,7 +32,7 @@ class orderRecievedToChef extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return ['mail'];
     }
 
     /**
@@ -37,8 +41,10 @@ class orderRecievedToChef extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('New Order')
-                    ->line('You have assigned a new order to prepare.');
+                    ->subject('Approval Notification')
+                    ->greeting('Hello ' . $this->manager->first_name . ',')
+                    ->line('We are pleased to inform you that you have been approved as a manager.')
+                    ->line('Thank you for being a part of our team!');
     }
 
     /**
@@ -48,14 +54,8 @@ class orderRecievedToChef extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $orderImages = $this->order->Images()->get(['id', 'image'])->toArray();
-
         return [
-            'title'      => 'طلب جديد',
-            'id'         => $this->order->id,
-            'order_type' => $this->order->order_type,
-            'status' => $this->order->status,
-            'order_images' => $orderImages,
+            //
         ];
     }
 }

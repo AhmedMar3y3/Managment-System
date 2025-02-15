@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Sales;
 
 use App\Models\Order;
 use App\Models\Manager;
-use App\Notifications\SendToManager;
+use App\Notifications\Manager\SendToManager;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\order\update;
 use App\Http\Requests\order\storeFirst;

@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Delivery;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\Manager\DeliveryAcceptOrder;
+use App\Notifications\Manager\OrderCanceled;
+use App\Notifications\Manager\orderDeclined;
+use App\Notifications\Manager\orderDelivered;
 
 class OrderManipulationController extends Controller
 {
@@ -13,6 +17,8 @@ class OrderManipulationController extends Controller
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
             $order->update(['status' => 'delivery recieved']);
+            $manager = $order->manager;
+            $manager->notify(new DeliveryAcceptOrder($order));
             return response()->json(['message' => 'Order accepted successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);
@@ -31,6 +37,8 @@ class OrderManipulationController extends Controller
                 'rejection_cause' => $request->rejection_cause,
                 'delivery_id' => null
             ]);
+            $manager = $order->manager;
+            $manager->notify(new orderDeclined($order));
             return response()->json(['message' => 'Order rejected successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);
@@ -57,6 +65,8 @@ class OrderManipulationController extends Controller
         $order = Order::find($id);
         if ($order->delivery_id == Auth('delivery')->id()) {
             $order->update(['status' => 'delivered', 'payment_method' => $payment_method]);
+            $manager = $order->manager;
+            $manager->notify(new orderDelivered($order));
             return response()->json(['message' => 'Order delivered successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);
@@ -70,6 +80,8 @@ class OrderManipulationController extends Controller
                 'problem' => 'nullable|string'
             ]);
             $order->update(['status' => 'returned', 'is_returned' => true, 'problem' => $request->problem]);
+            $manager = $order->manager;
+            $manager->notify(new OrderCanceled($order));
             return response()->json(['message' => 'Order cancelled successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);

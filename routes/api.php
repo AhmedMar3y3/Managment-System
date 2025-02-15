@@ -13,6 +13,8 @@ use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\SalesController;
 use App\Http\Controllers\Dashboard\SpecializationController;
+use App\Http\Controllers\FCMController;
+
 
 // public routes for all users
 Route::get('/all-specializations', [Controller::class, 'specializations']);
@@ -91,3 +93,8 @@ Route::middleware(['auth.admin'])->group(function () {
     Route::post('/specialization',        [SpecializationController::class, 'store']);
     Route::delete('/specialization/{id}', [SpecializationController::class, 'destroy']);
 });
+
+
+
+// Single endpoint for all user types
+Route::post('/store-fcm-token', [FCMController::class, 'store'])->middleware('auth.multiguard');
