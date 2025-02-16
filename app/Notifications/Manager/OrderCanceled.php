@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
-class OrderCanceled extends Notification
+class OrderCanceled extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -42,18 +42,15 @@ class OrderCanceled extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toFcm(object $notifiable): FcmMessage
+
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'Order Canceled',
-                'body'  => 'The order with ID ' . $this->order->id . ' has been canceled',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('Order Canceled')
+                    ->body('The order with ID ' . $this->order->id . ' has been canceled')
+            );
     }
 
     /**

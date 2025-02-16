@@ -65,8 +65,10 @@ class AuthController extends Controller
         $chef->verification_code = null;
         $chef->save();
 
-        $manager = Manager::where('branch_id', $chef->branch_id);
-        $manager->notify(new NewEmployee());
+        $manager = Manager::where('branch_id', $chef->branch_id)->first();
+        if ($manager) {
+            $manager->notify(new NewEmployee());
+        }
         return response()->json(['key' => 'chef', 'message' => 'Account verified successfully'], 200);
     }
 

@@ -6,8 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
 
-class orderRecievedToChef extends Notification
+class orderRecievedToChef extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -28,7 +30,7 @@ class orderRecievedToChef extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return [FcmChannel::class,'database'];
     }
 
     /**
@@ -41,6 +43,16 @@ class orderRecievedToChef extends Notification
                     ->line('You have assigned a new order to prepare.');
     }
 
+    public function toFcm(object $regonotifiablevable): FcmMessage
+    {
+        return FcmMessage::create()
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                ->title('New Order')
+                ->body('You have assigned a new order to prepare.')
+            );
+    }
+
     /**
      * Get the array representation of the notification.
      *
@@ -48,14 +60,9 @@ class orderRecievedToChef extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $orderImages = $this->order->Images()->get(['id', 'image'])->toArray();
-
         return [
-            'title'      => 'طلب جديد',
-            'id'         => $this->order->id,
-            'order_type' => $this->order->order_type,
-            'status' => $this->order->status,
-            'order_images' => $orderImages,
+            'title' => 'New Order',
+            'body'  => 'You have assigned a new order to prepare.',
         ];
     }
 }

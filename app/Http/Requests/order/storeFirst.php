@@ -26,7 +26,8 @@ class storeFirst extends FormRequest
             "is_sameday"       => ['required', 'boolean'],
             'order_type'       => ['required', 'string', 'in:cake,flower,cake and flower'],
             'order_details'    => ['nullable', 'string'],
-            'delivery_time'    => ['required', 'date_format:H:i'],
+            'from'             => ['required', 'date_format:H:i'],
+            'to'               => ['required', 'date_format:H:i'],
             'delivery_date'    => ['required', 'date'],
             'image'            => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif', 'max:2048'],
             'description'      => ['nullable','string'],
@@ -36,7 +37,8 @@ class storeFirst extends FormRequest
 
         if ($this->is_sameday) {
             $rules['delivery_date'] = ['nullable', 'date'];
-            $rules['delivery_time'] = ['nullable', 'date_format:H:i'];
+            $rules['from']          = ['nullable', 'date_format:H:i'];
+            $rules['to']            = ['nullable', 'date_format:H:i'];
 
         }
          return $rules;

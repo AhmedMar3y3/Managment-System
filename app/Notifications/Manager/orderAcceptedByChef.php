@@ -46,18 +46,15 @@ class orderAcceptedByChef extends Notification implements ShouldQueue
     }
 
 
-    public function toFcm(object $notifiable): FcmMessage
+
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'Order Accepted by Chef',
-                'body'  => 'The chef has accepted the order with the following ID: ' . $this->order->id,
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('Order Accepted by Chef')
+                    ->body('The chef has accepted the order with the following ID: ' . $this->order->id)
+            );
     }
 
     /**

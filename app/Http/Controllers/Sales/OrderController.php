@@ -10,6 +10,7 @@ use App\Http\Requests\order\update;
 use App\Http\Requests\order\storeFirst;
 use App\Http\Requests\order\storeSecond;
 use App\Http\Requests\order\storeThird;
+use App\Http\Resources\OrderDetailsResource;
 
 class OrderController extends Controller
 {
@@ -35,7 +36,7 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::findOrFail($id)->load('images',);
-        return response()->json(['order' => $order], 200);
+        return response()->json(new OrderDetailsResource($order), 200);
     }
 
     public function storeFirstScreen(storeFirst $request)

@@ -41,18 +41,15 @@ public  $order;
     //     ->line('شكراً');
     }
 
-    public function toFcm(object $notifiable): FcmMessage
+
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'New Order',
-                'body'  => 'There is a new order to check',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('New Order')
+                    ->body('There is a new order to check')
+            );
     }
 
     /**

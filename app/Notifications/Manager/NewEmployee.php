@@ -10,6 +10,7 @@ use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
 
+
 class NewEmployee extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -42,19 +43,14 @@ class NewEmployee extends Notification implements ShouldQueue
             ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }
-
-    public function toFcm(object $notifiable): FcmMessage
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'New Employee',
-                'body'  => 'You have a new pending request from an employee',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('New Employee')
+                    ->body('You have pending request')
+            );
     }
 
 

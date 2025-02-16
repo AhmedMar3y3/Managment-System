@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
-class DeliveryAcceptOrder extends Notification
+class DeliveryAcceptOrder extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,18 +44,14 @@ class DeliveryAcceptOrder extends Notification
                     ->line('Thank you for using our application!');
     }
 
-    public function toFcm(object $notifiable): FcmMessage
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'Delivery Accepted Order',
-                'body'  => 'The order with ID ' . $this->order->id . ' has been accepted by delivery.',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('Delivery Accepted Order')
+                    ->body('The order with ID ' . $this->order->id . ' has been accepted by delivery.')
+            );
     }
 
     /**

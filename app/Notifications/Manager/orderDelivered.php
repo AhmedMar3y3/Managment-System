@@ -43,18 +43,14 @@ class orderDelivered extends Notification implements ShouldQueue
                     ->line('Thank you for using our application!');
     }
 
-    public function toFcm(object $notifiable): FcmMessage
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'Order Delivered',
-                'body'  => 'The order with ID ' . $this->order->id . ' has been delivered successfully',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('Order Delivered')
+                    ->body('The order with ID ' . $this->order->id . ' has been delivered successfully')
+            );
     }
 
     /**

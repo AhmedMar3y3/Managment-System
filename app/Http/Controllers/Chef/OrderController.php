@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Manager;
 use App\Notifications\Manager\orderDone;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderDetailsResource;
 use App\Notifications\Manager\orderAcceptedByChef;
 
 class OrderController extends Controller
@@ -32,7 +33,7 @@ class OrderController extends Controller
     {
         $order = Order::where('chef_id', Auth('chef')->id())
             ->findOrFail($id)->load('images');
-        return response()->json(['order' => $order], 200);
+        return response()->json(new OrderDetailsResource($order), 200);
     }
 
     public function acceptOrder($id)

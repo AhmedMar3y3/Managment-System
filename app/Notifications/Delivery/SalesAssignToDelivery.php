@@ -46,18 +46,14 @@ class SalesAssignToDelivery extends Notification implements ShouldQueue
                     ->line('Thank you for using our application!');
     }
 
-    public function toFcm(object $notifiable): FcmMessage
+    public function toFcm(object $regonotifiablevable): FcmMessage
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => 'New Order',
-                'body'  => 'You have been assigned a new order for delivery',
-            ])
-            ->setAndroid([
-                'notification' => [
-                    'color' => '#0A0A0A',
-                ],
-            ]);
+            ->notification(
+                (new \NotificationChannels\Fcm\Resources\Notification())
+                    ->title('New Order')
+                    ->body('You have been assigned a new order for delivery')
+            );
     }
 
     /**
