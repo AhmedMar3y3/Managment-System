@@ -32,6 +32,7 @@ class Order extends Model
         'is_returned',
         'problem',
         'status',
+        'is_completed',
         'sale_id',
         'manager_id',
         'chef_id',

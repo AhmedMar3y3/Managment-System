@@ -52,6 +52,7 @@ return new class extends Migration
 
             // another data
             $table->enum('status', ["new","manager accepted","chef waiting","chef approved","inprogress", "completed","delivery waiting","delivery recieved","delivery declined", "start ride","returned", "delivered"])->default("new");
+            $table->boolean('is_completed')->default(false);
             $table->enum('payment_method', ["cash","visa"])->default('cash');
             $table->foreignId('sale_id')->nullable()->constrained('sales')->onDelete('cascade');
             $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('cascade');

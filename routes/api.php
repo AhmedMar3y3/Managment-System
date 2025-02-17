@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\SalesController;
 use App\Http\Controllers\Dashboard\SpecializationController;
+use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\FCMController;
 
 
@@ -92,6 +93,11 @@ Route::middleware(['auth.admin'])->group(function () {
     Route::get('/specializations',        [SpecializationController::class, 'index']);
     Route::post('/specialization',        [SpecializationController::class, 'store']);
     Route::delete('/specialization/{id}', [SpecializationController::class, 'destroy']);
+
+    // Report routes
+    Route::get('/all-deliveries',                   [ReportController::class, 'deliveries']);
+    Route::get('/reports/delivery-summary',         [ReportController::class, 'deliverySummary']);
+    Route::post('/reports/mark-delivery-completed', [ReportController::class, 'markCompleted']);
 });
 
 

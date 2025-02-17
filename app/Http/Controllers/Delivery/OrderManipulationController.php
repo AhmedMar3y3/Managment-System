@@ -9,6 +9,7 @@ use App\Notifications\Manager\DeliveryAcceptOrder;
 use App\Notifications\Manager\OrderCanceled;
 use App\Notifications\Manager\orderDeclined;
 use App\Notifications\Manager\orderDelivered;
+use App\Notifications\Sales\OrderDelivered as SalesOrderDelivered;
 
 class OrderManipulationController extends Controller
 {
@@ -67,6 +68,8 @@ class OrderManipulationController extends Controller
             $order->update(['status' => 'delivered', 'payment_method' => $payment_method]);
             $manager = $order->manager;
             $manager->notify(new orderDelivered($order));
+            $sales = $order->sales;
+            $sales->notify(new SalesOrderDelivered($order));
             return response()->json(['message' => 'Order delivered successfully'], 200);
         }
         return response()->json(['message' => 'Unauthorized'], 404);
