@@ -37,10 +37,11 @@ class DeliveryController extends Controller
     {
         $validatedData = $request->validate([
             'order_id' => 'required|exists:orders,id',
+            'branch_id' => 'required|exists:branches,id',
         ]);
         $order = Order::findOrFail($validatedData['order_id']);
         if ($order->is_sameday) {
-            $order->update(['delivery_id' => $id, 'status' => 'delivery waiting']);
+            $order->update(['delivery_id' => $id, 'status' => 'delivery waiting', 'branch_id' => $validatedData['branch_id']]);
             $delivery = Delivery::findOrFail($id);
             $delivery->notify(new SalesAssignToDelivery($order));
             return response()->json(['message' => 'Order assigned to driver'], 200);

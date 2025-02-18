@@ -19,7 +19,7 @@ class Controller extends BaseController
     }
     public function branches()
     {
-        $branches = Branch::get(['id', 'name']);
+        $branches = Branch::get(['id', 'name','lat','long']);
         return response()->json(['branches' => $branches], 200);
     }
 

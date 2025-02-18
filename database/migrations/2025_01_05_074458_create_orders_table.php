@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('latitude')->nullable();
             $table->string('map_desc')->nullable();
             $table->text('additional_data')->nullable();
+            $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('cascade');
 
             // another screens for returned orders
             $table->boolean('is_returned')->default(false);

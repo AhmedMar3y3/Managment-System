@@ -29,6 +29,7 @@ class Order extends Model
         'latitude',
         'map_desc',
         'additional_data',
+        'branch_id',
         'is_returned',
         'problem',
         'status',
@@ -79,5 +80,10 @@ class Order extends Model
                 $order->delivery_date = now()->toDateString();
             }
         });
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }
